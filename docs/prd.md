@@ -15,7 +15,7 @@ It builds on [`product-brief.md`](./product-brief.md), which carries the
 investor-facing story; this document does not repeat that story, it makes it
 buildable.
 
-Structure: vocabulary is fixed in §3 GlosAEDy and used verbatim everywhere else.
+Structure: vocabulary is fixed in §3 Glossary and used verbatim everywhere else.
 Features in §4 each carry nested, globally-numbered functional requirements
 (FR-1 … FR-33) so epics and stories can reference them even if features get
 reorganised. Inferences made without confirmation are tagged `[ASSUMPTION]`
@@ -110,7 +110,7 @@ credible.
   it, and we get a referral. This journey is the retention mechanism and the
   reason FR-24 is not a nice-to-have.
 
-## 3. GlosAEDy
+## 3. Glossary
 
 - **Restaurant** — the paying tenant. Owns exactly one location in v1, one Menu,
   one Ordering Page, and one set of Users.
