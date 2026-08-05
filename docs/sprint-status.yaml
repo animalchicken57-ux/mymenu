@@ -47,16 +47,16 @@ development_status:
   2-2-manage-menu-items: review
   2-3-menu-item-photos: backlog
   2-4-availability-toggle: review
-  2-5-printable-table-qr-sheet: ready-for-dev
+  2-5-printable-table-qr-sheet: review
   epic-2-retrospective: optional
 
   # ── Epic 3 · The Diner Orders ───────────────────────────────────
-  epic-3: backlog
-  3-1-public-ordering-page: backlog
-  3-2-cart: backlog
-  3-3-choose-a-fulfilment-mode: backlog
-  3-4-place-an-order: backlog
-  3-5-watch-order-status: backlog
+  epic-3: in-progress
+  3-1-public-ordering-page: review
+  3-2-cart: review
+  3-3-choose-a-fulfilment-mode: review
+  3-4-place-an-order: review
+  3-5-watch-order-status: review
   epic-3-retrospective: optional
 
   # ── Epic 4 · The Kitchen ────────────────────────────────────────

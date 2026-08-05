@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { MenuEditor, type MenuCategory } from "@/components/menu/menu-editor";
+import { QrSheetForm } from "@/components/menu/qr-sheet-form";
 import { requireRole } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
@@ -62,9 +63,21 @@ export default async function MenuPage() {
       </div>
 
       {itemCount > 0 ? (
-        <p className="mt-8 border-t border-border-hairline pt-6 text-meta text-ink-secondary">
-          {itemCount} dish{itemCount === 1 ? "" : "es"} on your menu.
-        </p>
+        <section className="mt-10 border-t border-border-hairline pt-8">
+          <h2 className="text-heading text-ink-primary">Table codes</h2>
+          <p className="mt-2 max-w-prose text-meta text-ink-secondary">
+            A printable sheet of QR codes, one per table. Print it, cut them up,
+            and tape them down. Scanning table 6 opens your menu already knowing
+            the customer is sitting at table 6.
+          </p>
+          <div className="mt-4">
+            <QrSheetForm />
+          </div>
+
+          <p className="mt-8 text-meta text-ink-secondary">
+            {itemCount} dish{itemCount === 1 ? "" : "es"} on your menu.
+          </p>
+        </section>
       ) : null}
     </main>
   );
