@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans_Arabic } from "next/font/google";
+
+import { dir, resolveLang } from "@/lib/i18n";
 import "./globals.css";
 
 /**
@@ -20,9 +22,16 @@ export const metadata: Metadata = {
     "Take orders on your own page and stop paying commission on customers who already know you.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  // AD-10: direction is an attribute set once here, not a second stylesheet.
+  const lang = await resolveLang();
+
   return (
-    <html lang="en" dir="ltr" className={`${plexArabic.variable} h-full antialiased`}>
+    <html
+      lang={lang}
+      dir={dir(lang)}
+      className={`${plexArabic.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
