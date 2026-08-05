@@ -65,7 +65,7 @@ stranger deciding whether to trust a page they have never seen.
 
 - **Say the thing.** "Order sent to the kitchen." Not "Success!" and not
   "Your order has been successfully submitted."
-- **Money in full words.** "You kept 8,740 SAR this month" — not "Savings:
+- **Money in full words.** "You kept 8,740 AED this month" — not "Savings:
   8,740" and not "+8,740".
 - **Errors name the fix, not the fault.** "That email already has an account —
   sign in instead?" Not "Invalid credentials." Never "Oops."
@@ -73,7 +73,7 @@ stranger deciding whether to trust a page they have never seen.
 - **Arabic is written, not translated.** Every string is authored in both
   languages by a human. A machine-translated Arabic interface reads as foreign to
   exactly the audience we are selling to, and that impression is unrecoverable.
-- **Never use platform names in product copy.** "Delivery apps", not "Jahez".
+- **Never use platform names in product copy.** "Delivery apps", not "Talabat".
   The comparison belongs in the pitch, not in the product.
 
 ## Component Patterns
@@ -247,7 +247,7 @@ Arabic is a first-class direction, not a translation layer.
 - **KF-5. Abu Khalid opens the dashboard on the first of the month.** *(realizes
   UJ-5 — the retention flow, and the reason this product is bought twice)*
   Phone, in bed. The first thing rendered above the fold is the Savings Counter,
-  counting up once from zero to *"You kept 8,740 SAR last month."* Underneath, in
+  counting up once from zero to *"You kept 8,740 AED last month."* Underneath, in
   small plain text, the arithmetic that produced it.
   **Climax:** he screenshots it.
   **Resolution:** he renews without a sales conversation, and sends the

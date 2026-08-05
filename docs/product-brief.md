@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-A small restaurant in Saudi Arabia sells a 60 SAR meal through a delivery app and
+A small restaurant in the UAE sells a 60 AED meal through a delivery app and
 keeps roughly 42 of it. The rest goes to commission. The restaurant never learns
 who the customer was, cannot contact them again, and has no way to bring them
 back except by paying the same commission a second time. The restaurant is
@@ -14,17 +14,17 @@ renting its own customers.
 
 **MyMenu gives every restaurant its own ordering page.** Its own menu, its own
 QR code on the table, its own order screen in the kitchen, and — the part that
-matters — its own customer list. The restaurant keeps the full 60 SAR and pays
-MyMenu a flat 300 SAR a month, no matter how many orders come through.
+matters — its own customer list. The restaurant keeps the full 60 AED and pays
+MyMenu a flat 300 AED a month, no matter how many orders come through.
 
-For a restaurant doing 500 orders a month, that is roughly **9,000 SAR of
-commission replaced by a 300 SAR bill.** The product proves this itself: the
+For a restaurant doing 500 orders a month, that is roughly **9,000 AED of
+commission replaced by a 300 AED bill.** The product proves this itself: the
 owner's dashboard runs a live counter showing how much commission they avoided
 this month. The sales pitch is a number on their own screen.
 
 ## The Problem
 
-**The commission.** Delivery platforms in the Gulf commonly take somewhere
+**The commission.** Delivery platforms in the UAE commonly take somewhere
 between 15% and 30% of the order value. For a restaurant running on thin food
 margins, that is often the difference between a profitable month and a flat one.
 
@@ -40,8 +40,8 @@ week, it pays commission again.
    paper, calls back to confirm. It works until it is busy, which is exactly
    when it fails.
 
-**The cost of doing nothing.** A restaurant doing 30,000 SAR a month in delivery
-sales gives away roughly 100,000 SAR a year — and still ends the year not
+**The cost of doing nothing.** A restaurant doing 30,000 AED a month in delivery
+sales gives away roughly 100,000 AED a year — and still ends the year not
 knowing a single customer's name.
 
 ## The Solution
@@ -61,19 +61,19 @@ one button: *delivered*. MyMenu does not supply drivers and does not run
 delivery logistics — it just stops the restaurant from managing that on paper.
 
 **For the owner** — the dashboard. Today's orders, today's revenue, the menu
-editor, and the money-saved counter running at the top: *"You kept 8,700 SAR
+editor, and the money-saved counter running at the top: *"You kept 8,700 AED
 this month."* Plus the thing no delivery app will ever give them: the list of
 their own customers.
 
 ## What Makes This Different
 
 **We are not competing with the delivery apps — we are the escape from them.**
-Jahez and HungerStation solve discovery: they bring a restaurant strangers.
+Talabat and Deliveroo solve discovery: they bring a restaurant strangers.
 MyMenu solves retention: it keeps the people who already know the food. A
 restaurant can use both, and most should. That honesty is the pitch, not a
 weakness in it.
 
-> **"Jahez brings you new people. MyMenu keeps the people you already have."**
+> **"Talabat brings you new people. MyMenu keeps the people you already have."**
 
 **We take the order; we do not drive the food.** Three routes cover the vast
 majority of a small restaurant's business — the diner is sitting at the table
@@ -115,9 +115,9 @@ QR scan to order placed in under a minute.
 - Diner completes an order in under 60 seconds from scan
 
 **Business objectives**
-- 50 paying restaurants within 6 months → ~15,000 SAR monthly recurring revenue
+- 50 paying restaurants within 6 months → ~15,000 AED monthly recurring revenue
 - Under 5% monthly churn (the money-saved counter is the retention mechanism)
-- Cost to sign one restaurant stays under 400 SAR
+- Cost to sign one restaurant stays under 400 AED
 
 ## Scope
 

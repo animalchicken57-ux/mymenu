@@ -27,7 +27,7 @@ export default function Home() {
             A restaurant doing 500 orders a month keeps
           </p>
           <p className="tabular mt-2 text-display text-accent-strong">
-            8,700 SAR
+            8,700 AED
           </p>
           <p className="mt-2 text-meta text-accent-strong">
             that it used to hand to a delivery app.

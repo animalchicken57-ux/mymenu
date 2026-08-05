@@ -15,7 +15,7 @@ It builds on [`product-brief.md`](./product-brief.md), which carries the
 investor-facing story; this document does not repeat that story, it makes it
 buildable.
 
-Structure: vocabulary is fixed in §3 Glossary and used verbatim everywhere else.
+Structure: vocabulary is fixed in §3 GlosAEDy and used verbatim everywhere else.
 Features in §4 each carry nested, globally-numbered functional requirements
 (FR-1 … FR-33) so epics and stories can reference them even if features get
 reorganised. Inferences made without confirmation are tagged `[ASSUMPTION]`
@@ -23,7 +23,7 @@ inline and collected in §11.
 
 ## 1. Vision
 
-A small restaurant sells a 60 SAR meal through a delivery app and keeps roughly
+A small restaurant sells a 60 AED meal through a delivery app and keeps roughly
 42 of it. Worse, it never learns who bought the meal. The customer belongs to the
 platform, and reaching that customer again costs commission again. The
 restaurant is renting people who already like its food.
@@ -34,8 +34,8 @@ monthly fee that does not grow when the restaurant grows. Diners scan, order, an
 watch the food get made. Staff work one uncluttered screen. The owner sees a
 live counter of the commission they did not pay this month.
 
-We are not a delivery company and we are not trying to beat Jahez at discovery.
-Jahez brings a restaurant strangers; MyMenu keeps the people who already came.
+We are not a delivery company and we are not trying to beat Talabat at discovery.
+Talabat brings a restaurant strangers; MyMenu keeps the people who already came.
 Most restaurants should run both, and saying so out loud is what makes the pitch
 credible.
 
@@ -104,13 +104,13 @@ credible.
 
 - **UJ-5. Abu Khalid opens the dashboard on the first of the month.** He is
   authenticated, on his phone, in bed. The first thing on the screen is the
-  Savings Counter: *"You kept 8,740 SAR last month."* Below it, the month's
+  Savings Counter: *"You kept 8,740 AED last month."* Below it, the month's
   revenue and Order count. **Climax:** he screenshots it and sends it to his
   brother, who owns a bakery. **Resolution:** he renews without thinking about
   it, and we get a referral. This journey is the retention mechanism and the
   reason FR-24 is not a nice-to-have.
 
-## 3. Glossary
+## 3. GlosAEDy
 
 - **Restaurant** — the paying tenant. Owns exactly one location in v1, one Menu,
   one Ordering Page, and one set of Users.
@@ -247,7 +247,7 @@ A visitor can enter their monthly delivery sales and see what commission is
 costing them per year.
 
 **Consequences (testable):**
-- Entering 30,000 with the default 25% shows a yearly figure of 90,000 SAR.
+- Entering 30,000 with the default 25% shows a yearly figure of 90,000 AED.
 - The result updates as the visitor types, without a page reload.
 - Non-numeric input does not produce NaN on screen.
 
@@ -579,7 +579,7 @@ A User can reach Support from every authenticated surface.
   `[NOTE FOR PM: the first serious investor question will be "why no payments?"
   Have the answer ready — it is a sequencing decision, not a capability gap.]`
 - **Multiple branches** — one Restaurant, one location. Deferred to v2; it is
-  already priced (+150 SAR/branch) so it must not be forgotten.
+  already priced (+150 AED/branch) so it must not be forgotten.
 - **Loyalty and win-back messaging** — the Customer List is the foundation; the
   campaigns on top of it are v2 and are the main reason this becomes more than
   an ordering page.
@@ -590,18 +590,18 @@ A User can reach Support from every authenticated surface.
 
 ## 7. Monetization
 
-- **Base**: 300 SAR per Restaurant per month, flat, regardless of Order volume.
-- **Setup**: 500 SAR one-time — we enter the Menu for them and print the first
+- **Base**: 300 AED per Restaurant per month, flat, regardless of Order volume.
+- **Setup**: 500 AED one-time — we enter the Menu for them and print the first
   set of Table QRs. This exists to remove the real barrier, which is not price
   but the evening of data entry.
-- **Extra branch**: +150 SAR per month (v2).
+- **Extra branch**: +150 AED per month (v2).
 - **Free tier**: the first 30 Orders each month are free. Chosen deliberately —
   a restaurant that crosses 30 Orders has already proved the product works, and
   is asking to pay rather than being asked.
-- **Target**: 50 paying Restaurants within 6 months ≈ 15,000 SAR monthly
+- **Target**: 50 paying Restaurants within 6 months ≈ 15,000 AED monthly
   recurring revenue.
 
-`[ASSUMPTION: 300 SAR/month is priced from the value story, not from validated
+`[ASSUMPTION: 300 AED/month is priced from the value story, not from validated
 willingness to pay. Verify with two real owners before the pitch.]`
 
 ## 8. Platform and Aesthetic
@@ -645,12 +645,12 @@ willingness to pay. Verify with two real owners before the pitch.]`
 
 1. What commission rate do local restaurants actually pay? The Savings Counter's
    credibility rests entirely on this. Two phone calls answer it.
-2. Is 300 SAR/month above or below what an owner would agree to on the spot?
+2. Is 300 AED/month above or below what an owner would agree to on the spot?
 3. Do small restaurants want the Diner's phone number badly enough to ask for
    it, or does requiring it cost us orders?
 4. Should Staff really need individual logins, or is one shared kitchen device
    login closer to how these kitchens actually work?
-5. Who pays the 500 SAR setup fee — is it a barrier that should be waived for
+5. Who pays the 500 AED setup fee — is it a barrier that should be waived for
    the first ten Restaurants in exchange for a testimonial?
 6. What happens when a Restaurant cancels? Do they keep their Customer List
    export? (Saying yes out loud is a strong trust signal, and costs us little.)
@@ -661,6 +661,6 @@ willingness to pay. Verify with two real owners before the pitch.]`
   OTP in v1.
 - §4.1 — Staff and Drivers never self-register; the Owner adds them.
 - §4.7 — 25% is a reasonable default Commission Assumption pending Q1 above.
-- §7 — 300 SAR/month is priced from value, not from validated willingness to pay.
+- §7 — 300 AED/month is priced from value, not from validated willingness to pay.
 - §2.2 — Cloud kitchens are correctly excluded because they have no existing
   customer base to retain.

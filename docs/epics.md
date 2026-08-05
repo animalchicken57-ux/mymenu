@@ -327,7 +327,7 @@ no save button anywhere on the page.
 
 **Given** a price input,
 **When** a negative number or more than two decimals is entered,
-**Then** it is rejected inline; stored values are integer halalas.
+**Then** it is rejected inline; stored values are integer fils.
 
 ### Story 2.3: Menu item photos
 
@@ -430,7 +430,7 @@ scrolling.
 **Given** quantity or removal changes,
 **When** they are made,
 **Then** the total recalculates to the exact sum of line items in integer
-halalas, and a removal offers a five-second undo.
+fils, and a removal offers a five-second undo.
 
 **Given** the page is refreshed or the phone rings,
 **When** the diner returns,
@@ -707,7 +707,7 @@ stored nowhere.
 **Given** the domain function,
 **When** the test suite runs,
 **Then** unit tests cover zero orders, a partial month, a value below the fee,
-and rounding at the halala.
+and rounding at the fil.
 
 ### Story 6.3: Customer list
 
@@ -873,7 +873,7 @@ So that the claim stops being abstract.
 
 **Given** monthly delivery sales of 30,000 at the default 25%,
 **When** entered,
-**Then** the page shows a yearly cost of 90,000 SAR.
+**Then** the page shows a yearly cost of 90,000 AED.
 
 **Given** typing,
 **When** each keystroke lands,

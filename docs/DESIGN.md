@@ -139,9 +139,11 @@ smiling delivery driver. The product looks like a well-run shop: clean surfaces,
 strong type, one confident colour, and enormous numbers where numbers matter.
 
 There is a deliberate positioning choice in the palette. The delivery platforms
-this product exists to escape are loud reds and oranges. MyMenu is green and
-quiet. A restaurant owner should be able to feel the difference before reading a
-word of it.
+this product exists to escape shout — Talabat in bright orange, Deliveroo in
+electric turquoise, both tuned to grab a hungry stranger scrolling a feed.
+MyMenu is not selling to that stranger. It is selling to the owner, so the green
+is deep and the surfaces are calm. A restaurant owner should be able to feel the
+difference before reading a word of it.
 
 ## Colors
 
@@ -152,7 +154,7 @@ warm neutral stack.
   white so a phone screen at a dinner table does not feel like a form.
 - **Ink (`#16181D`)** — all primary text. Near-black, not pure black; pure black
   on warm white reads as harsh at kitchen distance.
-- **Riyal Green (`#0F7B5F` / strong `#0A5D47`)** — the single brand colour. It
+- **Dirham Green (`#0F7B5F` / strong `#0A5D47`)** — the single brand colour. It
   carries exactly three jobs: primary actions, the Savings Counter, and the
   *ready* state. Money kept, and work finished. It is never used for decoration,
   never for a header band, never as a background for large areas of text.
