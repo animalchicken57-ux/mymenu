@@ -17,13 +17,18 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
   const { t } = await getT();
   const me = await getMe();
 
+  /**
+   * Only pages that exist.
+   *
+   * The full owner navigation is Dashboard · Menu · Orders · Customers · Team ·
+   * Settings (EXPERIENCE.md § Information Architecture). The rest get added to
+   * this list by the story that builds them — Orders and Customers in Epic 6,
+   * Team in story 1.7, Settings in Epic 7. A link that 404s teaches an owner
+   * the product is broken, which is a worse lesson than a shorter menu.
+   */
   const ownerLinks = [
     { href: "/dashboard", label: t.dashboard.title },
     { href: "/menu", label: "Menu" },
-    { href: "/orders", label: "Orders" },
-    { href: "/customers", label: "Customers" },
-    { href: "/team", label: "Team" },
-    { href: "/settings", label: "Settings" },
   ];
 
   return (
@@ -38,9 +43,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
           </Link>
 
           <div className="flex items-center gap-4">
-            <Link href="/support" className="text-meta text-ink-secondary">
-              {t.common.support}
-            </Link>
+            {/* Support goes back in with story 8.5, which builds /support. */}
             <form action={signOutAction}>
               <button type="submit" className="text-meta text-ink-secondary">
                 {t.common.signOut}
