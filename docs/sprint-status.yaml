@@ -42,12 +42,12 @@ development_status:
   epic-1-retrospective: optional
 
   # ── Epic 2 · The Menu ───────────────────────────────────────────
-  epic-2: backlog
-  2-1-manage-menu-categories: backlog
-  2-2-manage-menu-items: backlog
+  epic-2: in-progress
+  2-1-manage-menu-categories: review
+  2-2-manage-menu-items: review
   2-3-menu-item-photos: backlog
-  2-4-availability-toggle: backlog
-  2-5-printable-table-qr-sheet: backlog
+  2-4-availability-toggle: review
+  2-5-printable-table-qr-sheet: ready-for-dev
   epic-2-retrospective: optional
 
   # ── Epic 3 · The Diner Orders ───────────────────────────────────
