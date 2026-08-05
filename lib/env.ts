@@ -12,12 +12,24 @@ import "server-only";
 const required = [
   "NEXT_PUBLIC_SUPABASE_URL",
   "NEXT_PUBLIC_SUPABASE_ANON_KEY",
-  "SUPABASE_SERVICE_ROLE_KEY",
   "NEXT_PUBLIC_SITE_URL",
 ] as const;
 
-/** Not needed until the contact form ships (story 8.4). */
-const optional = ["RESEND_API_KEY", "SUPPORT_INBOX"] as const;
+/**
+ * Deliberately not required to serve a request.
+ *
+ * - SUPABASE_SERVICE_ROLE_KEY bypasses Row Level Security, so per AD-9 it is
+ *   only ever read by migrations and the seed script. Keeping it out of the
+ *   required set means a normal boot cannot depend on it, which is one fewer
+ *   way for it to end up somewhere it shouldn't.
+ * - RESEND_API_KEY / SUPPORT_INBOX are not needed until the contact form
+ *   ships (story 8.4).
+ */
+const optional = [
+  "SUPABASE_SERVICE_ROLE_KEY",
+  "RESEND_API_KEY",
+  "SUPPORT_INBOX",
+] as const;
 
 type Required = (typeof required)[number];
 type Optional = (typeof optional)[number];
