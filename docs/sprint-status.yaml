@@ -1,0 +1,142 @@
+# generated: 2026-08-05
+# project: MyMenu
+# project_key: MYM
+# tracking_system: file-system
+# story_location: "docs/epics.md"
+#
+# STATUS DEFINITIONS
+# ==================
+# Epic status:  backlog · in-progress · done
+# Story status: backlog · ready-for-dev · in-progress · review · done
+# Retrospective: optional · done
+#
+# WORKFLOW NOTES
+# ==============
+# - Mark an epic in-progress when its first story starts.
+# - Work top to bottom. The order is the demo path: sign up, build a menu,
+#   scan, order, cook, see the money. Do not jump ahead to Epic 8 because the
+#   landing page is fun — it is easier to write once the product exists.
+# - Move a story to review when it is built, then run a code review in a fresh
+#   context before marking it done.
+# - Story 1.2 gates everything. Nothing after it is trustworthy until the
+#   database enforces tenancy.
+
+generated: 2026-08-05
+last_updated: 2026-08-05
+project: MyMenu
+project_key: MYM
+tracking_system: file-system
+story_location: "docs/epics.md"
+
+development_status:
+  # ── Epic 1 · Foundation and Access ──────────────────────────────
+  epic-1: backlog
+  1-1-project-skeleton-and-deployment: ready-for-dev
+  1-2-database-schema-and-tenancy: backlog
+  1-3-restaurant-signup: backlog
+  1-4-login-and-role-routing: backlog
+  1-5-password-reset: backlog
+  1-6-logout: backlog
+  1-7-owner-adds-staff-and-drivers: backlog
+  1-8-role-based-access-enforcement: backlog
+  epic-1-retrospective: optional
+
+  # ── Epic 2 · The Menu ───────────────────────────────────────────
+  epic-2: backlog
+  2-1-manage-menu-categories: backlog
+  2-2-manage-menu-items: backlog
+  2-3-menu-item-photos: backlog
+  2-4-availability-toggle: backlog
+  2-5-printable-table-qr-sheet: backlog
+  epic-2-retrospective: optional
+
+  # ── Epic 3 · The Diner Orders ───────────────────────────────────
+  epic-3: backlog
+  3-1-public-ordering-page: backlog
+  3-2-cart: backlog
+  3-3-choose-a-fulfilment-mode: backlog
+  3-4-place-an-order: backlog
+  3-5-watch-order-status: backlog
+  epic-3-retrospective: optional
+
+  # ── Epic 4 · The Kitchen ────────────────────────────────────────
+  epic-4: backlog
+  4-1-todays-orders: backlog
+  4-2-new-order-alert: backlog
+  4-3-advance-order-status: backlog
+  4-4-connection-loss-is-impossible-to-miss: backlog
+  epic-4-retrospective: optional
+
+  # ── Epic 5 · Own-Driver Handoff ─────────────────────────────────
+  epic-5: backlog
+  5-1-assign-an-order-to-a-driver: backlog
+  5-2-driver-list-and-completion: backlog
+  epic-5-retrospective: optional
+
+  # ── Epic 6 · The Money Story ────────────────────────────────────
+  epic-6: backlog
+  6-1-today-at-a-glance: backlog
+  6-2-the-savings-counter: backlog
+  6-3-customer-list: backlog
+  6-4-order-history: backlog
+  epic-6-retrospective: optional
+
+  # ── Epic 7 · Account, Settings, and Arabic ──────────────────────
+  epic-7: backlog
+  7-1-account-profile: backlog
+  7-2-language-and-arabic-parity: backlog
+  7-3-security: backlog
+  7-4-restaurant-settings: backlog
+  epic-7-retrospective: optional
+
+  # ── Epic 8 · The Front Door ─────────────────────────────────────
+  epic-8: backlog
+  8-1-landing-page: backlog
+  8-2-savings-estimator: backlog
+  8-3-faqs: backlog
+  8-4-contact-form-that-really-sends: backlog
+  8-5-support-reachable-from-everywhere: backlog
+  epic-8-retrospective: optional
+
+  # ── Epic 9 · Demo Ready ─────────────────────────────────────────
+  epic-9: backlog
+  9-1-seed-a-believable-demo-restaurant: backlog
+  9-2-production-deploy-and-the-live-link: backlog
+  9-3-the-presentation: backlog
+  epic-9-retrospective: optional
+
+# The smallest set that makes a complete demo, if time runs short. Everything
+# outside this list can be cut and the pitch still works end to end.
+demo_critical_path:
+  - 1-1-project-skeleton-and-deployment
+  - 1-2-database-schema-and-tenancy
+  - 1-3-restaurant-signup
+  - 1-4-login-and-role-routing
+  - 2-1-manage-menu-categories
+  - 2-2-manage-menu-items
+  - 2-5-printable-table-qr-sheet
+  - 3-1-public-ordering-page
+  - 3-2-cart
+  - 3-4-place-an-order
+  - 3-5-watch-order-status
+  - 4-1-todays-orders
+  - 4-2-new-order-alert
+  - 4-3-advance-order-status
+  - 6-1-today-at-a-glance
+  - 6-2-the-savings-counter
+  - 8-1-landing-page
+  - 9-1-seed-a-believable-demo-restaurant
+  - 9-2-production-deploy-and-the-live-link
+  - 9-3-the-presentation
+
+# Required by the assignment brief, so none of these may be cut even though
+# they sit outside the demo critical path.
+assignment_required:
+  - 1-5-password-reset          # "forgot password" is named explicitly
+  - 7-1-account-profile         # Account / Settings / Security page
+  - 7-3-security
+  - 7-4-restaurant-settings
+  - 8-3-faqs                    # Support must contain FAQs
+  - 8-4-contact-form-that-really-sends  # must be wired to email and working
+
+action_items: []
