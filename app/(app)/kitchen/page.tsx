@@ -1,20 +1,21 @@
+import { OrderScreen, type KitchenOrder } from "@/components/kitchen/order-screen";
 import { requireRole } from "@/lib/auth";
-import { getT } from "@/lib/i18n";
+import { createClient } from "@/lib/supabase/server";
 
-/** Staff Home — the Order Screen. Built out in Epic 4. */
+/** Staff Home — the Order Screen. Epic 4. */
 export default async function KitchenPage() {
   await requireRole("staff", "owner");
-  const { t } = await getT();
 
-  return (
-    <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
-      <h1 className="text-title text-ink-primary">{t.kitchen.title}</h1>
+  const supabase = await createClient();
 
-      {/* DESIGN.md: `kitchen` type is the floor on this surface — nothing here
-          may be smaller, including this empty state. */}
-      <p className="mt-12 text-center text-kitchen text-ink-secondary">
-        {t.kitchen.empty}
-      </p>
-    </main>
-  );
+  // Row Level Security scopes this to the signed-in user's restaurant; there is
+  // deliberately no restaurant_id filter here, because relying on one would be
+  // exactly the forgotten-filter mistake AD-1 exists to make impossible.
+  const { data } = await supabase
+    .from("orders")
+    .select("id, daily_number, fulfilment_mode, table_number, address, diner_phone, note, status, total_fils, created_at, order_items(name_snapshot, quantity, note)")
+    .in("status", ["received", "cooking", "ready"])
+    .order("created_at", { ascending: false });
+
+  return <OrderScreen initial={(data ?? []) as unknown as KitchenOrder[]} />;
 }

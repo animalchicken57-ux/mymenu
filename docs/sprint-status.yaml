@@ -60,11 +60,11 @@ development_status:
   epic-3-retrospective: optional
 
   # ── Epic 4 · The Kitchen ────────────────────────────────────────
-  epic-4: backlog
-  4-1-todays-orders: backlog
-  4-2-new-order-alert: backlog
-  4-3-advance-order-status: backlog
-  4-4-connection-loss-is-impossible-to-miss: backlog
+  epic-4: in-progress
+  4-1-todays-orders: review
+  4-2-new-order-alert: review
+  4-3-advance-order-status: review
+  4-4-connection-loss-is-impossible-to-miss: review
   epic-4-retrospective: optional
 
   # ── Epic 5 · Own-Driver Handoff ─────────────────────────────────
@@ -74,9 +74,9 @@ development_status:
   epic-5-retrospective: optional
 
   # ── Epic 6 · The Money Story ────────────────────────────────────
-  epic-6: backlog
-  6-1-today-at-a-glance: backlog
-  6-2-the-savings-counter: backlog
+  epic-6: in-progress
+  6-1-today-at-a-glance: review
+  6-2-the-savings-counter: review
   6-3-customer-list: backlog
   6-4-order-history: backlog
   epic-6-retrospective: optional
