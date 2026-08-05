@@ -82,11 +82,11 @@ development_status:
   epic-6-retrospective: optional
 
   # ── Epic 7 · Account, Settings, and Arabic ──────────────────────
-  epic-7: backlog
-  7-1-account-profile: backlog
+  epic-7: in-progress
+  7-1-account-profile: review
   7-2-language-and-arabic-parity: backlog
-  7-3-security: backlog
-  7-4-restaurant-settings: backlog
+  7-3-security: review
+  7-4-restaurant-settings: review
   epic-7-retrospective: optional
 
   # ── Epic 8 · The Front Door ─────────────────────────────────────

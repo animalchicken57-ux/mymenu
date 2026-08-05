@@ -14,6 +14,7 @@ export function Field({
   autoComplete,
   required = true,
   hint,
+  inputMode,
 }: {
   name: string;
   label: string;
@@ -23,6 +24,7 @@ export function Field({
   autoComplete?: string;
   required?: boolean;
   hint?: string;
+  inputMode?: "text" | "decimal" | "numeric" | "tel" | "email";
 }) {
   const errorId = `${name}-error`;
   const hintId = `${name}-hint`;
@@ -40,6 +42,7 @@ export function Field({
         required={required}
         defaultValue={defaultValue}
         autoComplete={autoComplete}
+        inputMode={inputMode}
         aria-invalid={error ? true : undefined}
         aria-describedby={
           [error ? errorId : null, hint ? hintId : null]

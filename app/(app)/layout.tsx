@@ -29,6 +29,8 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
   const ownerLinks = [
     { href: "/dashboard", label: t.dashboard.title },
     { href: "/menu", label: "Menu" },
+    { href: "/kitchen", label: t.kitchen.title },
+    { href: "/settings", label: "Settings" },
   ];
 
   return (
