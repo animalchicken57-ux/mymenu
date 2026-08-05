@@ -30,10 +30,10 @@ story_location: "docs/epics.md"
 
 development_status:
   # ── Epic 1 · Foundation and Access ──────────────────────────────
-  epic-1: backlog
-  1-1-project-skeleton-and-deployment: ready-for-dev
-  1-2-database-schema-and-tenancy: backlog
-  1-3-restaurant-signup: backlog
+  epic-1: in-progress
+  1-1-project-skeleton-and-deployment: done
+  1-2-database-schema-and-tenancy: done
+  1-3-restaurant-signup: ready-for-dev
   1-4-login-and-role-routing: backlog
   1-5-password-reset: backlog
   1-6-logout: backlog
