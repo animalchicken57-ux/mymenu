@@ -90,12 +90,12 @@ development_status:
   epic-7-retrospective: optional
 
   # ── Epic 8 · The Front Door ─────────────────────────────────────
-  epic-8: backlog
-  8-1-landing-page: backlog
-  8-2-savings-estimator: backlog
-  8-3-faqs: backlog
-  8-4-contact-form-that-really-sends: backlog
-  8-5-support-reachable-from-everywhere: backlog
+  epic-8: in-progress
+  8-1-landing-page: review
+  8-2-savings-estimator: review
+  8-3-faqs: review
+  8-4-contact-form-that-really-sends: review
+  8-5-support-reachable-from-everywhere: review
   epic-8-retrospective: optional
 
   # ── Epic 9 · Demo Ready ─────────────────────────────────────────

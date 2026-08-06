@@ -45,7 +45,11 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
           </Link>
 
           <div className="flex items-center gap-4">
-            {/* Support goes back in with story 8.5, which builds /support. */}
+            {/* FR-33: reachable from every authenticated surface, including
+                /kitchen and /deliveries, without adding navigation to them. */}
+            <Link href="/support" className="text-meta text-ink-secondary">
+              {t.common.support}
+            </Link>
             <form action={signOutAction}>
               <button type="submit" className="text-meta text-ink-secondary">
                 {t.common.signOut}
