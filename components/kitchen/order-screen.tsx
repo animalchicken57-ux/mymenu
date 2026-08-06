@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { advanceOrder } from "@/app/actions/kitchen";
+import { bestMapLink, isPin } from "@/lib/domain/maps";
 import { formatFils } from "@/lib/domain/money";
 import { createClient } from "@/lib/supabase/client";
 
@@ -25,6 +26,8 @@ export type KitchenOrder = {
   fulfilment_mode: "dine_in" | "pickup" | "delivery";
   table_number: number | null;
   address: string | null;
+  lat: number | null;
+  lng: number | null;
   diner_phone: string;
   note: string | null;
   status: "received" | "cooking" | "ready" | "completed" | "cancelled";
@@ -105,7 +108,7 @@ export function OrderScreen({ initial }: { initial: KitchenOrder[] }) {
     const supabase = createClient();
     const { data, error } = await supabase
       .from("orders")
-      .select("id, daily_number, fulfilment_mode, table_number, address, diner_phone, note, status, total_fils, created_at, order_items(name_snapshot, quantity, note)")
+      .select("id, daily_number, fulfilment_mode, table_number, address, lat, lng, diner_phone, note, status, total_fils, created_at, order_items(name_snapshot, quantity, note)")
       .in("status", ACTIVE as unknown as string[])
       .order("created_at", { ascending: false });
 
@@ -320,8 +323,13 @@ function Card({
         #{order.daily_number} · {where}
       </p>
       <p className="text-meta text-ink-secondary">
-        {MODE_LABEL[order.fulfilment_mode]} · {order.diner_phone}
+        {MODE_LABEL[order.fulfilment_mode]} ·{" "}
+        <a href={`tel:${order.diner_phone}`} className="underline">
+          {order.diner_phone}
+        </a>
       </p>
+
+      {order.fulfilment_mode === "delivery" ? <Directions order={order} /> : null}
 
       <ul className="mt-3 flex flex-col gap-1">
         {order.order_items.map((item, index) => (
@@ -367,5 +375,29 @@ function Card({
         )}
       </div>
     </li>
+  );
+}
+
+/**
+ * One tap to Google Maps, already navigating.
+ *
+ * A pin is better than an address, but a driver would rather have a rough
+ * search than nothing at all — so an order with only words still gets a button,
+ * labelled honestly so nobody trusts it more than it deserves.
+ */
+function Directions({ order }: { order: KitchenOrder }) {
+  const pin = { lat: order.lat ?? undefined, lng: order.lng ?? undefined };
+  const link = bestMapLink(pin, order.address);
+  if (!link) return null;
+
+  return (
+    <a
+      href={link}
+      target="_blank"
+      rel="noreferrer"
+      className="mt-2 inline-flex min-h-touch items-center rounded-md border border-border-strong px-4 text-meta text-ink-primary"
+    >
+      🗺️ Directions{isPin(pin) ? "" : " (from the address)"}
+    </a>
   );
 }

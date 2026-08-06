@@ -33,6 +33,10 @@ const orderSchema = z.object({
   table: z.number().int().positive().nullable().optional(),
   address: z.string().trim().max(300).nullable().optional(),
   note: z.string().trim().max(200).nullable().optional(),
+  // Optional on purpose: a customer on a laptop, or one who refuses the
+  // browser's location prompt, must still be able to order.
+  lat: z.number().min(-90).max(90).nullable().optional(),
+  lng: z.number().min(-180).max(180).nullable().optional(),
 });
 
 export type PlaceOrderResult =
@@ -52,7 +56,8 @@ export async function placeOrder(
     };
   }
 
-  const { slug, mode, phone, items, table, address, note } = parsed.data;
+  const { slug, mode, phone, items, table, address, note, lat, lng } =
+    parsed.data;
 
   if (mode === "dine_in" && !table) {
     return { ok: false, error: "Which table are you at?" };
@@ -71,6 +76,8 @@ export async function placeOrder(
     p_table: table ?? null,
     p_address: address ?? null,
     p_note: note ?? null,
+    p_lat: lat ?? null,
+    p_lng: lng ?? null,
   });
 
   if (error) {

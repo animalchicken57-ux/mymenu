@@ -13,7 +13,7 @@ export default async function KitchenPage() {
   // exactly the forgotten-filter mistake AD-1 exists to make impossible.
   const { data } = await supabase
     .from("orders")
-    .select("id, daily_number, fulfilment_mode, table_number, address, diner_phone, note, status, total_fils, created_at, order_items(name_snapshot, quantity, note)")
+    .select("id, daily_number, fulfilment_mode, table_number, address, lat, lng, diner_phone, note, status, total_fils, created_at, order_items(name_snapshot, quantity, note)")
     .in("status", ["received", "cooking", "ready"])
     .order("created_at", { ascending: false });
 

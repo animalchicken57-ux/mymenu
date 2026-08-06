@@ -4,8 +4,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
 
 import { placeOrder } from "@/app/actions/order";
+import { LocationPicker } from "@/components/ordering/location-picker";
 import { cartTotal, formatFils } from "@/lib/domain/money";
 import type { OpenState } from "@/lib/domain/hours";
+import type { Pin } from "@/lib/domain/maps";
 
 /**
  * The Diner's whole world — stories 3.1 to 3.4.
@@ -49,6 +51,7 @@ export function OrderingPage({
   const [mode, setMode] = useState<Mode>(tableNumber ? "dine_in" : "pickup");
   const [table, setTable] = useState(tableNumber ? String(tableNumber) : "");
   const [address, setAddress] = useState("");
+  const [pin, setPin] = useState<Pin | null>(null);
   const [phone, setPhone] = useState("");
   const [note, setNote] = useState("");
 
@@ -106,6 +109,8 @@ export function OrderingPage({
         table: mode === "dine_in" ? Number(table) || null : null,
         address: mode === "delivery" ? address : null,
         note: note.trim() || null,
+        lat: mode === "delivery" ? (pin?.lat ?? null) : null,
+        lng: mode === "delivery" ? (pin?.lng ?? null) : null,
       });
 
       if (!result.ok) {
@@ -224,6 +229,8 @@ export function OrderingPage({
           setTable={setTable}
           address={address}
           setAddress={setAddress}
+          pin={pin}
+          setPin={setPin}
           phone={phone}
           setPhone={setPhone}
           note={note}
@@ -351,6 +358,8 @@ function Checkout(props: {
   setTable: (v: string) => void;
   address: string;
   setAddress: (v: string) => void;
+  pin: Pin | null;
+  setPin: (p: Pin | null) => void;
   phone: string;
   setPhone: (v: string) => void;
   note: string;
@@ -440,14 +449,19 @@ function Checkout(props: {
           ) : null}
 
           {props.mode === "delivery" ? (
-            <Labelled label="Where should we bring it?">
-              <textarea
-                rows={2}
-                value={props.address}
-                onChange={(e) => props.setAddress(e.target.value)}
-                className="w-full rounded-sm border border-border-strong bg-surface-raised px-4 py-3 text-body"
-              />
-            </Labelled>
+            <>
+              <LocationPicker pin={props.pin} onPin={props.setPin} />
+
+              <Labelled label="Where should we bring it?">
+                <textarea
+                  rows={2}
+                  value={props.address}
+                  onChange={(e) => props.setAddress(e.target.value)}
+                  placeholder="Building, flat number, anything that helps"
+                  className="w-full rounded-sm border border-border-strong bg-surface-raised px-4 py-3 text-body"
+                />
+              </Labelled>
+            </>
           ) : null}
 
           <Labelled label="Your phone number">

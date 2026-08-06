@@ -167,5 +167,85 @@ check("AD-2 raising a price does not rewrite a past order", after.json?.total_fi
 const kitchen = await api("/rest/v1/orders?select=id,daily_number,status,total_fils", { token });
 check("the owner sees the order on their own restaurant", Array.isArray(kitchen.json) && kitchen.json.length === 1);
 
+// --- the delivery map pin -----------------------------------------------------
+//
+// A delivery order can carry the customer's coordinates as well as their words.
+// The pin is help, never a requirement: somebody on a laptop, or who refuses the
+// browser's location prompt, must still be able to order.
+
+const DUBAI = { lat: 25.276987, lng: 55.296249 };
+const near = (a, b) => typeof a === "number" && Math.abs(a - b) < 1e-6;
+
+async function deliver(body) {
+  return api("/rest/v1/rpc/place_order", {
+    method: "POST",
+    body: {
+      p_slug: slug,
+      p_mode: "delivery",
+      p_phone: "050 123 4567",
+      p_items: [{ menu_item_id: mixedGrill, quantity: 1 }],
+      p_address: "Marina Gate 2, flat 1104",
+      ...body,
+    },
+  });
+}
+
+/** Reads an order back the way the Order Screen does — as the signed-in owner. */
+async function asOwner(orderRef, select) {
+  const res = await api(`/rest/v1/orders?order_ref=eq.${orderRef}&select=${select}`, { token });
+  return res.json?.[0];
+}
+
+const pinned = await deliver({ p_lat: DUBAI.lat, p_lng: DUBAI.lng });
+check("a delivery order accepts a map pin", typeof pinned.json === "string", `status ${pinned.status}`);
+
+const pinnedRow = await asOwner(pinned.json, "lat,lng,address");
+check(
+  "the pin reaches the kitchen intact",
+  near(pinnedRow?.lat, DUBAI.lat) && near(pinnedRow?.lng, DUBAI.lng),
+  `${pinnedRow?.lat}, ${pinnedRow?.lng}`,
+);
+check("the typed address is kept alongside the pin", pinnedRow?.address === "Marina Gate 2, flat 1104");
+
+// The pin is the customer's home. The Diner's 24-hour link is unauthenticated,
+// so it must not hand those coordinates back out to whoever holds the URL.
+const dinerView = await api("/rest/v1/rpc/get_order_by_ref", {
+  method: "POST",
+  body: { p_ref: pinned.json },
+});
+check(
+  "AD-3 the public order link does not leak the coordinates",
+  dinerView.json?.lat === undefined && dinerView.json?.lng === undefined,
+);
+
+const unpinned = await deliver({});
+check("delivery still works with no pin at all", typeof unpinned.json === "string", `status ${unpinned.status}`);
+
+const unpinnedRow = await asOwner(unpinned.json, "lat,lng");
+check("an unpinned order stores no coordinates", unpinnedRow?.lat === null && unpinnedRow?.lng === null);
+
+// Only a delivery has somewhere to drive to. Coordinates sent with any other
+// mode are dropped rather than quietly stored.
+const pinnedPickup = await api("/rest/v1/rpc/place_order", {
+  method: "POST",
+  body: {
+    p_slug: slug,
+    p_mode: "pickup",
+    p_phone: "050 123 4567",
+    p_items: [{ menu_item_id: mixedGrill, quantity: 1 }],
+    p_lat: DUBAI.lat,
+    p_lng: DUBAI.lng,
+  },
+});
+const pickupRow = await asOwner(pinnedPickup.json, "lat,lng");
+check(
+  "a pickup order discards coordinates it was sent",
+  pickupRow?.lat === null && pickupRow?.lng === null,
+  `${pickupRow?.lat}, ${pickupRow?.lng}`,
+);
+
+const impossible = await deliver({ p_lat: 999, p_lng: 55.296249 });
+check("impossible coordinates are refused", impossible.status >= 400, `status ${impossible.status}`);
+
 console.log(failures === 0 ? "\nAll checks passed." : `\n${failures} check(s) failed.`);
 process.exit(failures === 0 ? 0 : 1);
