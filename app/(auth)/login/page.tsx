@@ -13,12 +13,12 @@ export default async function LoginPage() {
       subtitle={t.auth.loginSubtitle}
       footer={
         <div className="flex flex-col gap-2">
-          <Link href="/forgot" className="text-accent underline">
+          <Link href="/forgot" className="text-accent-strong underline">
             {t.auth.forgotLink}
           </Link>
           <span>
             {t.auth.noAccount}{" "}
-            <Link href="/signup" className="text-accent underline">
+            <Link href="/signup" className="text-accent-strong underline">
               {t.common.signUp}
             </Link>
           </span>

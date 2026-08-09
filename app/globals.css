@@ -8,13 +8,25 @@
 --------------------------------------------------------------------------- */
 
 @theme {
-  /* Surfaces and ink */
-  --color-surface-base: #fbfaf8;
+  /* Surfaces and ink.
+
+     The neutral stack is biased toward Riyal Green rather than being a plain
+     warm off-white. Two reasons, and neither is decoration:
+
+     1. The old base (#fbfaf8) and raised (#ffffff) were 1.02:1 apart, which is
+        to say invisible. Cards did not read as cards. Dropping the base to a
+        light sage gives every panel in the product an edge without drawing one.
+     2. A neutral with no hue in it reads as unchosen. This one is the accent,
+        desaturated almost to paper, so the whole product looks like it belongs
+        to the green rather than merely containing it.
+
+     Still flat colour. DESIGN.md's ban on gradients stands. */
+  --color-surface-base: #eaf1ec;
   --color-surface-raised: #ffffff;
-  --color-surface-sunken: #f2f0ec;
-  --color-ink-primary: #16181d;
-  --color-ink-secondary: #5b6270;
-  --color-ink-disabled: #a2a8b4;
+  --color-surface-sunken: #dde8e0;
+  --color-ink-primary: #131a16;
+  --color-ink-secondary: #4f5c54;
+  --color-ink-disabled: #94a29a;
 
   /* Riyal Green — actions, savings, and `ready`. Nothing else. */
   --color-accent: #0f7b5f;
@@ -30,9 +42,9 @@
   --color-status-problem: #b91c1c;
   --color-status-problem-wash: #fcebea;
 
-  /* Lines */
-  --color-border-hairline: #e4e1db;
-  --color-border-strong: #c9c5bd;
+  /* Lines — tinted to match the ground they sit on */
+  --color-border-hairline: #d3e0d7;
+  --color-border-strong: #b3c4b8;
   --color-focus-ring: #0f7b5f;
 
   /* One family, both scripts */
@@ -109,12 +121,15 @@ body {
    is also how every menu worth copying prints it.
 --------------------------------------------------------------------------- */
 .diner-dark {
-  --color-surface-base: #0f1012;
-  --color-surface-raised: #191b1e;
-  --color-surface-sunken: #08090a;
-  --color-ink-primary: #f5f4f1;
-  --color-ink-secondary: #9aa0a6;
-  --color-ink-disabled: #6b7076;
+  /* Green-black, not neutral black. Same argument as the light stack: the
+     ground belongs to the accent. It also flatters food, which a blue-grey
+     charcoal does not. */
+  --color-surface-base: #0b100d;
+  --color-surface-raised: #151d18;
+  --color-surface-sunken: #060907;
+  --color-ink-primary: #f2f6f3;
+  --color-ink-secondary: #93a099;
+  --color-ink-disabled: #66716b;
 
   /* Riyal Green does not survive a dark ground at #0f7b5f. Same hue, lifted
      until it clears 4.5:1 against the surfaces above. */
@@ -125,8 +140,8 @@ body {
   --color-status-problem: #f0736b;
   --color-status-problem-wash: #33191a;
 
-  --color-border-hairline: #2a2d31;
-  --color-border-strong: #3d4147;
+  --color-border-hairline: #24302a;
+  --color-border-strong: #38473f;
   --color-focus-ring: #56d6a6;
 
   --tile-mix: 26%;

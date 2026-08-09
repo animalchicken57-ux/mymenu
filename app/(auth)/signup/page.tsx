@@ -14,7 +14,7 @@ export default async function SignupPage() {
       footer={
         <>
           {t.auth.haveAccount}{" "}
-          <Link href="/login" className="text-accent underline">
+          <Link href="/login" className="text-accent-strong underline">
             {t.common.signIn}
           </Link>
         </>

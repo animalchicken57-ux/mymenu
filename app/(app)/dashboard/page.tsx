@@ -101,7 +101,7 @@ export default async function DashboardPage() {
         </p>
         <Link
           href={`/r/${me.restaurant.slug}`}
-          className="mt-3 inline-block text-body text-accent underline"
+          className="mt-3 inline-block text-body text-accent-strong underline"
         >
           /r/{me.restaurant.slug}
         </Link>

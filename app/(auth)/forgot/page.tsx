@@ -12,7 +12,7 @@ export default async function ForgotPage() {
       title={t.auth.forgotTitle}
       subtitle={t.auth.forgotSubtitle}
       footer={
-        <Link href="/login" className="text-accent underline">
+        <Link href="/login" className="text-accent-strong underline">
           {t.common.back}
         </Link>
       }

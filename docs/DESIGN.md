@@ -173,6 +173,19 @@ Avoid: gradients of any kind, a second accent colour, coloured page headers,
 red-for-emphasis, and any use of green that is not an action, a saving, or a
 finished order.
 
+**The neutral stack is tinted, not neutral.** It was a warm off-white, which
+left the page ground (`#fbfaf8`) and a card (`#ffffff`) 1.02:1 apart — a
+difference nobody could see, so no panel in the product read as a panel. The
+stack is now the accent hue desaturated almost to paper (`#eaf1ec` ground,
+white cards, `#dde8e0` wells), and the dark ordering page is a green-black
+rather than a blue-grey charcoal.
+
+This is not a second colour. It is the same one, at the far end of its
+saturation, and it is still flat — the gradient ban above is unaffected. It
+does cost contrast: `--color-accent` on the new ground is 4.55:1, which passes
+but leaves no margin, so body-size links use `--color-accent-strong` (6.9:1)
+instead. Solid `--color-accent` buttons with white type are 5.2:1 and unchanged.
+
 **A dark theme the user can choose is deliberately not in v1.** Shipping one
 well-tested light theme is worth more than two half-tested ones, and the Order
 Screen's contrast requirements are easier to guarantee in a single theme.

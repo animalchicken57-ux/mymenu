@@ -34,7 +34,7 @@ export default async function MenuPage() {
         <h1 className="text-title text-ink-primary">Menu</h1>
         <p className="text-meta text-ink-secondary">
           Your page:{" "}
-          <Link href={`/r/${me.restaurant.slug}`} className="text-accent underline">
+          <Link href={`/r/${me.restaurant.slug}`} className="text-accent-strong underline">
             /r/{me.restaurant.slug}
           </Link>
         </p>
