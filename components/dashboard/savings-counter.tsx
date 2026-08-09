@@ -55,11 +55,15 @@ export function SavingsCounter({
   }, [keptFils]);
 
   return (
-    <section className="rounded-lg bg-accent-wash p-6 sm:p-8">
-      <p className="text-meta text-accent-strong">You kept, {monthLabel}</p>
+    // Solid Riyal Green, not the wash. DESIGN.md grants this one element
+    // display type on a coloured field, and a pale panel spends that permission
+    // on nothing — an owner should see this number from across the kitchen, and
+    // it is the last thing anybody looks at in a demo.
+    <section className="rounded-lg bg-accent-strong p-6 text-white sm:p-8">
+      <p className="text-meta text-white/75">You kept, {monthLabel}</p>
 
       <p
-        className="tabular mt-2 text-display text-accent-strong"
+        className="tabular mt-2 text-display"
         aria-label={`You kept ${formatDirhamsRounded(keptFils)} this month`}
       >
         {formatDirhamsRounded(shown)}
@@ -67,7 +71,7 @@ export function SavingsCounter({
 
       {/* The arithmetic, in words. An owner who does not trust the number will
           not be persuaded by a bigger version of it. */}
-      <p className="mt-3 max-w-prose text-meta text-accent-strong">
+      <p className="mt-3 max-w-prose text-meta text-white/80">
         {formatFils(salesFils)} AED of orders this month. A delivery app taking{" "}
         {Math.round(commissionRate * 100)}% would have kept{" "}
         {formatFils(commissionFils)} AED of that. MyMenu costs you{" "}
