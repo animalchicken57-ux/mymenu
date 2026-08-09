@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { HOME_FOR_ROLE, type Role } from "@/lib/auth";
-import { env } from "@/lib/env";
+import { siteUrl } from "@/lib/env";
 import { dictionary, resolveLang } from "@/lib/i18n";
 import { createClient } from "@/lib/supabase/server";
 
@@ -188,7 +188,7 @@ export async function requestResetAction(
 
   const supabase = await createClient();
   await supabase.auth.resetPasswordForEmail(email.data, {
-    redirectTo: `${env.NEXT_PUBLIC_SITE_URL}/reset`,
+    redirectTo: `${siteUrl()}/reset`,
   });
 
   return sameAnswer;

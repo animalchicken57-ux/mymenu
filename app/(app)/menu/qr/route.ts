@@ -2,7 +2,7 @@ import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import QRCode from "qrcode";
 
 import { requireRole } from "@/lib/auth";
-import { env } from "@/lib/env";
+import { siteUrl } from "@/lib/env";
 
 /**
  * The Table QR sheet — story 2.5, and UJ-1's climax.
@@ -58,7 +58,7 @@ export async function GET(request: Request) {
       const column = slot % COLUMNS;
       const row = Math.floor(slot / COLUMNS);
 
-      const url = `${env.NEXT_PUBLIC_SITE_URL}/r/${me.restaurant.slug}?table=${table}`;
+      const url = `${siteUrl()}/r/${me.restaurant.slug}?table=${table}`;
 
       const png = await QRCode.toBuffer(url, {
         type: "png",
