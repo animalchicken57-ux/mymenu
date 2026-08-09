@@ -11,6 +11,7 @@ import {
   updateItem,
 } from "@/app/actions/menu";
 import { AvailabilityToggle } from "@/components/menu/availability-toggle";
+import { PhotoButton } from "@/components/menu/photo-button";
 import { SaveOnBlur } from "@/components/menu/save-on-blur";
 import { formatFils } from "@/lib/domain/money";
 
@@ -20,6 +21,7 @@ export type MenuItem = {
   description: string | null;
   price_fils: number;
   is_available: boolean;
+  photo_path: string | null;
 };
 
 export type MenuCategory = {
@@ -63,8 +65,14 @@ export function MenuEditor({ categories }: { categories: MenuCategory[] }) {
             {category.menu_items.map((item) => (
               <li
                 key={item.id}
-                className="flex flex-wrap items-start gap-2 border-b border-border-hairline px-3 py-3 last:border-b-0"
+                className="flex flex-wrap items-start gap-3 border-b border-border-hairline px-3 py-3 last:border-b-0"
               >
+                <PhotoButton
+                  itemId={item.id}
+                  name={item.name}
+                  photoPath={item.photo_path}
+                />
+
                 <div className="min-w-[12rem] flex-1">
                   <SaveOnBlur
                     label="Dish name"

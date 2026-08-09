@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { z } from "zod";
 
 import { getMe, requireRole } from "@/lib/auth";
+import { coverPath } from "@/lib/domain/photos";
 import { LANG_COOKIE } from "@/lib/i18n";
 import { createClient } from "@/lib/supabase/server";
 
@@ -88,6 +89,105 @@ export async function saveRestaurant(
   revalidatePath("/menu");
 
   return { ok: true, message: "saved" };
+}
+
+// -----------------------------------------------------------------------------
+// The cover photograph — the picture behind the restaurant's name
+// -----------------------------------------------------------------------------
+
+const MAX_COVER_BYTES = 5 * 1024 * 1024;
+const ALLOWED_IMAGE = ["image/jpeg", "image/png", "image/webp"];
+
+export async function uploadCover(
+  _prev: Result | null,
+  formData: FormData,
+): Promise<Result> {
+  const me = await requireRole("owner");
+
+  const file = formData.get("cover");
+  if (!(file instanceof File) || file.size === 0) {
+    return { ok: false, error: "Choose a photo first." };
+  }
+  if (file.size > MAX_COVER_BYTES) {
+    return { ok: false, error: "That photo is over 5 MB. Try a smaller one." };
+  }
+  if (!ALLOWED_IMAGE.includes(file.type)) {
+    return { ok: false, error: "Use a JPG, PNG or WEBP photo." };
+  }
+
+  const supabase = await createClient();
+
+  const { data: current } = await supabase
+    .from("restaurants")
+    .select("cover_path")
+    .eq("id", me.restaurant_id)
+    .maybeSingle();
+
+  const path = coverPath(me.restaurant_id, file.name);
+
+  const { error: uploadError } = await supabase.storage
+    .from("menu-photos")
+    .upload(path, file, { upsert: true, contentType: file.type });
+
+  if (uploadError) {
+    if (/bucket/i.test(uploadError.message)) {
+      return {
+        ok: false,
+        error: "Photo storage is not set up yet. Run migration 0006 in Supabase.",
+      };
+    }
+    return { ok: false, error: "That photo did not upload. Try again." };
+  }
+
+  // A JPG replaced by a PNG leaves the old object behind, paid for and unused.
+  if (current?.cover_path && current.cover_path !== path) {
+    await supabase.storage.from("menu-photos").remove([current.cover_path]);
+  }
+
+  const { error } = await supabase
+    .from("restaurants")
+    .update({ cover_path: path })
+    .eq("id", me.restaurant_id);
+
+  if (error) {
+    if (/cover_path/.test(error.message)) {
+      return {
+        ok: false,
+        error: "The database is missing an update. Run migration 0006 in Supabase.",
+      };
+    }
+    return { ok: false, error: "The photo uploaded but did not save. Try again." };
+  }
+
+  revalidatePath("/settings");
+  revalidatePath("/r", "layout");
+  return { ok: true, message: "saved" };
+}
+
+export async function removeCover(): Promise<Result> {
+  const me = await requireRole("owner");
+  const supabase = await createClient();
+
+  const { data: current } = await supabase
+    .from("restaurants")
+    .select("cover_path")
+    .eq("id", me.restaurant_id)
+    .maybeSingle();
+
+  if (!current?.cover_path) return ok;
+
+  await supabase.storage.from("menu-photos").remove([current.cover_path]);
+
+  const { error } = await supabase
+    .from("restaurants")
+    .update({ cover_path: null })
+    .eq("id", me.restaurant_id);
+
+  if (error) return { ok: false, error: "That did not remove. Try again." };
+
+  revalidatePath("/settings");
+  revalidatePath("/r", "layout");
+  return ok;
 }
 
 // -----------------------------------------------------------------------------

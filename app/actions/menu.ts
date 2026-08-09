@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { requireRole } from "@/lib/auth";
 import { parseDirhams } from "@/lib/domain/money";
+import { photoPath } from "@/lib/domain/photos";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -190,5 +191,112 @@ export async function deleteItem(id: string): Promise<Result> {
   if (error) return fail("That did not delete. Try again.");
 
   revalidatePath("/menu");
+  return ok;
+}
+
+// -----------------------------------------------------------------------------
+// Photographs — FR-12, story 2.3
+// -----------------------------------------------------------------------------
+
+const MAX_BYTES = 3 * 1024 * 1024;
+const ALLOWED = ["image/jpeg", "image/png", "image/webp"];
+
+/**
+ * Upload goes through the cookie-bound client, so the storage policy from
+ * migration 0006 applies exactly as the table policies do: an owner writing
+ * inside their own restaurant's folder, and nobody else anywhere.
+ */
+export async function uploadItemPhoto(
+  itemId: string,
+  formData: FormData,
+): Promise<Result> {
+  const me = await requireRole("owner");
+  if (!uuid.safeParse(itemId).success) return fail("Unknown item.");
+
+  const file = formData.get("photo");
+  if (!(file instanceof File) || file.size === 0) {
+    return fail("Choose a photo first.");
+  }
+  if (file.size > MAX_BYTES) {
+    return fail("That photo is over 3 MB. Try a smaller one.");
+  }
+  if (!ALLOWED.includes(file.type)) {
+    return fail("Use a JPG, PNG or WEBP photo.");
+  }
+
+  const supabase = await createClient();
+
+  // The item is fetched rather than trusted from the form: this is what stops a
+  // forged itemId writing a photo onto another restaurant's dish. RLS would
+  // refuse the update anyway; this refuses it before anything is uploaded.
+  const { data: item } = await supabase
+    .from("menu_items")
+    .select("id, photo_path")
+    .eq("id", itemId)
+    .eq("restaurant_id", me.restaurant_id)
+    .maybeSingle();
+
+  if (!item) return fail("That dish is not on your menu.");
+
+  const path = photoPath(me.restaurant_id, itemId, file.name);
+
+  const { error: uploadError } = await supabase.storage
+    .from("menu-photos")
+    .upload(path, file, { upsert: true, contentType: file.type });
+
+  if (uploadError) {
+    if (/bucket/i.test(uploadError.message)) {
+      return fail(
+        "Photo storage is not set up yet. Run migration 0006 in Supabase.",
+      );
+    }
+    return fail("That photo did not upload. Try again.");
+  }
+
+  // A re-upload as a different file type leaves the old object behind, and a
+  // stale JPG next to a new PNG is a bill nobody notices.
+  if (item.photo_path && item.photo_path !== path) {
+    await supabase.storage.from("menu-photos").remove([item.photo_path]);
+  }
+
+  const { error } = await supabase
+    .from("menu_items")
+    .update({ photo_path: path })
+    .eq("id", itemId);
+
+  if (error) return fail("The photo uploaded but did not attach. Try again.");
+
+  revalidatePath("/menu");
+  revalidatePath("/r", "layout");
+  return ok;
+}
+
+export async function removeItemPhoto(itemId: string): Promise<Result> {
+  const me = await requireRole("owner");
+  if (!uuid.safeParse(itemId).success) return fail("Unknown item.");
+
+  const supabase = await createClient();
+
+  const { data: item } = await supabase
+    .from("menu_items")
+    .select("id, photo_path")
+    .eq("id", itemId)
+    .eq("restaurant_id", me.restaurant_id)
+    .maybeSingle();
+
+  if (!item) return fail("That dish is not on your menu.");
+  if (!item.photo_path) return ok;
+
+  await supabase.storage.from("menu-photos").remove([item.photo_path]);
+
+  const { error } = await supabase
+    .from("menu_items")
+    .update({ photo_path: null })
+    .eq("id", itemId);
+
+  if (error) return fail("That did not remove. Try again.");
+
+  revalidatePath("/menu");
+  revalidatePath("/r", "layout");
   return ok;
 }

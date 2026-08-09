@@ -146,7 +146,7 @@ export default async function LandingPage() {
           <p className="text-meta text-ink-secondary">MyMenu</p>
           <nav className="flex gap-6">
             <Link href="/support" className="text-meta text-ink-secondary">
-              Support
+              Help
             </Link>
             <Link href="/login" className="text-meta text-ink-secondary">
               Sign in

@@ -4,7 +4,14 @@ import { ContactForm } from "@/components/support/contact-form";
 import { getMe } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
-/** Support — stories 8.3 and 8.4. FAQs first, because most questions repeat. */
+/**
+ * Help — stories 8.3 and 8.4. FAQs first, because most questions repeat.
+ *
+ * Called Help and not Support throughout: "support" reads to some people as
+ * money you give a project rather than help you get from it, and this page is
+ * squarely the second thing. The route stays /support so existing links, and
+ * the support_messages table behind the form, keep working.
+ */
 
 const FAQS = [
   {
@@ -66,7 +73,7 @@ export default async function SupportPage() {
         MyMenu
       </Link>
 
-      <h1 className="mt-4 text-title text-ink-primary">Support</h1>
+      <h1 className="mt-4 text-title text-ink-primary">Help</h1>
       <p className="mt-2 max-w-prose text-body text-ink-secondary">
         The questions we get most, and a way to ask anything else.
       </p>

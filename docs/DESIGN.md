@@ -173,10 +173,28 @@ Avoid: gradients of any kind, a second accent colour, coloured page headers,
 red-for-emphasis, and any use of green that is not an action, a saving, or a
 finished order.
 
-**Dark mode is deliberately not in v1.** The three rooms are all lit. Shipping
-one well-tested light theme is worth more than two half-tested ones, and the
-Order Screen's contrast requirements are easier to guarantee in a single theme.
-Revisit when a real kitchen asks.
+**A dark theme the user can choose is deliberately not in v1.** Shipping one
+well-tested light theme is worth more than two half-tested ones, and the Order
+Screen's contrast requirements are easier to guarantee in a single theme.
+
+**But the Diner's ordering page is dark, and it is not a theme.** It is the one
+fixed palette for that one surface, scoped in `globals.css` as `.diner-dark`,
+and no user setting reaches it. The rooms are not all lit the same way:
+
+- The **Owner's dashboard** and the **Order Screen** are read in a bright
+  kitchen under strip lighting, often on a wall-mounted tablet. Light, always.
+- The **Diner** is sitting at a table in a dining room lit for eating, holding
+  a phone at arm's length. A white page at full brightness is the thing people
+  put face-down on the table.
+
+Food is also the argument. A photograph of a mixed grill on charcoal is how
+every menu worth copying prints it; the same photograph on white looks like a
+stock listing. The tile colours for dishes without a photograph carry the same
+logic — they wash the ground at 26% instead of 14%, and the letter lifts 42%
+toward white, because a palette tuned for paper fails on charcoal.
+
+Riyal Green is lifted from `#0f7b5f` to `#2fb887` on that surface only. Same
+hue, same meaning, enough contrast to clear 4.5:1 against the dark ground.
 
 ## Typography
 

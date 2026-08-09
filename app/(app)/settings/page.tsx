@@ -1,4 +1,5 @@
 import {
+  CoverForm,
   LanguageSwitch,
   PasswordForm,
   ProfileForm,
@@ -30,6 +31,14 @@ export default async function SettingsPage() {
     .eq("id", me.restaurant_id)
     .maybeSingle();
 
+  // Separate, and allowed to fail: cover_path arrives with migration 0006, and
+  // the rest of Settings must keep working on a database that has not run it.
+  const { data: cover, error: coverError } = await supabase
+    .from("restaurants")
+    .select("cover_path")
+    .eq("id", me.restaurant_id)
+    .maybeSingle();
+
   return (
     <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-8">
       <h1 className="text-title text-ink-primary">Settings</h1>
@@ -49,6 +58,26 @@ export default async function SettingsPage() {
       >
         <LanguageSwitch current={lang} />
       </Section>
+
+      {me.role === "owner" ? (
+        <Section
+          title="Cover photo"
+          blurb="The picture behind your name on your ordering page. Yours, not one off the internet."
+        >
+          {coverError ? (
+            <p
+              role="alert"
+              className="rounded-md border border-status-problem p-4 text-meta text-status-problem"
+            >
+              The database is missing an update. Run{" "}
+              <code>supabase/migrations/0006_menu_photos.sql</code> in the
+              Supabase SQL Editor, then reload this page.
+            </p>
+          ) : (
+            <CoverForm coverPath={cover?.cover_path ?? null} />
+          )}
+        </Section>
+      ) : null}
 
       {me.role === "owner" && restaurant ? (
         <Section title="Your restaurant">

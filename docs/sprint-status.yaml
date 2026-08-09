@@ -22,7 +22,7 @@
 #   database enforces tenancy.
 
 generated: 2026-08-05
-last_updated: 2026-08-05
+last_updated: 2026-08-08
 project: MyMenu
 project_key: MYM
 tracking_system: file-system
@@ -37,7 +37,10 @@ development_status:
   1-4-login-and-role-routing: done
   1-5-password-reset: review
   1-6-logout: done
-  1-7-owner-adds-staff-and-drivers: ready-for-dev
+  # Built as drivers only — kitchen staff share the one tablet that is already
+  # signed in, so a staff login was scope nobody would use. Epic 5 is what
+  # needed drivers to exist. Blocked on migration 0005 being run by hand.
+  1-7-owner-adds-staff-and-drivers: review
   1-8-role-based-access-enforcement: review
   epic-1-retrospective: optional
 

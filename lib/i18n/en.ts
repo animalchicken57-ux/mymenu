@@ -22,7 +22,11 @@ export const en = {
     signOut: "Sign out",
     saving: "Saving",
     back: "Back",
-    support: "Support",
+    // "Help", not "Support": support reads to some people as the kind you give
+    // rather than the kind you get, and this link is the second one.
+    support: "Help",
+    settings: "Settings",
+    account: "Your account",
   },
 
   auth: {
@@ -57,6 +61,8 @@ export const en = {
       badCredentials: "That email and password do not match.",
       linkExpired: "That link has expired. Ask for a new one.",
       alreadySetUp: "This account already has a restaurant.",
+      noRestaurant:
+        "This account is not part of a restaurant. Ask the owner to add you.",
       generic: "Something went wrong at our end. Try again.",
     },
   },

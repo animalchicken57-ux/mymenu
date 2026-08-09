@@ -73,6 +73,15 @@
   --spacing-touch-lg: 64px;
 }
 
+/* A dish tile's colour, in two parts: how much of it washes the ground, and
+   how much white lifts the letter. Both are overridden on the Diner's dark
+   page, where a paper-weight wash disappears and a mid-tone letter fails
+   contrast. Full strength on paper; 58% over white on charcoal. */
+:root {
+  --tile-mix: 14%;
+  --tile-ink-mix: 100%;
+}
+
 /* ---------------------------------------------------------------------------
    Base
 --------------------------------------------------------------------------- */
@@ -83,6 +92,48 @@ body {
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: 1.55;
+}
+
+/* ---------------------------------------------------------------------------
+   The Diner's dark room — DESIGN.md § Colors
+
+   One scope, and deliberately only one: the public ordering page. Every token
+   below is redefined on the wrapper, so the Tailwind utilities inside resolve
+   to these instead of the light values without a single class changing.
+
+   The Owner's dashboard and the kitchen Order Screen stay light on purpose.
+   They are read in a bright kitchen under strip lighting, where a dark screen
+   is the wrong answer and the Order Screen's contrast floor is hard to hold.
+   The Diner is somewhere else entirely: sitting at a table in a dim dining
+   room, holding a phone at arm's length. Food photographed on a dark ground
+   is also how every menu worth copying prints it.
+--------------------------------------------------------------------------- */
+.diner-dark {
+  --color-surface-base: #0f1012;
+  --color-surface-raised: #191b1e;
+  --color-surface-sunken: #08090a;
+  --color-ink-primary: #f5f4f1;
+  --color-ink-secondary: #9aa0a6;
+  --color-ink-disabled: #6b7076;
+
+  /* Riyal Green does not survive a dark ground at #0f7b5f. Same hue, lifted
+     until it clears 4.5:1 against the surfaces above. */
+  --color-accent: #2fb887;
+  --color-accent-strong: #56d6a6;
+  --color-accent-wash: #12312a;
+
+  --color-status-problem: #f0736b;
+  --color-status-problem-wash: #33191a;
+
+  --color-border-hairline: #2a2d31;
+  --color-border-strong: #3d4147;
+  --color-focus-ring: #56d6a6;
+
+  --tile-mix: 26%;
+  --tile-ink-mix: 58%;
+
+  background: var(--color-surface-base);
+  color: var(--color-ink-primary);
 }
 
 /* Every price, total, and counter. Stops a ticking figure from jittering

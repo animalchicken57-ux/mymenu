@@ -1,8 +1,9 @@
 import Link from "next/link";
 
-import { signOutAction } from "@/app/actions/auth";
+import { AccountMenu } from "@/components/app/account-menu";
 import { getMe, HOME_FOR_ROLE } from "@/lib/auth";
 import { getT } from "@/lib/i18n";
+import { createClient } from "@/lib/supabase/server";
 
 /**
  * The authenticated shell.
@@ -10,27 +11,32 @@ import { getT } from "@/lib/i18n";
  * EXPERIENCE.md § Information Architecture: two navigation shapes on purpose.
  * The Owner browses, so they get a nav bar. Staff and Drivers get none — their
  * Home surface fills the screen and the only other reachable places sit behind
- * this one header. A kitchen tablet with a nav bar is a kitchen tablet someone
- * gets lost in.
+ * the account menu in the corner. A kitchen tablet with a nav bar is a kitchen
+ * tablet someone gets lost in.
  */
 export default async function AppLayout({ children }: LayoutProps<"/">) {
   const { t } = await getT();
   const me = await getMe();
 
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   /**
-   * Only pages that exist.
+   * Only pages that exist, and only places an owner works.
    *
-   * The full owner navigation is Dashboard · Menu · Orders · Customers · Team ·
-   * Settings (EXPERIENCE.md § Information Architecture). The rest get added to
-   * this list by the story that builds them — Orders and Customers in Epic 6,
-   * Team in story 1.7, Settings in Epic 7. A link that 404s teaches an owner
-   * the product is broken, which is a worse lesson than a shorter menu.
+   * Settings and Help are deliberately not here — they live in the account
+   * menu, where every product keeps them, which leaves this row holding just
+   * the four surfaces of the job. Orders and Customers get added by Epic 6. A
+   * link that 404s teaches an owner the product is broken, which is a worse
+   * lesson than a shorter menu.
    */
   const ownerLinks = [
     { href: "/dashboard", label: t.dashboard.title },
     { href: "/menu", label: "Menu" },
     { href: "/kitchen", label: t.kitchen.title },
-    { href: "/settings", label: "Settings" },
+    { href: "/team", label: "Drivers" },
   ];
 
   return (
@@ -44,18 +50,19 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
             {me?.restaurant.name ?? t.brand.name}
           </Link>
 
-          <div className="flex items-center gap-4">
-            {/* FR-33: reachable from every authenticated surface, including
-                /kitchen and /deliveries, without adding navigation to them. */}
-            <Link href="/support" className="text-meta text-ink-secondary">
-              {t.common.support}
-            </Link>
-            <form action={signOutAction}>
-              <button type="submit" className="text-meta text-ink-secondary">
-                {t.common.signOut}
-              </button>
-            </form>
-          </div>
+          {/* FR-33: Help is reachable from every authenticated surface,
+              including /kitchen and /deliveries, without adding navigation to
+              them. */}
+          <AccountMenu
+            name={me?.full_name ?? null}
+            email={user?.email ?? null}
+            labels={{
+              account: t.common.account,
+              settings: t.common.settings,
+              support: t.common.support,
+              signOut: t.common.signOut,
+            }}
+          />
         </div>
 
         {me?.role === "owner" ? (

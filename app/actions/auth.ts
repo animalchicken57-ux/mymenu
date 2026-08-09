@@ -147,8 +147,14 @@ export async function signInAction(
 
   const { data: me } = await supabase.rpc("me");
 
-  // Signed in, but never finished naming their restaurant.
-  if (!me) redirect("/signup/restaurant");
+  // The credentials are good but the account belongs to no restaurant: either
+  // signup was abandoned before naming one, or an owner has since removed them
+  // from the team (story 1.7). Either way there is no surface to land on, so
+  // end the session here rather than let a dead login hold an open one.
+  if (!me) {
+    await supabase.auth.signOut();
+    return { ok: false, error: e.noRestaurant };
+  }
 
   redirect(HOME_FOR_ROLE[(me as { role: Role }).role]);
 }

@@ -1,11 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
 
 import { placeOrder } from "@/app/actions/order";
 import { LocationPicker } from "@/components/ordering/location-picker";
 import { cartTotal, formatFils } from "@/lib/domain/money";
+import { photoUrl, tileColor, tileLetter } from "@/lib/domain/photos";
 import type { OpenState } from "@/lib/domain/hours";
 import type { Pin } from "@/lib/domain/maps";
 
@@ -23,6 +25,7 @@ type Item = {
   description: string | null;
   priceFils: number;
   isAvailable: boolean;
+  photoPath: string | null;
 };
 
 type Category = { id: string; name: string; items: Item[] };
@@ -35,7 +38,12 @@ export function OrderingPage({
   tableNumber,
   openState,
 }: {
-  restaurant: { name: string; slug: string; deliveryEnabled: boolean };
+  restaurant: {
+    name: string;
+    slug: string;
+    deliveryEnabled: boolean;
+    coverPath: string | null;
+  };
   categories: Category[];
   tableNumber: number | null;
   openState: OpenState;
@@ -156,21 +164,27 @@ export function OrderingPage({
   }
 
   return (
-    <Shell restaurant={restaurant} tableNumber={tableNumber}>
-      <div className="flex flex-col gap-8 pb-32">
+    <Shell
+      restaurant={restaurant}
+      tableNumber={tableNumber}
+      categories={categories}
+    >
+      <div className="flex flex-col gap-10 pb-36">
         {categories.map((category) => (
-          <section key={category.id}>
+          <section key={category.id} id={`cat-${category.id}`} className="scroll-mt-20">
             <h2 className="text-heading text-ink-primary">{category.name}</h2>
 
-            <ul className="mt-3 flex flex-col gap-2">
+            <ul className="mt-3 flex flex-col gap-3">
               {category.items.map((item) => (
                 <li
                   key={item.id}
-                  className={`flex items-start gap-3 rounded-md border border-border-hairline bg-surface-raised p-4 ${
+                  className={`flex items-stretch gap-4 overflow-hidden rounded-md border border-border-hairline bg-surface-raised ${
                     item.isAvailable ? "" : "opacity-60"
                   }`}
                 >
-                  <div className="min-w-0 flex-1">
+                  <DishTile item={item} />
+
+                  <div className="flex min-w-0 flex-1 flex-col justify-center gap-1 py-4">
                     <p
                       className={`text-body font-semibold ${
                         item.isAvailable
@@ -181,28 +195,33 @@ export function OrderingPage({
                       {item.name}
                     </p>
                     {item.description ? (
-                      <p className="mt-1 text-meta text-ink-secondary">
+                      <p className="text-meta text-ink-secondary">
                         {item.description}
                       </p>
                     ) : null}
-                    <p className="tabular mt-2 text-body font-semibold text-ink-primary">
-                      {formatFils(item.priceFils)} AED
+                    <p className="tabular text-body font-bold text-accent-strong">
+                      {formatFils(item.priceFils)}
+                      <span className="ms-1 text-meta font-medium text-ink-secondary">
+                        AED
+                      </span>
                     </p>
                   </div>
 
-                  {item.isAvailable ? (
-                    <Stepper
-                      quantity={quantities[item.id] ?? 0}
-                      onChange={(next) => setQuantity(item.id, next)}
-                      label={item.name}
-                    />
-                  ) : (
-                    // Greyed in place, never hidden — a diner who cannot find
-                    // the dish they came for asks a human instead.
-                    <span className="shrink-0 rounded-full bg-surface-sunken px-3 py-1 text-meta text-ink-secondary">
-                      Sold out
-                    </span>
-                  )}
+                  <div className="flex items-center pe-4">
+                    {item.isAvailable ? (
+                      <Stepper
+                        quantity={quantities[item.id] ?? 0}
+                        onChange={(next) => setQuantity(item.id, next)}
+                        label={item.name}
+                      />
+                    ) : (
+                      // Greyed in place, never hidden — a diner who cannot find
+                      // the dish they came for asks a human instead.
+                      <span className="shrink-0 rounded-full bg-surface-sunken px-3 py-1 text-meta text-ink-secondary">
+                        Sold out
+                      </span>
+                    )}
+                  </div>
                 </li>
               ))}
             </ul>
@@ -248,22 +267,132 @@ export function OrderingPage({
 
 // -----------------------------------------------------------------------------
 
+/**
+ * The picture of the dish, or a stand-in for it.
+ *
+ * A menu with no photographs still has to look like a menu. Every dish without
+ * one gets a coloured tile carrying its first letter, in a colour derived from
+ * its name, so the page has life on the day an owner finishes typing and before
+ * they have photographed anything. Not an emoji, and not a grey placeholder
+ * box — both of those read as unfinished.
+ */
+function DishTile({ item }: { item: Item }) {
+  const url = photoUrl(item.photoPath);
+
+  if (url) {
+    return (
+      <Image
+        src={url}
+        alt={item.name}
+        width={192}
+        height={192}
+        className="size-24 shrink-0 object-cover"
+        unoptimized
+      />
+    );
+  }
+
+  const color = tileColor(item.name || item.id);
+
+  return (
+    <div
+      aria-hidden="true"
+      className="flex size-24 shrink-0 items-center justify-center"
+      style={{
+        backgroundColor: `color-mix(in srgb, ${color} var(--tile-mix), transparent)`,
+        color: `color-mix(in srgb, ${color} var(--tile-ink-mix), white)`,
+      }}
+    >
+      <span className="text-title font-bold">{tileLetter(item.name)}</span>
+    </div>
+  );
+}
+
 function Shell({
   restaurant,
   tableNumber,
+  categories,
   children,
 }: {
-  restaurant: { name: string };
+  restaurant: { name: string; coverPath?: string | null };
   tableNumber?: number | null;
+  categories?: Category[];
   children: React.ReactNode;
 }) {
+  const cover = photoUrl(restaurant.coverPath);
+
   return (
-    <main className="mx-auto w-full max-w-xl flex-1 px-4 py-8">
-      <h1 className="text-title text-ink-primary">{restaurant.name}</h1>
-      {tableNumber ? (
-        <p className="mt-1 text-meta text-ink-secondary">Table {tableNumber}</p>
-      ) : null}
-      <div className="mt-6">{children}</div>
+    // diner-dark redefines the palette tokens for everything inside, so the
+    // Diner reads a dark page while the Owner and the kitchen stay light
+    // (globals.css § The Diner's dark room).
+    <main className="diner-dark flex min-h-screen flex-1 flex-col">
+      <header className="relative bg-surface-sunken">
+        {cover ? (
+          <>
+            <Image
+              src={cover}
+              alt=""
+              fill
+              sizes="100vw"
+              priority
+              className="object-cover"
+            />
+            {/* The scrim is the whole reason a photo can go here at all. A
+                restaurant's own picture is busy by nature — plates, faces,
+                strip lights — and the name has to stay readable on top of
+                whatever they upload. Darkest at the bottom, where the section
+                buttons sit. */}
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/65 to-black/85"
+            />
+          </>
+        ) : null}
+
+        <div className="relative mx-auto w-full max-w-xl px-4 py-8">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <h1 className="text-title text-ink-primary">{restaurant.name}</h1>
+              {tableNumber ? (
+                <p className="mt-2 inline-flex rounded-full bg-accent-wash px-3 py-1 text-meta font-semibold text-accent-strong">
+                  Table {tableNumber}
+                </p>
+              ) : null}
+            </div>
+
+            {/* Whose software this is. It sits opposite the restaurant's own
+                name rather than above it — the restaurant is the brand on this
+                page, and we are the small print. Flips side in Arabic. */}
+            <span className="shrink-0 pt-1 text-meta uppercase tracking-widest text-ink-secondary">
+              MyMenu
+            </span>
+          </div>
+        </div>
+
+        {/* Jump links, not decoration: a menu with eight sections is a long
+            scroll on a phone held in one hand over a table. */}
+        {categories && categories.length > 1 ? (
+          <nav
+            aria-label="Menu sections"
+            className="relative mx-auto w-full max-w-xl overflow-x-auto px-4 pb-4"
+          >
+            <ul className="flex gap-2">
+              {categories.map((category) => (
+                <li key={category.id}>
+                  <a
+                    href={`#cat-${category.id}`}
+                    className="block whitespace-nowrap rounded-full border border-border-hairline bg-surface-raised/90 px-4 py-2 text-meta text-ink-primary backdrop-blur-sm"
+                  >
+                    {category.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ) : null}
+      </header>
+
+      <div className="mx-auto w-full max-w-xl px-4 py-8">{children}</div>
     </main>
   );
 }

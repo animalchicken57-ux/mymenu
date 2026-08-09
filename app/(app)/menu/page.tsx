@@ -18,7 +18,9 @@ export default async function MenuPage() {
 
   const { data } = await supabase
     .from("menu_categories")
-    .select("id, name, position, menu_items(id, name, description, price_fils, is_available, position)")
+    .select(
+      "id, name, position, menu_items(id, name, description, price_fils, is_available, photo_path, position)",
+    )
     .eq("restaurant_id", me.restaurant_id)
     .order("position", { ascending: true })
     .order("position", { referencedTable: "menu_items", ascending: true });

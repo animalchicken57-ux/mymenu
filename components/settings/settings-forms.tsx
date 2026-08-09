@@ -1,16 +1,20 @@
 "use client";
 
-import { useActionState, useTransition } from "react";
+import Image from "next/image";
+import { useActionState, useRef, useState, useTransition } from "react";
 
 import {
   changePassword,
+  removeCover,
   saveProfile,
   saveRestaurant,
   setLanguage,
+  uploadCover,
   type Result,
 } from "@/app/actions/settings";
 import { Field } from "@/components/ui/field";
 import { SubmitButton } from "@/components/ui/submit-button";
+import { photoUrl } from "@/lib/domain/photos";
 import type { Dictionary, Lang } from "@/lib/i18n";
 
 function Saved({ shown }: { shown: boolean }) {
@@ -94,6 +98,96 @@ export function RestaurantForm({
       <Saved shown={state?.message === "saved"} />
 
       <SubmitButton pendingLabel={t.common.saving}>Save</SubmitButton>
+    </form>
+  );
+}
+
+/**
+ * The picture behind the restaurant's name on its ordering page.
+ *
+ * Deliberately the owner's own photograph and nothing else — no stock library
+ * and no gallery to pick from. A cover pulled off the internet is somebody
+ * else's restaurant, usually with somebody else's logo and phone number
+ * printed across it.
+ */
+export function CoverForm({ coverPath }: { coverPath: string | null }) {
+  const [state, action] = useActionState<Result | null, FormData>(
+    uploadCover,
+    null,
+  );
+  const [removing, startRemoving] = useTransition();
+  const [chosen, setChosen] = useState<string | null>(null);
+  const input = useRef<HTMLInputElement>(null);
+
+  const url = photoUrl(coverPath);
+
+  return (
+    <form action={action} className="flex flex-col gap-4">
+      <div className="relative flex h-40 items-center justify-center overflow-hidden rounded-md border border-border-hairline bg-surface-sunken">
+        {url ? (
+          <Image
+            src={url}
+            alt="Your cover photo"
+            width={960}
+            height={320}
+            className="size-full object-cover"
+            unoptimized
+          />
+        ) : (
+          <p className="px-6 text-center text-meta text-ink-secondary">
+            No cover photo yet. Your menu shows your name on a plain dark
+            background.
+          </p>
+        )}
+      </div>
+
+      <label className="flex flex-col gap-2">
+        <span className="text-meta font-medium text-ink-primary">
+          Choose a photo
+        </span>
+        <input
+          ref={input}
+          type="file"
+          name="cover"
+          accept="image/jpeg,image/png,image/webp"
+          onChange={(e) => setChosen(e.target.files?.[0]?.name ?? null)}
+          className="text-meta text-ink-secondary file:me-3 file:min-h-touch file:rounded-md file:border file:border-border-strong file:bg-surface-raised file:px-4 file:text-body file:text-ink-primary"
+        />
+        <span className="text-meta text-ink-secondary">
+          A wide photo of your dining room or your food works best. Use your own
+          photo &mdash; one taken off the internet usually has another
+          restaurant&rsquo;s logo on it. Up to 5 MB.
+        </span>
+      </label>
+
+      {state && !state.ok ? (
+        <p role="alert" className="text-meta text-status-problem">
+          {state.error}
+        </p>
+      ) : null}
+      <Saved shown={state?.message === "saved"} />
+
+      <div className="flex flex-wrap gap-3">
+        <div className="min-w-48 flex-1">
+          <SubmitButton pendingLabel="Uploading">
+            {chosen ? "Upload this photo" : "Upload"}
+          </SubmitButton>
+        </div>
+
+        {url ? (
+          <button
+            type="button"
+            disabled={removing}
+            onClick={() => {
+              if (!window.confirm("Remove your cover photo?")) return;
+              startRemoving(() => removeCover().then(() => {}));
+            }}
+            className="min-h-touch rounded-md border border-border-strong px-5 text-body text-ink-secondary hover:text-status-problem disabled:opacity-60"
+          >
+            Remove
+          </button>
+        ) : null}
+      </div>
     </form>
   );
 }

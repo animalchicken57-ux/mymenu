@@ -31,9 +31,20 @@ export default async function RestaurantOrderingPage({
 
   if (!restaurant) notFound();
 
+  // Asked for separately, and allowed to fail. cover_path arrives with
+  // migration 0006, and a menu that 404s because one optional column is not
+  // there yet would be a worse bug than a page with no photo behind the name.
+  const { data: cover } = await supabase
+    .from("public_restaurants")
+    .select("cover_path")
+    .eq("id", restaurant.id)
+    .maybeSingle();
+
   const { data: categories } = await supabase
     .from("menu_categories")
-    .select("id, name, position, menu_items(id, name, description, price_fils, is_available, position)")
+    .select(
+      "id, name, position, menu_items(id, name, description, price_fils, is_available, photo_path, position)",
+    )
     .eq("restaurant_id", restaurant.id)
     .order("position", { ascending: true })
     .order("position", { referencedTable: "menu_items", ascending: true });
@@ -52,6 +63,7 @@ export default async function RestaurantOrderingPage({
         name: restaurant.name,
         slug: restaurant.slug,
         deliveryEnabled: restaurant.delivery_enabled,
+        coverPath: cover?.cover_path ?? null,
       }}
       categories={
         (categories ?? []).map((c) => ({
@@ -67,6 +79,7 @@ export default async function RestaurantOrderingPage({
               description: i.description,
               priceFils: i.price_fils,
               isAvailable: i.is_available,
+              photoPath: i.photo_path,
             })),
         }))
         // Same for an empty section.
