@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- A crib sheet for one presentation. No reason for it to be in search results. -->
+<meta name="robots" content="noindex, nofollow">
+<title>MyMenu — Investor Pitch</title>
+</head>
+<body>
+<style>
+  /* ---------------------------------------------------------------------
+     Palette is MyMenu's own, lifted from app/globals.css so the deck and
+     the product are visibly the same thing. Two semantic colours carry the
+     whole argument: green is money the restaurant keeps, red is money the
+     delivery app takes. They are never used decoratively.
+  --------------------------------------------------------------------- */
+  :root {
+    --paper:        #fbfaf8;
+    --paper-raised: #ffffff;
+    --paper-sunken: #f2f0ec;
+    --ink:          #16181d;
+    --ink-soft:     #5b6270;
+    --rule:         #e4e1db;
+    --keep:         #0f7b5f;
+    --keep-strong:  #0a5d47;
+    --keep-wash:    #e6f2ee;
+    --taken:        #b91c1c;
+    --taken-wash:   #fcebea;
+
+    --display: system-ui, -apple-system, "Segoe UI Variable Display",
+               "Segoe UI", Roboto, sans-serif;
+    --data:    ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono",
+               Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper:        #141513;
+      --paper-raised: #1c1e1b;
+      --paper-sunken: #101110;
+      --ink:          #f4f2ec;
+      --ink-soft:     #a3a79e;
+      --rule:         #2e312c;
+      --keep:         #35c48f;
+      --keep-strong:  #5fdcae;
+      --keep-wash:    #16302a;
+      --taken:        #f0736b;
+      --taken-wash:   #33191a;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:        #141513;
+    --paper-raised: #1c1e1b;
+    --paper-sunken: #101110;
+    --ink:          #f4f2ec;
+    --ink-soft:     #a3a79e;
+    --rule:         #2e312c;
+    --keep:         #35c48f;
+    --keep-strong:  #5fdcae;
+    --keep-wash:    #16302a;
+    --taken:        #f0736b;
+    --taken-wash:   #33191a;
+  }
+
+  :root[data-theme="light"] {
+    --paper:        #fbfaf8;
+    --paper-raised: #ffffff;
+    --paper-sunken: #f2f0ec;
+    --ink:          #16181d;
+    --ink-soft:     #5b6270;
+    --rule:         #e4e1db;
+    --keep:         #0f7b5f;
+    --keep-strong:  #0a5d47;
+    --keep-wash:    #e6f2ee;
+    --taken:        #b91c1c;
+    --taken-wash:   #fcebea;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--display);
+    font-size: 17px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* --- slide frame ---------------------------------------------------- */
+
+  .slide {
+    display: none;
+    min-height: 100svh;
+    padding: clamp(28px, 6vh, 72px) clamp(24px, 7vw, 108px) 112px;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(18px, 3vh, 34px);
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  .slide.is-active { display: flex; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .slide.is-active > * {
+      animation: rise 400ms cubic-bezier(.2,.7,.3,1) backwards;
+    }
+    .slide.is-active > *:nth-child(2) { animation-delay: 55ms; }
+    .slide.is-active > *:nth-child(3) { animation-delay: 110ms; }
+    .slide.is-active > *:nth-child(4) { animation-delay: 165ms; }
+    .slide.is-active > *:nth-child(5) { animation-delay: 220ms; }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: none; }
+    }
+  }
+
+  /* --- type ----------------------------------------------------------- */
+
+  .eyebrow {
+    font-family: var(--data);
+    font-size: 12px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  .eyebrow.is-taken { color: var(--taken); }
+  .eyebrow.is-keep  { color: var(--keep); }
+
+  h1 {
+    font-size: clamp(38px, 7vw, 84px);
+    line-height: 1.03;
+    letter-spacing: -.035em;
+    font-weight: 800;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  h2 {
+    font-size: clamp(28px, 4.6vw, 54px);
+    line-height: 1.08;
+    letter-spacing: -.028em;
+    font-weight: 750;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .lede {
+    font-size: clamp(18px, 2.1vw, 25px);
+    line-height: 1.45;
+    color: var(--ink-soft);
+    margin: 0;
+    max-width: 34ch;
+  }
+
+  p { margin: 0; max-width: 62ch; }
+  .soft { color: var(--ink-soft); }
+  .tight { max-width: 48ch; }
+  strong { font-weight: 700; }
+
+  /* --- the money bar: the deck's central device ----------------------- */
+
+  .bar {
+    display: flex;
+    height: clamp(52px, 8vh, 78px);
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: var(--data);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .bar > span {
+    display: flex;
+    align-items: center;
+    padding-inline: 16px;
+    font-size: clamp(12px, 1.5vw, 18px);
+    white-space: nowrap;
+    color: #fff;
+  }
+  .bar .taken { background: var(--taken); }
+  .bar .keep  { background: var(--keep); }
+  .bar .keep-quiet { background: var(--keep-wash); color: var(--keep-strong); }
+
+  /* --- figures -------------------------------------------------------- */
+
+  .figures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 2px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .figure {
+    background: var(--paper-raised);
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .figure .n {
+    font-family: var(--data);
+    font-size: clamp(26px, 3.4vw, 40px);
+    font-weight: 700;
+    letter-spacing: -.03em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .figure .n.keep  { color: var(--keep); }
+  .figure .n.taken { color: var(--taken); }
+  .figure .l { font-size: 14px; color: var(--ink-soft); line-height: 1.4; }
+
+  /* --- quote ---------------------------------------------------------- */
+
+  blockquote {
+    margin: 0;
+    padding-left: clamp(18px, 2.4vw, 30px);
+    border-left: 3px solid var(--taken);
+    font-size: clamp(20px, 2.9vw, 34px);
+    line-height: 1.3;
+    letter-spacing: -.018em;
+    font-weight: 600;
+    max-width: 24ch;
+  }
+  cite {
+    display: block;
+    margin-top: 16px;
+    font-family: var(--data);
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-style: normal;
+    color: var(--ink-soft);
+  }
+
+  /* --- lists ---------------------------------------------------------- */
+
+  .points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 60ch;
+  }
+  .points li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 14px;
+    align-items: baseline;
+    font-size: clamp(15px, 1.75vw, 19px);
+    line-height: 1.5;
+  }
+  .points .mark {
+    font-family: var(--data);
+    font-size: 12px;
+    letter-spacing: .1em;
+    color: var(--keep);
+    font-weight: 700;
+  }
+
+  /* --- the ask -------------------------------------------------------- */
+
+  .ask {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: clamp(22px, 3.4vw, 38px) clamp(26px, 4vw, 48px);
+    background: var(--keep-wash);
+    border-radius: 16px;
+    align-self: flex-start;
+  }
+  .ask .n {
+    font-family: var(--data);
+    font-size: clamp(34px, 6.2vw, 72px);
+    font-weight: 800;
+    letter-spacing: -.04em;
+    line-height: 1;
+    color: var(--keep-strong);
+    font-variant-numeric: tabular-nums;
+  }
+  .ask .l {
+    font-family: var(--data);
+    font-size: 13px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--keep-strong);
+  }
+
+  /* --- speaker script -------------------------------------------------- */
+
+  .notes {
+    display: none;
+    border-top: 2px solid var(--keep);
+    background: var(--paper-sunken);
+    border-radius: 0 0 12px 12px;
+    padding: 18px 22px;
+    max-width: 70ch;
+  }
+  body.notes-on .slide.is-active .notes { display: block; }
+  .notes-head {
+    font-family: var(--data);
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--keep-strong);
+    margin-bottom: 8px;
+  }
+  .notes p {
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: none;
+  }
+  .notes p + p { margin-top: 9px; }
+
+  /* --- footer rail ---------------------------------------------------- */
+
+  .rail {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px clamp(16px, 7vw, 108px);
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid var(--rule);
+    font-family: var(--data);
+    font-size: 12px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .rail-group { display: flex; align-items: center; gap: 10px; }
+  .rail button {
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    color: var(--ink);
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 7px;
+    padding: 7px 13px;
+    cursor: pointer;
+    min-height: 36px;
+  }
+  .rail button:hover { border-color: var(--keep); color: var(--keep); }
+  .rail button[disabled] { opacity: .38; cursor: default; }
+  .rail button[disabled]:hover { border-color: var(--rule); color: var(--ink); }
+  .rail button[aria-pressed="true"] {
+    background: var(--keep-wash);
+    border-color: var(--keep);
+    color: var(--keep-strong);
+  }
+
+  .counter, .clock { font-variant-numeric: tabular-nums; }
+  .clock { font-weight: 700; color: var(--ink); }
+  .clock.is-warning { color: var(--taken); }
+
+  .progress {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--keep);
+    transform-origin: left;
+    transition: transform 320ms cubic-bezier(.2,.7,.3,1);
+    z-index: 2;
+  }
+  @media (prefers-reduced-motion: reduce) { .progress { transition: none; } }
+
+  :focus-visible { outline: 2px solid var(--keep); outline-offset: 2px; }
+
+  .hint {
+    font-family: var(--data);
+    font-size: 12px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .sources {
+    font-family: var(--data);
+    font-size: 11px;
+    letter-spacing: .05em;
+    color: var(--ink-soft);
+    line-height: 1.7;
+    max-width: 78ch;
+  }
+  .sources a { color: inherit; }
+
+  @media (max-width: 720px) {
+    .rail { font-size: 11px; padding-inline: 12px; }
+    .rail .hide-sm { display: none; }
+    .bar > span { padding-inline: 10px; font-size: 11px; }
+  }
+</style>
+
+<!-- 1 .................................................................. -->
+<section class="slide is-active">
+  <p class="eyebrow">MyMenu &middot; Asking for AED 250,000</p>
+  <h1>Talabat didn't cook the food. It still takes the biggest cut.</h1>
+  <p class="lede">A 60 dirham meal. The restaurant keeps 42.<br>
+    I change that for 300 dirhams a month.</p>
+  <p class="hint">Press &rarr; to start &middot; press N for the script</p>
+  <div class="notes">
+    <p class="notes-head">Say this &middot; 30 seconds</p>
+    <p>"Talabat did not buy the meat. It did not cook the food. It did not wash
+      a single plate. And out of every order, it takes the biggest cut of
+      anybody."</p>
+    <p>"A customer pays 60 dirhams for a meal. The restaurant keeps 42."</p>
+    <p>"My name is [your name]. I built MyMenu, and I change that number for 300
+      dirhams a month."</p>
+    <p><strong>Stop after "the biggest cut of anybody". Give it two seconds
+      before you say the numbers.</strong></p>
+  </div>
+</section>
+
+<!-- 2 .................................................................. -->
+<section class="slide">
+  <p class="eyebrow is-taken">The problem</p>
+  <h2>18 dirhams, for taking the order.</h2>
+  <div class="bar">
+    <span class="taken" style="width:30%">AED 18 to the app</span>
+    <span class="keep" style="width:70%">AED 42 to the restaurant</span>
+  </div>
+  <p class="soft tight">Talabat takes 15 to 30 percent. Deliveroo takes 25 to 35
+    percent. And that is before the extra fees they add on top.</p>
+  <div class="notes">
+    <p class="notes-head">Say this &middot; 40 seconds</p>
+    <p>"Here is what happens when a customer buys a 60 dirham meal through a
+      delivery app."</p>
+    <p>"The app takes 18 dirhams. The restaurant &mdash; who bought the food,
+      cooked it, and packed it &mdash; keeps 42."</p>
+    <p>"Talabat takes 15 to 30 percent. Deliveroo takes 25 to 35. And there are
+      extra fees on top of that."</p>
+    <p><strong>Point at the red part of the bar when you say 18.</strong></p>
+  </div>
+</section>
+
+<!-- 3 .................................................................. -->
+<section class="slide">
+  <p class="eyebrow is-taken">The problem</p>
+  <h2>Over a year, that is 90,000 dirhams.</h2>
+  <div class="figures">
+    <div class="figure">
+      <span class="n">30,000</span>
+      <span class="l">What a small restaurant sells through the apps each month</span>
+    </div>
+    <div class="figure">
+      <span class="n taken">7,500</span>
+      <span class="l">What the app takes, every month</span>
+    </div>
+    <div class="figure">
+      <span class="n taken">90,000</span>
+      <span class="l">Gone in one year</span>
+    </div>
+  </div>
+  <p class="soft tight">And after paying all of that, the restaurant still does
+    not know one customer's name or phone number.</p>
+  <div class="notes">
+    <p class="notes-head">Say this &middot; 40 seconds</p>
+    <p>"A small restaurant sells about 30,000 dirhams a month through the apps.
+      At 25 percent, that is 7,500 dirhams gone every month."</p>
+    <p>"In one year, that is 90,000 dirhams."</p>
+    <p>"And here is the part that hurts more. After paying 90,000 dirhams, the
+      restaurant still does not have one customer's phone number. If they want
+      that customer back next week, they pay the app again."</p>
+    <p>"They are renting their own customers."</p>
+  </div>
+</section>
+
+<!-- 4 .................................................................. -->
+<section class="slide">
+  <p class="eyebrow is-keep">My solution</p>
+  <h2>I give every restaurant its own ordering page.</h2>
+  <ul class="points">
+    <li><span class="mark">01</span><span><strong>The customer</strong> scans the code on the table, or opens the restaurant's link. No app to download, no account to make.</span></li>
+    <li><span class="mark">02</span><span><strong>The kitchen</strong> gets one screen with today's orders. Tap an order to move it forward.</span></li>
+    <li><span class="mark">03</span><span><strong>The owner</strong> gets the money page, the menu editor, and the customer list the delivery apps will never give them.</span></li>
+  </ul>
+  <p class="soft tight">The food is eaten at the table, collected, or taken by the
+    restaurant's own driver. I take the order. I do not drive the food.</p>
+  <div class="notes">
+    <p class="notes-head">Say this &middot; 50 seconds</p>
+    <p>"MyMenu gives every restaurant its own ordering page. Three people use it."</p>
+    <p>"The customer scans a code on the table. The menu opens. They order. No app
+      to download, no account."</p>
+    <p>"The kitchen gets one screen showing today's orders. They tap to move an
+      order from received, to cooking, to ready."</p>
+    <p>"The owner gets everything else &mdash; the money, the menu, and the
+      customer list."</p>
+    <p>"One important thing: I do not deliver food. The customer is at the table,
+      or collects it, or the restaurant's own driver takes it."</p>
+  </div>
+</section>
+
+<!-- 5 .................................................................. -->
+<section class="slide">
+  <p class="eyebrow">Positioning</p>
+  <h2>I am not fighting Talabat. I am the way out of it.</h2>
+  <p class="lede" style="max-width:40ch">Talabat brings a restaurant new people.
+    MyMenu keeps the people who already like the food.</p>
+  <p class="soft tight">Most restaurants should use both, and I say that on my own
+    website. Being honest about it is the point, not a weakness.</p>
+  <div class="notes">
+    <p class="notes-head">Say this &middot; 30 seconds</p>
+    <p>"You might ask: are you fighting Talabat? No. Talabat is good at one thing
+      &mdash; bringing a restaurant people who never heard of them."</p>
+    <p>"MyMenu does the opposite. It keeps the people who already know the food
+      and already like it."</p>
+    <p>"Most restaurants should use both. I say that on my own website. I am not
+      going to lie to a customer to make a sale."</p>
+  </div>
+</section>
+
+<!-- 6 .................................................................. -->
+<section class="slide">
+  <p class="eyebrow is-keep">How I make money</p>
+  <h2>300 dirhams a month. Always. No percentage.</h2>
+  <div class="figures">
+    <div class="figure">
+      <span class="n keep">AED 300</span>
+      <span class="l">Per restaurant, every month, no matter how many orders</span>
+    </div>
+    <div class="figure">
+      <span class="n">30 free</span>
+      <span class="l">Orders each month, so they can try it before paying</span>
+    </div>
+    <div class="figure">
+      <span class="n">AED 500</span>
+      <span class="l">Once, if they want me to type their menu in for them</span>
+    </div>
+  </div>
+  <p class="soft tight">A percentage is the thing they are running away from. If I
+    took a cut, I would start wanting their bills to be bigger &mdash; and I would
+    become the thing they left.</p>
+  <div class="notes">
+    <p class="notes-head">Say this &middot; 40 seconds</p>
+    <p>"I charge 300 dirhams a month. That is it. It does not matter if they do
+      50 orders or 5,000 orders &mdash; the price is the same."</p>
+    <p>"The first 30 orders every month are free, so they can try it properly
+      before they pay me anything."</p>
+    <p>"Why not take a percentage? Because a percentage is exactly what they are
+      running away from. If I took a cut, I would start wanting their bills to be
+      bigger. I would become the same thing they left."</p>
+  </div>
+</section>
+
+<!-- 7 .................................................................. -->
+<section class="slide">
+  <p class="eyebrow is-keep">Why a restaurant says yes</p>
+  <h2>After 20 orders a month, they are saving money.</h2>
+  <div class="bar">
+    <span class="taken" style="width:22%">AED 300 &mdash; my fee</span>
+    <span class="keep-quiet" style="width:78%">Everything after this, they keep</span>
+  </div>
+  <p class="soft tight">300 dirhams is what the app would take on 1,200 dirhams of
+    orders. At 60 dirhams a meal, that is 20 orders &mdash; less than one a day.</p>
+  <p class="soft tight"><strong>And my app proves it to them.</strong> The owner's
+    screen counts up how much they saved this month. I never have to sell it
+    twice.</p>
+  <div class="notes">
+    <p class="notes-head">Say this &middot; 45 seconds</p>
+    <p>"Here is the number that makes a restaurant say yes."</p>
+    <p>"300 dirhams is what the delivery app would take on 1,200 dirhams of
+      orders. At 60 dirhams a meal, that is only 20 orders in a whole month.
+      Less than one a day."</p>
+    <p>"After 20 orders, everything they sell, they keep."</p>
+    <p>"And I do not have to keep convincing them. When the owner logs in, the
+      screen shows how much money they saved this month. The app sells itself
+      every day."</p>
+  </div>
+</section>
+
+<!-- 8 .................................................................. -->
+<section class="slide">
+  <p class="eyebrow">The market</p>
+  <h2>There are 26,795 restaurants and caf&eacute;s in the UAE.</h2>
+  <div class="figures">
+    <div class="figure">
+      <span class="n">13,857</span>
+      <span class="l">In Dubai alone</span>
+    </div>
+    <div class="figure">
+      <span class="n">AED 9.2B</span>
+      <span class="l">Spent on food delivery in the UAE in 2024, growing 7% a year</span>
+    </div>
+    <div class="figure">
+      <span class="n keep">1,000</span>
+      <span class="l">My target in three years. Under 4 of every 100 restaurants.</span>
+    </div>
+  </div>
+  <p class="soft tight">1,000 restaurants paying 300 a month is 3.6 million
+    dirhams a year.</p>
+  <div class="notes">
+    <p class="notes-head">Say this &middot; 40 seconds</p>
+    <p>"How big is this? There are 26,795 restaurants and cafés in the UAE.
+      Almost 14,000 of them are in Dubai."</p>
+    <p>"People spent 9.2 billion dirhams on food delivery here in 2024, and it
+      grows about 7 percent every year. So this problem gets bigger, not
+      smaller."</p>
+    <p>"I am not asking you to believe I will get all of them. My target is 1,000
+      restaurants in three years. That is under 4 out of every 100. And 1,000
+      restaurants is 3.6 million dirhams a year."</p>
+  </div>
+</section>
+
+<!-- 9 .................................................................. -->
+<section class="slide">
+  <p class="eyebrow">Proof this works</p>
+  <h2>A Dubai company did this, and a bigger company bought them.</h2>
+  <div class="figures">
+    <div class="figure">
+      <span class="n">AED 100M</span>
+      <span class="l">Orders taken by ChatFood, a Dubai company with the same idea</span>
+    </div>
+    <div class="figure">
+      <span class="n keep">AED 30M</span>
+      <span class="l">Commission they saved restaurants</span>
+    </div>
+    <div class="figure">
+      <span class="n keep">May 2023</span>
+      <span class="l">A company called Deliverect bought them</span>
+    </div>
+  </div>
+  <p class="soft tight">So this is not a guess. It works here, and buyers exist.
+    ChatFood now belongs to a big company that sells to large chains &mdash; the
+    small one-branch restaurant is not their customer any more. <strong>That is
+    the gap I am selling into.</strong></p>
+  <div class="notes">
+    <p class="notes-head">Say this &middot; 45 seconds &middot; your strongest slide</p>
+    <p>"You might be thinking: if this is such a good idea, why has nobody done
+      it? Somebody did."</p>
+    <p>"A Dubai company called ChatFood built almost exactly this. They took 100
+      million dirhams in orders and saved restaurants 30 million in commission.
+      In May 2023, a company called Deliverect bought them."</p>
+    <p>"That is good news for you, for two reasons. One: the idea is proven in
+      this exact market. Two: there is already a buyer who paid for it."</p>
+    <p>"And ChatFood now belongs to a big company that sells to big chains. The
+      small one-branch restaurant is not their customer any more. That is my
+      gap."</p>
+  </div>
+</section>
+
+<!-- 10 ................................................................. -->
+<section class="slide">
+  <p class="eyebrow is-keep">What I am asking for</p>
+  <div class="ask">
+    <span class="n">AED 250,000</span>
+    <span class="l">for 15% of the company</span>
+  </div>
+  <ul class="points">
+    <li><span class="mark">FOR</span><span>One salesperson for a year, visiting restaurants. The app is finished. Selling is what is missing.</span></li>
+    <li><span class="mark">GET</span><span>200 restaurants by the end of year one &mdash; 720,000 dirhams a year. Your 15% would be worth roughly 430,000 to 650,000.</span></li>
+    <li><span class="mark">RISK</span><span>Honestly: my biggest risk is selling, not the software. If nobody visits the restaurants, none of this happens. That is what your money pays for.</span></li>
+  </ul>
+  <div class="notes">
+    <p class="notes-head">Say this &middot; 50 seconds &middot; then go straight to the demo</p>
+    <p>"I am asking for 250,000 dirhams for 15 percent of the company."</p>
+    <p>"The app is already built and working. So the money is not for building.
+      It pays for one salesperson to visit restaurants for a year, plus card
+      payments and the trade licence."</p>
+    <p>"If I hit 200 restaurants in year one, that is 720,000 dirhams a year, and
+      your 15 percent is worth around 430,000 to 650,000."</p>
+    <p>"And let me be honest about my risk. My problem is not the software. It is
+      selling. If nobody walks into those restaurants, none of this happens. That
+      is exactly what I want your money for."</p>
+    <p>"Now let me show you the app."</p>
+  </div>
+</section>
+
+<!-- 11 ................................................................. -->
+<section class="slide">
+  <p class="eyebrow is-keep">Demo &middot; about 6 minutes left</p>
+  <h1>Let me show you.</h1>
+  <ul class="points">
+    <li><span class="mark">01</span><span>Scan the table code &mdash; the menu opens with no app</span></li>
+    <li><span class="mark">02</span><span>Place an order as a customer</span></li>
+    <li><span class="mark">03</span><span>It appears on the kitchen screen. Move it to cooking, then ready.</span></li>
+    <li><span class="mark">04</span><span>Open the owner's page &mdash; the savings counter has gone up</span></li>
+  </ul>
+  <p class="sources">
+    Sources &mdash; commission rates:
+    <a href="https://reconcileos.com/blog/talabat-commission-rate-complete-guide-restaurant-owners">ReconcileOS 2026</a>,
+    <a href="https://onlineemenu.com/blog/talabat-noon-deliveroo-careem-commission-comparison-2026.html">onlineemenu 2026</a>;
+    market size: <a href="https://www.grandviewresearch.com/horizon/outlook/online-food-delivery-market/uae">Grand View Research</a>;
+    restaurant counts: <a href="https://www.xmap.ai/blog/uae-restaurants-and-cafes-in-2023-insights-for-f-b-and-fmcg-industries">xMap</a>,
+    <a href="https://www.restroworks.com/blog/dubai-restaurants-statistics/">Restroworks</a>;
+    ChatFood: <a href="https://www.caterermiddleeast.com/suppliers/86305-online-ordering-platform-chatfood-reaches-aed100m-in-direct-sales">Caterer Middle East</a>.
+  </p>
+  <div class="notes">
+    <p class="notes-head">Demo &middot; keep it to four steps</p>
+    <p>Do not walk through every page. Four steps only, exactly as listed.</p>
+    <p>End on the savings counter going up. That is the whole pitch in one number,
+      and it is the last thing they should see.</p>
+    <p>If you have time left, invite them to scan the code themselves.</p>
+  </div>
+</section>
+
+<div class="progress" id="progress"></div>
+
+<nav class="rail" aria-label="Slide navigation">
+  <span class="rail-group">
+    <span class="clock" id="clock">15:00</span>
+    <span class="hide-sm">left</span>
+  </span>
+  <span class="counter" id="counter">1 / 11</span>
+  <span class="rail-group">
+    <button type="button" id="notes" aria-pressed="false">Script</button>
+    <button type="button" id="prev" aria-label="Previous slide">Prev</button>
+    <button type="button" id="next" aria-label="Next slide">Next</button>
+  </span>
+</nav>
+
+<script>
+  (function () {
+    var slides   = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+    var counter  = document.getElementById("counter");
+    var progress = document.getElementById("progress");
+    var prevBtn  = document.getElementById("prev");
+    var nextBtn  = document.getElementById("next");
+    var notesBtn = document.getElementById("notes");
+    var clockEl  = document.getElementById("clock");
+    var i = 0;
+    var startedAt = null;
+    var LIMIT = 15 * 60 * 1000;
+
+    function show(n) {
+      i = Math.max(0, Math.min(slides.length - 1, n));
+      slides.forEach(function (s, k) { s.classList.toggle("is-active", k === i); });
+      counter.textContent = (i + 1) + " / " + slides.length;
+      progress.style.transform = "scaleX(" + ((i + 1) / slides.length) + ")";
+      prevBtn.disabled = i === 0;
+      nextBtn.disabled = i === slides.length - 1;
+      window.scrollTo(0, 0);
+      if (startedAt === null && i > 0) { startedAt = Date.now(); }
+    }
+
+    function pad(n) { return (n < 10 ? "0" : "") + n; }
+
+    function tick() {
+      if (startedAt === null) { return; }
+      var left = LIMIT - (Date.now() - startedAt);
+      var over = left < 0;
+      var abs  = Math.abs(left);
+      clockEl.textContent =
+        (over ? "+" : "") + pad(Math.floor(abs / 60000)) + ":" + pad(Math.floor(abs / 1000) % 60);
+      clockEl.classList.toggle("is-warning", over || left < 3 * 60 * 1000);
+    }
+    setInterval(tick, 1000);
+
+    nextBtn.addEventListener("click", function () { show(i + 1); });
+    prevBtn.addEventListener("click", function () { show(i - 1); });
+
+    notesBtn.addEventListener("click", function () {
+      var on = document.body.classList.toggle("notes-on");
+      notesBtn.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.target.tagName === "BUTTON" && (e.key === " " || e.key === "Enter")) { return; }
+      if (e.key === "ArrowRight" || e.key === "PageDown") { show(i + 1); }
+      else if (e.key === "ArrowLeft" || e.key === "PageUp") { show(i - 1); }
+      else if (e.key === " ") { e.preventDefault(); show(i + 1); }
+      else if (e.key === "Home") { show(0); }
+      else if (e.key === "End") { show(slides.length - 1); }
+      else if (e.key === "n" || e.key === "N") { notesBtn.click(); }
+      else { return; }
+    });
+
+    show(0);
+  })();
+</script>
+
+</body>
+</html>

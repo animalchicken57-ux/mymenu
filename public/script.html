@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- A crib sheet for one presentation. No reason for it to be in search results. -->
+<meta name="robots" content="noindex, nofollow">
+<title>MyMenu — What To Say</title>
+</head>
+<body>
+<style>
+  :root {
+    --paper: #ffffff;
+    --ink: #16181d;
+    --ink-soft: #5b6270;
+    --rule: #e4e1db;
+    --keep: #0f7b5f;
+    --keep-strong: #0a5d47;
+    --keep-wash: #e6f2ee;
+    --taken: #b91c1c;
+    --display: system-ui, -apple-system, "Segoe UI Variable Display",
+               "Segoe UI", Roboto, sans-serif;
+    --data: ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono",
+            Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #141513; --ink: #f4f2ec; --ink-soft: #a3a79e;
+      --rule: #2e312c; --keep: #35c48f; --keep-strong: #5fdcae;
+      --keep-wash: #16302a; --taken: #f0736b;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #141513; --ink: #f4f2ec; --ink-soft: #a3a79e;
+    --rule: #2e312c; --keep: #35c48f; --keep-strong: #5fdcae;
+    --keep-wash: #16302a; --taken: #f0736b;
+  }
+  :root[data-theme="light"] {
+    --paper: #ffffff; --ink: #16181d; --ink-soft: #5b6270;
+    --rule: #e4e1db; --keep: #0f7b5f; --keep-strong: #0a5d47;
+    --keep-wash: #e6f2ee; --taken: #b91c1c;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--display);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 32px 96px;
+  }
+
+  h1 {
+    font-size: 42px;
+    line-height: 1.05;
+    letter-spacing: -.03em;
+    font-weight: 800;
+    margin: 0 0 8px;
+  }
+
+  .sub { color: var(--ink-soft); margin: 0 0 12px; }
+
+  .slide {
+    border-top: 2px solid var(--rule);
+    padding-top: 22px;
+    margin-top: 34px;
+    break-inside: avoid;
+  }
+
+  .slide-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 4px;
+  }
+  .slide-no {
+    font-family: var(--data);
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--keep);
+    border-radius: 6px;
+    padding: 3px 9px;
+    flex: none;
+  }
+  .slide-title {
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -.015em;
+  }
+  .slide-time {
+    font-family: var(--data);
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-inline-start: auto;
+    flex: none;
+  }
+
+  .say {
+    margin: 14px 0 0;
+    padding-left: 18px;
+    border-left: 3px solid var(--keep-wash);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .say p { margin: 0; font-size: 18px; line-height: 1.55; }
+
+  .do {
+    margin-top: 14px;
+    padding: 11px 15px;
+    background: var(--keep-wash);
+    border-radius: 8px;
+    font-size: 15px;
+    color: var(--keep-strong);
+    font-weight: 600;
+  }
+
+  .words {
+    margin-top: 44px;
+    border-top: 3px solid var(--keep);
+    padding-top: 24px;
+    break-before: page;
+  }
+  .words h2 { font-size: 26px; margin: 0 0 18px; letter-spacing: -.02em; }
+  dl { margin: 0; display: flex; flex-direction: column; gap: 14px; }
+  dt { font-weight: 700; }
+  dd { margin: 2px 0 0; color: var(--ink-soft); }
+
+  @media print {
+    :root {
+      --paper: #ffffff; --ink: #000000; --ink-soft: #444444;
+      --rule: #cccccc; --keep: #0a5d47; --keep-strong: #0a5d47;
+      --keep-wash: #eeeeee; --taken: #990000;
+    }
+    body { font-size: 12pt; }
+    .page { padding: 0; max-width: none; }
+    h1 { font-size: 24pt; }
+    .slide { margin-top: 20px; padding-top: 14px; }
+    .say p { font-size: 12.5pt; }
+    .slide-no { background: #000; }
+  }
+</style>
+
+<div class="page">
+
+  <h1>What to say.</h1>
+  <p class="sub">Read this out. Every word is written the way you would speak it.</p>
+  <p class="sub"><strong>7 minutes of talking, then 5 minutes showing the app, then 3 for questions.</strong></p>
+
+  <div class="slide">
+    <div class="slide-head">
+      <span class="slide-no">1</span>
+      <span class="slide-title">Your opening</span>
+      <span class="slide-time">30 sec</span>
+    </div>
+    <div class="say">
+      <p>&ldquo;Talabat did not buy the meat. It did not cook the food. It did not wash a single plate. And out of every order, it takes the biggest cut of anybody.&rdquo;</p>
+      <p>&ldquo;A customer pays 60 dirhams for a meal. The restaurant keeps 42.&rdquo;</p>
+      <p>&ldquo;My name is ______. I built MyMenu, and I change that number for 300 dirhams a month.&rdquo;</p>
+    </div>
+    <p class="do">Stop for two seconds after &ldquo;the biggest cut of anybody.&rdquo; Let it land.</p>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head">
+      <span class="slide-no">2</span>
+      <span class="slide-title">18 dirhams gone</span>
+      <span class="slide-time">40 sec</span>
+    </div>
+    <div class="say">
+      <p>&ldquo;Here is what happens when a customer buys a 60 dirham meal through a delivery app.&rdquo;</p>
+      <p>&ldquo;The app takes 18 dirhams. The restaurant &mdash; who bought the food, cooked it, and packed it &mdash; keeps 42.&rdquo;</p>
+      <p>&ldquo;Talabat takes 15 to 30 percent. Deliveroo takes 25 to 35. And there are extra fees on top of that.&rdquo;</p>
+    </div>
+    <p class="do">Point at the red part of the bar when you say 18.</p>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head">
+      <span class="slide-no">3</span>
+      <span class="slide-title">90,000 a year</span>
+      <span class="slide-time">40 sec</span>
+    </div>
+    <div class="say">
+      <p>&ldquo;A small restaurant sells about 30,000 dirhams a month through the apps. At 25 percent, that is 7,500 dirhams gone every month.&rdquo;</p>
+      <p>&ldquo;In one year, that is 90,000 dirhams.&rdquo;</p>
+      <p>&ldquo;And here is the part that hurts more. After paying 90,000 dirhams, the restaurant still does not have one customer&rsquo;s phone number. If they want that customer back next week, they pay the app again.&rdquo;</p>
+      <p>&ldquo;They are renting their own customers.&rdquo;</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head">
+      <span class="slide-no">4</span>
+      <span class="slide-title">Your solution</span>
+      <span class="slide-time">50 sec</span>
+    </div>
+    <div class="say">
+      <p>&ldquo;MyMenu gives every restaurant its own ordering page. Three people use it.&rdquo;</p>
+      <p>&ldquo;The customer scans a code on the table. The menu opens. They order. No app to download, no account.&rdquo;</p>
+      <p>&ldquo;The kitchen gets one screen showing today&rsquo;s orders. They tap to move an order from received, to cooking, to ready.&rdquo;</p>
+      <p>&ldquo;The owner gets everything else &mdash; the money, the menu, and the customer list.&rdquo;</p>
+      <p>&ldquo;One important thing: I do not deliver food. The customer is at the table, or collects it, or the restaurant&rsquo;s own driver takes it.&rdquo;</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head">
+      <span class="slide-no">5</span>
+      <span class="slide-title">Not fighting Talabat</span>
+      <span class="slide-time">30 sec</span>
+    </div>
+    <div class="say">
+      <p>&ldquo;You might ask: are you fighting Talabat? No. Talabat is good at one thing &mdash; bringing a restaurant people who never heard of them.&rdquo;</p>
+      <p>&ldquo;MyMenu does the opposite. It keeps the people who already know the food and already like it.&rdquo;</p>
+      <p>&ldquo;Most restaurants should use both. I say that on my own website. I am not going to lie to a customer to make a sale.&rdquo;</p>
+    </div>
+    <p class="do">If you are running late, this is the slide to skip.</p>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head">
+      <span class="slide-no">6</span>
+      <span class="slide-title">How you make money</span>
+      <span class="slide-time">40 sec</span>
+    </div>
+    <div class="say">
+      <p>&ldquo;I charge 300 dirhams a month. That is it. It does not matter if they do 50 orders or 5,000 orders &mdash; the price is the same.&rdquo;</p>
+      <p>&ldquo;The first 30 orders every month are free, so they can try it properly before they pay me anything.&rdquo;</p>
+      <p>&ldquo;Why not take a percentage? Because a percentage is exactly what they are running away from. If I took a cut, I would start wanting their bills to be bigger. I would become the same thing they left.&rdquo;</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head">
+      <span class="slide-no">7</span>
+      <span class="slide-title">Why they say yes</span>
+      <span class="slide-time">45 sec</span>
+    </div>
+    <div class="say">
+      <p>&ldquo;Here is the number that makes a restaurant say yes.&rdquo;</p>
+      <p>&ldquo;300 dirhams is what the delivery app would take on 1,200 dirhams of orders. At 60 dirhams a meal, that is only 20 orders in a whole month. Less than one a day.&rdquo;</p>
+      <p>&ldquo;After 20 orders, everything they sell, they keep.&rdquo;</p>
+      <p>&ldquo;And I do not have to keep convincing them. When the owner logs in, the screen shows how much money they saved this month. The app sells itself every day.&rdquo;</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head">
+      <span class="slide-no">8</span>
+      <span class="slide-title">The market</span>
+      <span class="slide-time">40 sec</span>
+    </div>
+    <div class="say">
+      <p>&ldquo;How big is this? There are 26,795 restaurants and caf&eacute;s in the UAE. Almost 14,000 of them are in Dubai.&rdquo;</p>
+      <p>&ldquo;People spent 9.2 billion dirhams on food delivery here in 2024, and it grows about 7 percent every year. So this problem gets bigger, not smaller.&rdquo;</p>
+      <p>&ldquo;I am not asking you to believe I will get all of them. My target is 1,000 restaurants in three years. That is under 4 out of every 100. And 1,000 restaurants is 3.6 million dirhams a year.&rdquo;</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head">
+      <span class="slide-no">9</span>
+      <span class="slide-title">Proof it works</span>
+      <span class="slide-time">45 sec</span>
+    </div>
+    <div class="say">
+      <p>&ldquo;You might be thinking: if this is such a good idea, why has nobody done it? Somebody did.&rdquo;</p>
+      <p>&ldquo;A Dubai company called ChatFood built almost exactly this. They took 100 million dirhams in orders and saved restaurants 30 million in commission. In May 2023, a company called Deliverect bought them.&rdquo;</p>
+      <p>&ldquo;That is good news for you, for two reasons. One: the idea is proven in this exact market. Two: there is already a buyer who paid for it.&rdquo;</p>
+      <p>&ldquo;And ChatFood now belongs to a big company that sells to big chains. The small one-branch restaurant is not their customer any more. That is my gap.&rdquo;</p>
+    </div>
+    <p class="do">This is your strongest slide. Slow down here.</p>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head">
+      <span class="slide-no">10</span>
+      <span class="slide-title">The ask</span>
+      <span class="slide-time">50 sec</span>
+    </div>
+    <div class="say">
+      <p>&ldquo;I am asking for 250,000 dirhams for 15 percent of the company.&rdquo;</p>
+      <p>&ldquo;The app is already built and working. So the money is not for building. It pays for one salesperson to visit restaurants for a year, plus card payments and the trade licence.&rdquo;</p>
+      <p>&ldquo;If I hit 200 restaurants in year one, that is 720,000 dirhams a year, and your 15 percent is worth around 430,000 to 650,000.&rdquo;</p>
+      <p>&ldquo;And let me be honest about my risk. My problem is not the software. It is selling. If nobody walks into those restaurants, none of this happens. That is exactly what I want your money for.&rdquo;</p>
+      <p>&ldquo;Now let me show you the app.&rdquo;</p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <div class="slide-head">
+      <span class="slide-no">11</span>
+      <span class="slide-title">The demo</span>
+      <span class="slide-time">5 min</span>
+    </div>
+    <div class="say">
+      <p><strong>1.</strong> Open the customer menu. &ldquo;This is what the diner sees after scanning the code on the table.&rdquo;</p>
+      <p><strong>2.</strong> Add two dishes and send the order.</p>
+      <p><strong>3.</strong> Switch to the kitchen screen. The order is already there. Move it to cooking, then ready.</p>
+      <p><strong>4.</strong> Open the owner&rsquo;s dashboard. &ldquo;And the savings counter has gone up.&rdquo;</p>
+    </div>
+    <p class="do">Four steps. Do not tour every page. Stop on the savings counter.</p>
+  </div>
+
+  <div class="words">
+    <h2>Words, in case he asks</h2>
+    <dl>
+      <div>
+        <dt>Commission</dt>
+        <dd>The cut. Money Talabat keeps from every order before the restaurant gets paid. On a 60 dirham meal at 30%, Talabat keeps 18.</dd>
+      </div>
+      <div>
+        <dt>AED / dirham</dt>
+        <dd>The same thing. AED is just the short code for dirhams.</dd>
+      </div>
+      <div>
+        <dt>Flat fee</dt>
+        <dd>A price that never changes. 300 a month whether they sell 50 meals or 5,000. The opposite of a percentage.</dd>
+      </div>
+      <div>
+        <dt>Break even</dt>
+        <dd>The point where they stop losing and start saving. For you it is 20 orders a month.</dd>
+      </div>
+      <div>
+        <dt>Positioning</dt>
+        <dd>Where you sit next to your competitors. Yours: not fighting Talabat, but the escape from it.</dd>
+      </div>
+      <div>
+        <dt>The market</dt>
+        <dd>How many possible customers exist. Yours is 26,795 restaurants and caf&eacute;s in the UAE.</dd>
+      </div>
+      <div>
+        <dt>Revenue</dt>
+        <dd>Money coming in. 200 restaurants &times; 300 dirhams = 60,000 a month.</dd>
+      </div>
+      <div>
+        <dt>15% of the company</dt>
+        <dd>If he gives you 250,000 dirhams, he owns 15 out of every 100 dirhams the company is ever worth. You keep 85.</dd>
+      </div>
+      <div>
+        <dt>ChatFood</dt>
+        <dd>A Dubai company, started 2018, that built almost the same thing as you.</dd>
+      </div>
+      <div>
+        <dt>Deliverect</dt>
+        <dd>A bigger company that bought ChatFood in May 2023. Your proof that someone pays money for this idea.</dd>
+      </div>
+    </dl>
+  </div>
+
+</div>
+
+</body>
+</html>
