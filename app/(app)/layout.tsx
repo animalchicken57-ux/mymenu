@@ -28,7 +28,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
    *
    * Settings and Help are deliberately not here — they live in the account
    * menu, where every product keeps them, which leaves this row holding just
-   * the four surfaces of the job. Orders and Customers get added by Epic 6. A
+   * the surfaces of the job. Order history is still to come (story 6.4). A
    * link that 404s teaches an owner the product is broken, which is a worse
    * lesson than a shorter menu.
    */
@@ -36,6 +36,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
     { href: "/dashboard", label: t.dashboard.title },
     { href: "/menu", label: "Menu" },
     { href: "/kitchen", label: t.kitchen.title },
+    { href: "/customers", label: "Customers" },
     { href: "/team", label: "Drivers" },
   ];
 
