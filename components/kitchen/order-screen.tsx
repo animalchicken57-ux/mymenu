@@ -38,10 +38,21 @@ export type KitchenOrder = {
 
 const ACTIVE = ["received", "cooking", "ready"] as const;
 
+/**
+ * A solid band across the top of the card, not a pale pill inside it.
+ *
+ * The Order Screen's whole job is to be read from wherever the cook happens to
+ * be standing, and a wash at 14% is invisible at three metres on a tablet with
+ * the brightness turned down and steam in front of it. Solid colour with white
+ * type carries; the glyph stays so the state survives a colourblind reader
+ * (EXPERIENCE.md § Accessibility Floor).
+ *
+ * These are the status colours from DESIGN.md, used for status. No new hues.
+ */
 const STATUS_STYLE = {
-  received: { glyph: "●", label: "New", pill: "bg-surface-sunken text-status-waiting" },
-  cooking: { glyph: "◐", label: "Cooking", pill: "bg-status-cooking-wash text-status-cooking" },
-  ready: { glyph: "✓", label: "Ready", pill: "bg-status-ready-wash text-status-ready" },
+  received: { glyph: "●", label: "New", band: "bg-status-waiting" },
+  cooking: { glyph: "◐", label: "Cooking", band: "bg-status-cooking" },
+  ready: { glyph: "✓", label: "Ready", band: "bg-status-ready" },
 } as const;
 
 const NEXT_LABEL = {
@@ -307,19 +318,20 @@ function Card({
         : (order.address ?? "Delivery");
 
   return (
-    <li className="flex flex-col rounded-md border border-border-hairline bg-surface-raised p-4">
-      <div className="flex items-center justify-between gap-2">
-        {/* Glyph as well as colour, so the state survives a colourblind reader
-            and a washed-out tablet screen. */}
-        <span className={`rounded-full px-3 py-1 text-meta ${style.pill}`}>
+    <li className="flex flex-col overflow-hidden rounded-md border border-border-hairline bg-surface-raised">
+      {/* Glyph as well as colour, so the state survives a colourblind reader
+          and a washed-out tablet screen. */}
+      <div
+        className={`flex items-center justify-between gap-2 px-4 py-2 text-white ${style.band}`}
+      >
+        <span className="text-meta font-semibold uppercase tracking-wide">
           <span aria-hidden>{style.glyph}</span> {style.label}
         </span>
-        <span className="tabular text-meta text-ink-secondary">
-          {minutes} min
-        </span>
+        <span className="tabular text-meta">{minutes} min</span>
       </div>
 
-      <p className="tabular mt-3 text-kitchen font-semibold text-ink-primary">
+      <div className="flex flex-1 flex-col p-4">
+      <p className="tabular text-kitchen font-semibold text-ink-primary">
         #{order.daily_number} · {where}
       </p>
       <p className="text-meta text-ink-secondary">
@@ -373,6 +385,7 @@ function Card({
             {NEXT_LABEL[order.status as keyof typeof NEXT_LABEL]}
           </button>
         )}
+      </div>
       </div>
     </li>
   );

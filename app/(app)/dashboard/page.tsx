@@ -94,6 +94,10 @@ export default async function DashboardPage() {
         <Figure label="Revenue today" value={`${formatFils(todayRevenue)} AED`} />
       </section>
 
+      {/* Today's figures are ink; the month's saving is green. Same rule as the
+          landing page's estimator — green means money kept, and revenue is not
+          money kept, it is money taken in. */}
+
       <section className="mt-8 rounded-md border border-border-hairline bg-surface-raised p-6">
         <h2 className="text-heading text-ink-primary">Your ordering page</h2>
         <p className="mt-2 text-body text-ink-secondary">
@@ -121,7 +125,10 @@ export default async function DashboardPage() {
 
 function Figure({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-border-hairline bg-surface-raised p-6">
+    // A green rule down the leading edge rather than a green fill: these sit
+    // directly under the savings counter, and two solid green panels in a row
+    // would leave neither of them meaning anything.
+    <div className="rounded-md border border-border-hairline border-s-4 border-s-accent bg-surface-raised p-6">
       <p className="text-meta text-ink-secondary">{label}</p>
       <p className="tabular mt-1 text-title text-ink-primary">{value}</p>
     </div>
