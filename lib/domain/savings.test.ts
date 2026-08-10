@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { formatDirhamsRounded } from "./money";
-import { savings, startOfMonthISO, yearlyCommission } from "./savings";
+import { savings, yearlyCommission } from "./savings";
 
 const FEE = 30_000; // 300 AED
 
@@ -66,14 +66,5 @@ describe("yearlyCommission", () => {
   });
 });
 
-describe("startOfMonthISO", () => {
-  it("uses the restaurant's own timezone, not the server's", () => {
-    // 23:30 UTC on 31 July is already 03:30 on 1 August in Dubai, so the
-    // restaurant's month has rolled over even though the server's has not.
-    const instant = new Date("2026-07-31T23:30:00.000Z");
-    expect(startOfMonthISO("Asia/Dubai", instant)).toBe(
-      "2026-08-01T00:00:00.000Z",
-    );
-    expect(startOfMonthISO("UTC", instant)).toBe("2026-07-01T00:00:00.000Z");
-  });
-});
+// startOfMonthISO moved to time.ts, and its test with it — see time.test.ts for
+// why the assertion that used to be here was wrong.

@@ -4,7 +4,8 @@ import { clearProblemAction } from "@/app/actions/delivery";
 import { SavingsCounter } from "@/components/dashboard/savings-counter";
 import { requireRole } from "@/lib/auth";
 import { formatFils } from "@/lib/domain/money";
-import { savings, startOfMonthISO } from "@/lib/domain/savings";
+import { savings } from "@/lib/domain/savings";
+import { startOfDayISO, startOfMonthISO } from "@/lib/domain/time";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -17,12 +18,13 @@ export default async function DashboardPage() {
   const supabase = await createClient();
 
   const timezone = me.restaurant.timezone;
-  const monthStart = startOfMonthISO(timezone);
 
-  const todayStart = new Date(
-    new Date().toLocaleString("en-US", { timeZone: timezone }),
-  );
-  todayStart.setHours(0, 0, 0, 0);
+  // Both boundaries come from lib/domain/time.ts. "Today" used to be built by
+  // formatting now() into the restaurant's zone, re-parsing that string as a
+  // local Date and zeroing the clock — which produced midnight in whatever zone
+  // the server happens to run in, not the restaurant's.
+  const monthStart = startOfMonthISO(timezone);
+  const todayStart = startOfDayISO(timezone);
 
   const [monthOrders, todayOrders, flagged] = await Promise.all([
     // AD-5: the counter is computed from completed orders, on read, and stored
@@ -35,7 +37,7 @@ export default async function DashboardPage() {
     supabase
       .from("orders")
       .select("total_fils, status")
-      .gte("created_at", todayStart.toISOString()),
+      .gte("created_at", todayStart),
     supabase
       .from("orders")
       .select("id, daily_number, flagged_reason")

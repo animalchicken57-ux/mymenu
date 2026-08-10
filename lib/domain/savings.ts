@@ -69,16 +69,9 @@ export function yearlyCommission(
   return Math.round(monthly * rate) * 12;
 }
 
-/** First moment of the current month, in the restaurant's own timezone. */
-export function startOfMonthISO(timezone: string, now: Date = new Date()): string {
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: timezone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).formatToParts(now);
-
-  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "01";
-
-  return `${get("year")}-${get("month")}-01T00:00:00.000Z`;
-}
+// startOfMonthISO used to live here. It moved to lib/domain/time.ts, because it
+// was wrong in a way that had nothing to do with money: it read the
+// restaurant's local year and month and then labelled local midnight as if it
+// were UTC, putting the month boundary four hours late for Dubai. Period
+// arithmetic now lives in one place, with tests that assert the requirement
+// rather than the old behaviour.
