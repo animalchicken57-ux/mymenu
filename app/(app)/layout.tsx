@@ -4,6 +4,7 @@ import { AccountMenu } from "@/components/app/account-menu";
 import { getMe, HOME_FOR_ROLE } from "@/lib/auth";
 import { getT } from "@/lib/i18n";
 import { createClient } from "@/lib/supabase/server";
+import { resolveTheme } from "@/lib/theme";
 
 /**
  * The authenticated shell.
@@ -17,6 +18,7 @@ import { createClient } from "@/lib/supabase/server";
 export default async function AppLayout({ children }: LayoutProps<"/">) {
   const { t } = await getT();
   const me = await getMe();
+  const theme = await resolveTheme();
 
   const supabase = await createClient();
   const {
@@ -57,6 +59,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
           <AccountMenu
             name={me?.full_name ?? null}
             email={user?.email ?? null}
+            theme={theme}
             labels={{
               account: t.common.account,
               settings: t.common.settings,

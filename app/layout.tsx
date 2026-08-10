@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { IBM_Plex_Sans_Arabic } from "next/font/google";
 
 import { dir, resolveLang } from "@/lib/i18n";
+import { resolveTheme } from "@/lib/theme";
 import "./globals.css";
 
 /**
@@ -24,12 +25,16 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   // AD-10: direction is an attribute set once here, not a second stylesheet.
-  const lang = await resolveLang();
+  // The theme is the same idea — one attribute, resolved on the server, so the
+  // first paint is already the right colour. Absent when nobody has chosen,
+  // which is what lets prefers-color-scheme decide.
+  const [lang, theme] = await Promise.all([resolveLang(), resolveTheme()]);
 
   return (
     <html
       lang={lang}
       dir={dir(lang)}
+      data-theme={theme ?? undefined}
       className={`${plexArabic.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>

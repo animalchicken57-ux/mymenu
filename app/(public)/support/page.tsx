@@ -1,8 +1,10 @@
 import Link from "next/link";
 
 import { ContactForm } from "@/components/support/contact-form";
+import { ThemeSwitch } from "@/components/ui/theme-switch";
 import { getMe } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { resolveTheme } from "@/lib/theme";
 
 /**
  * Help — stories 8.3 and 8.4. FAQs first, because most questions repeat.
@@ -57,6 +59,7 @@ const FAQS = [
 ];
 
 export default async function SupportPage() {
+  const theme = await resolveTheme();
   const me = await getMe();
 
   const supabase = await createClient();
@@ -73,7 +76,10 @@ export default async function SupportPage() {
         MyMenu
       </Link>
 
-      <h1 className="mt-4 text-title text-ink-primary">Help</h1>
+      <div className="mt-4 flex flex-wrap items-baseline justify-between gap-3">
+        <h1 className="text-title text-ink-primary">Help</h1>
+        <ThemeSwitch current={theme} size="compact" />
+      </div>
       <p className="mt-2 max-w-prose text-body text-ink-secondary">
         The questions we get most, and a way to ask anything else.
       </p>

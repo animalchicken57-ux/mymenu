@@ -1,7 +1,9 @@
 import Link from "next/link";
 
 import { SavingsEstimator } from "@/components/landing/savings-estimator";
+import { ThemeSwitch } from "@/components/ui/theme-switch";
 import { createClient } from "@/lib/supabase/server";
+import { resolveTheme } from "@/lib/theme";
 
 /**
  * The Landing Page — stories 8.1 and 8.2.
@@ -11,6 +13,7 @@ import { createClient } from "@/lib/supabase/server";
  * is not — which is the part that makes the rest believable.
  */
 export default async function LandingPage() {
+  const theme = await resolveTheme();
   const supabase = await createClient();
 
   // "See a live demo menu" only appears if there is actually a demo to see.
@@ -144,13 +147,14 @@ export default async function LandingPage() {
       <footer className="border-t border-border-hairline">
         <div className="mx-auto flex w-full max-w-3xl flex-wrap items-center justify-between gap-4 px-4 py-8">
           <p className="text-meta text-ink-secondary">MyMenu</p>
-          <nav className="flex gap-6">
+          <nav className="flex flex-wrap items-center gap-6">
             <Link href="/support" className="text-meta text-ink-secondary">
               Help
             </Link>
             <Link href="/login" className="text-meta text-ink-secondary">
               Sign in
             </Link>
+            <ThemeSwitch current={theme} size="compact" />
           </nav>
         </div>
       </footer>

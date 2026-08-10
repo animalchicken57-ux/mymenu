@@ -95,6 +95,91 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Black, everywhere — DESIGN.md § Colors
+
+   The whole product, not one surface. `lib/theme.ts` stamps data-theme onto
+   <html> from a cookie during render, so the first paint is already right.
+
+   Written once as a custom-property list and applied three ways:
+     1. :root[data-theme="dark"]  — the reader chose black
+     2. prefers-color-scheme      — they chose nothing, so follow the device
+     3. :root[data-theme="light"] — they chose white, which must beat the device
+
+   The third is why (2) is scoped to :root:not([data-theme]). Without it a
+   reader on a dark laptop could never get white, which is the case that
+   matters: presenting from a dark machine onto a bright projector.
+
+   The Diner's ordering page is unaffected either way. `.diner-dark` sets these
+   same variables on an element inside the page, so it wins over :root for its
+   own subtree no matter what is chosen here.
+--------------------------------------------------------------------------- */
+
+:root[data-theme="dark"] {
+  --color-surface-base: #0d1611;
+  --color-surface-raised: #16211b;
+  --color-surface-sunken: #080f0b;
+  --color-ink-primary: #eef4f0;
+  --color-ink-secondary: #98a79f;
+  --color-ink-disabled: #667069;
+
+  /* Riyal Green cannot stay at #0f7b5f on a dark ground. Same hue, lifted.
+     accent-strong is the one used as text (28 places), so it lifts furthest. */
+  --color-accent: #2fb887;
+  --color-accent-strong: #5cdcac;
+  --color-accent-wash: #102b24;
+
+  /* The solid status bands keep their light-mode values on purpose: they are
+     filled blocks carrying white type, and white on them already clears 4.5:1
+     against any ground. Only the ones used as *text* or as a wash move. */
+  --color-status-cooking: #e8a33d;
+  --color-status-cooking-wash: #2a2013;
+  --color-status-ready-wash: #102b24;
+  --color-status-problem: #f0736b;
+  --color-status-problem-wash: #301818;
+  --color-status-waiting: #98a79f;
+
+  --color-border-hairline: #253028;
+  --color-border-strong: #3a4740;
+  --color-focus-ring: #5cdcac;
+
+  --tile-mix: 26%;
+  --tile-ink-mix: 58%;
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-surface-base: #0d1611;
+    --color-surface-raised: #16211b;
+    --color-surface-sunken: #080f0b;
+    --color-ink-primary: #eef4f0;
+    --color-ink-secondary: #98a79f;
+    --color-ink-disabled: #667069;
+
+    --color-accent: #2fb887;
+    --color-accent-strong: #5cdcac;
+    --color-accent-wash: #102b24;
+
+    --color-status-cooking: #e8a33d;
+    --color-status-cooking-wash: #2a2013;
+    --color-status-ready-wash: #102b24;
+    --color-status-problem: #f0736b;
+    --color-status-problem-wash: #301818;
+    --color-status-waiting: #98a79f;
+
+    --color-border-hairline: #253028;
+    --color-border-strong: #3a4740;
+    --color-focus-ring: #5cdcac;
+
+    --tile-mix: 26%;
+    --tile-ink-mix: 58%;
+
+    color-scheme: dark;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Base
 --------------------------------------------------------------------------- */
 

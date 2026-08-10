@@ -8,6 +8,7 @@ import { getMe, requireRole } from "@/lib/auth";
 import { coverPath } from "@/lib/domain/photos";
 import { LANG_COOKIE } from "@/lib/i18n";
 import { createClient } from "@/lib/supabase/server";
+import { THEME_COOKIE, type Theme } from "@/lib/theme";
 
 /** Stories 7.1, 7.2, 7.3, 7.4. */
 
@@ -241,6 +242,39 @@ export async function setLanguage(lang: "en" | "ar"): Promise<Result> {
   if (me) {
     const supabase = await createClient();
     await supabase.from("profiles").update({ language: lang }).eq("id", me.user_id);
+  }
+
+  revalidatePath("/", "layout");
+  return ok;
+}
+
+// -----------------------------------------------------------------------------
+// White or black
+// -----------------------------------------------------------------------------
+
+/**
+ * Cookie only, and no profile column behind it.
+ *
+ * Language is stored on the profile as well, because a staff member's language
+ * should follow them to whichever tablet they pick up. A colour scheme should
+ * not: it belongs to the screen and the room it is in, not to the person. The
+ * same cook wants black on the phone in their pocket and white on the tablet
+ * under the kitchen lights.
+ *
+ * "device" clears the cookie, which is not the same as choosing white — with no
+ * cookie there is no data-theme attribute, and prefers-color-scheme decides.
+ */
+export async function setTheme(theme: Theme | "device"): Promise<Result> {
+  const store = await cookies();
+
+  if (theme === "device") {
+    store.delete(THEME_COOKIE);
+  } else {
+    store.set(THEME_COOKIE, theme, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: "lax",
+    });
   }
 
   revalidatePath("/", "layout");

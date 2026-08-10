@@ -1,7 +1,10 @@
 import Link from "next/link";
 
+import { ThemeSwitch } from "@/components/ui/theme-switch";
+import { resolveTheme } from "@/lib/theme";
+
 /** The shell every access page sits in. Single column, phone-first. */
-export function AuthCard({
+export async function AuthCard({
   title,
   subtitle,
   children,
@@ -12,6 +15,8 @@ export function AuthCard({
   children: React.ReactNode;
   footer?: React.ReactNode;
 }) {
+  const theme = await resolveTheme();
+
   return (
     <main className="flex flex-1 items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm">
@@ -34,6 +39,10 @@ export function AuthCard({
             {footer}
           </div>
         ) : null}
+
+        <div className="mt-8 border-t border-border-hairline pt-6">
+          <ThemeSwitch current={theme} size="compact" />
+        </div>
       </div>
     </main>
   );

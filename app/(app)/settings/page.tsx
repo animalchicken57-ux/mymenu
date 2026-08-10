@@ -5,9 +5,11 @@ import {
   ProfileForm,
   RestaurantForm,
 } from "@/components/settings/settings-forms";
+import { ThemeSwitch } from "@/components/ui/theme-switch";
 import { getMe } from "@/lib/auth";
 import { getT } from "@/lib/i18n";
 import { createClient } from "@/lib/supabase/server";
+import { resolveTheme } from "@/lib/theme";
 import { redirect } from "next/navigation";
 
 /**
@@ -19,6 +21,7 @@ export default async function SettingsPage() {
   if (!me) redirect("/login");
 
   const { t, lang } = await getT();
+  const theme = await resolveTheme();
 
   const supabase = await createClient();
   const {
@@ -57,6 +60,15 @@ export default async function SettingsPage() {
         blurb="Changes straight away, and follows you to any device you sign in on."
       >
         <LanguageSwitch current={lang} />
+      </Section>
+
+      {/* Unlike language, this one stays on this device. A kitchen tablet under
+          strip lighting and a phone in a pocket want different answers. */}
+      <Section
+        title="Colours"
+        blurb="This screen only. Automatic follows whatever this device is set to."
+      >
+        <ThemeSwitch current={theme} />
       </Section>
 
       {me.role === "owner" ? (

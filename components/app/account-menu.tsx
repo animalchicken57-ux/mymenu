@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 
 import { signOutAction } from "@/app/actions/auth";
+import { ThemeSwitch } from "@/components/ui/theme-switch";
+import type { Theme } from "@/lib/theme";
 
 /**
  * The round button in the top corner, holding the three things that are not
@@ -22,10 +24,12 @@ import { signOutAction } from "@/app/actions/auth";
 export function AccountMenu({
   name,
   email,
+  theme,
   labels,
 }: {
   name: string | null;
   email: string | null;
+  theme: Theme | null;
   labels: {
     account: string;
     settings: string;
@@ -81,6 +85,15 @@ export function AccountMenu({
           <p className="truncate px-4 pb-2 text-meta text-ink-secondary">
             {name || email}
           </p>
+
+          {/* Here as well as in Settings, because the reason somebody wants
+              this is usually the screen they are looking at right now. */}
+          <div role="none" className="px-4 pb-3 pt-1">
+            <p className="pb-2 text-meta text-ink-secondary">Colours</p>
+            <ThemeSwitch current={theme} size="compact" />
+          </div>
+
+          <div role="none" className="my-1 border-t border-border-hairline" />
 
           <MenuLink href="/settings" onNavigate={() => setOpen(false)}>
             {labels.settings}

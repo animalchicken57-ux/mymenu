@@ -202,9 +202,30 @@ is every button in the product. On a white card it is 5.2:1 and also fine. The
 only forbidden combination is accent text directly on the page ground, and the
 six links that did that now use `accent-strong`.
 
-**A dark theme the user can choose is deliberately not in v1.** Shipping one
-well-tested light theme is worth more than two half-tested ones, and the Order
-Screen's contrast requirements are easier to guarantee in a single theme.
+**There is a dark theme, and the reader chooses it.** This reverses an earlier
+decision to ship one theme, which was the right call when the palette was a
+handful of hard-coded values and the wrong one once every colour in the product
+had become a custom property — at that point the second theme is a list of
+values, not a second design.
+
+Three states, not two: `light`, `dark`, and no choice at all, which follows
+`prefers-color-scheme`. "Follow my device" is a real answer and a two-way toggle
+cannot express it. An explicit `light` must beat a dark device, because
+presenting from a dark laptop onto a bright projector is exactly the case that
+needs it.
+
+It is a cookie, resolved in `lib/theme.ts` and stamped onto `<html>` during
+render, so the first paint is already correct. Unlike language it is **not**
+mirrored onto the profile: language belongs to the person and should follow them
+between tablets, but a colour scheme belongs to the screen and the room. The
+same cook wants black on their phone and white on the tablet under the kitchen
+lights.
+
+Two notes on the dark values. `--color-accent-strong` lifts furthest, because it
+is the one used as text in 28 places. The solid status bands keep their
+light-mode values on purpose — they are filled blocks carrying white type, and
+white already clears 4.5:1 on them against any ground; only the status colours
+used *as text* or *as a wash* move.
 
 **But the Diner's ordering page is dark, and it is not a theme.** It is the one
 fixed palette for that one surface, scoped in `globals.css` as `.diner-dark`,
