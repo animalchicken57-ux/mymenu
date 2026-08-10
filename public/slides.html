@@ -407,8 +407,13 @@
      One slide per sheet, with its script underneath, so the printed copy is
      the thing you actually stand there holding. Ink-friendly: the screen
      palette would empty a cartridge on the first page. */
+  /* :root[data-theme="dark"] outranks a bare :root, so a deck being printed
+     while the toggle is on dark would print black. All three selectors, so
+     paper always wins on paper. */
   @media print {
-    :root {
+    :root,
+    :root[data-theme="dark"],
+    :root[data-theme="light"] {
       --paper:        #ffffff;
       --paper-raised: #ffffff;
       --paper-sunken: #f2f2f2;
@@ -459,6 +464,19 @@
     * { animation: none !important; transition: none !important; }
   }
 </style>
+
+<script>
+  // Restores the saved choice before the slides paint, so a presenter who
+  // picked white does not get a flash of black in front of the room.
+  (function () {
+    try {
+      var saved = localStorage.getItem("mymenu-theme");
+      if (saved === "light" || saved === "dark") {
+        document.documentElement.setAttribute("data-theme", saved);
+      }
+    } catch (e) {}
+  })();
+</script>
 
 <!-- 1 .................................................................. -->
 <section class="slide is-active">
@@ -771,6 +789,7 @@
   </span>
   <span class="counter" id="counter">1 / 11</span>
   <span class="rail-group">
+    <button type="button" id="theme">Dark</button>
     <button type="button" id="notes" aria-pressed="false">Script</button>
     <button type="button" id="prev" aria-label="Previous slide">Prev</button>
     <button type="button" id="next" aria-label="Next slide">Next</button>
@@ -821,6 +840,42 @@
       var on = document.body.classList.toggle("notes-on");
       notesBtn.setAttribute("aria-pressed", on ? "true" : "false");
     });
+
+    // --- white / black ------------------------------------------------------
+    // The button is labelled with what it will do, not with what is on screen.
+    var root = document.documentElement;
+    var themeBtn = document.getElementById("theme");
+
+    function isDark() {
+      var set = root.getAttribute("data-theme");
+      if (set === "dark") return true;
+      if (set === "light") return false;
+      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+
+    function labelTheme() {
+      themeBtn.textContent = isDark() ? "White" : "Black";
+      themeBtn.setAttribute(
+        "aria-label",
+        isDark() ? "Switch to white background" : "Switch to black background",
+      );
+    }
+
+    themeBtn.addEventListener("click", function () {
+      var next = isDark() ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try {
+        localStorage.setItem("mymenu-theme", next);
+      } catch (e) {}
+      labelTheme();
+    });
+
+    // Follow the machine until the presenter overrides it.
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", labelTheme);
+
+    labelTheme();
 
     document.addEventListener("keydown", function (e) {
       if (e.target.tagName === "BUTTON" && (e.key === " " || e.key === "Enter")) { return; }

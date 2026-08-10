@@ -211,7 +211,47 @@
     border-radius: 5px;
   }
 
+  .theme-toggle {
+    position: fixed;
+    top: 12px;
+    inset-inline-end: 12px;
+    z-index: 5;
+    font-family: var(--data);
+    font-size: 12px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 7px;
+    padding: 7px 12px;
+    min-height: 36px;
+    cursor: pointer;
+  }
+  .theme-toggle:hover { border-color: var(--keep); color: var(--keep); }
+
   @media print {
+    .theme-toggle { display: none !important; }
+
+    /* This block used to set no colours at all, so printing while the page was
+       dark produced black sheets. All three selectors, because
+       :root[data-theme="dark"] outranks a bare :root. */
+    :root,
+    :root[data-theme="dark"],
+    :root[data-theme="light"] {
+      --paper:        #ffffff;
+      --paper-raised: #ffffff;
+      --paper-sunken: #f2f2f2;
+      --ink:          #000000;
+      --ink-soft:     #444444;
+      --rule:         #cccccc;
+      --keep:         #0a5d47;
+      --keep-strong:  #0a5d47;
+      --keep-wash:    #eeeeee;
+      --taken:        #990000;
+      --taken-wash:   #f4f4f4;
+    }
+
     body { font-size: 12px; }
     .page { padding: 0; gap: 22px; max-width: none; }
     h1 { font-size: 26px; }
@@ -219,6 +259,19 @@
     section { break-inside: avoid; }
   }
 </style>
+
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem("mymenu-theme");
+      if (saved === "light" || saved === "dark") {
+        document.documentElement.setAttribute("data-theme", saved);
+      }
+    } catch (e) {}
+  })();
+</script>
+
+<button type="button" class="theme-toggle" id="theme">Black</button>
 
 <div class="page">
 
@@ -368,3 +421,41 @@
   </section>
 
 </div>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var button = document.getElementById("theme");
+
+    function isDark() {
+      var set = root.getAttribute("data-theme");
+      if (set === "dark") return true;
+      if (set === "light") return false;
+      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+
+    // Labelled with what it will do, not with what is on screen.
+    function label() {
+      button.textContent = isDark() ? "White" : "Black";
+      button.setAttribute(
+        "aria-label",
+        isDark() ? "Switch to white background" : "Switch to black background",
+      );
+    }
+
+    button.addEventListener("click", function () {
+      var next = isDark() ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try {
+        localStorage.setItem("mymenu-theme", next);
+      } catch (e) {}
+      label();
+    });
+
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", label);
+
+    label();
+  })();
+</script>
