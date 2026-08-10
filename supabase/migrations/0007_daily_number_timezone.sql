@@ -70,11 +70,22 @@ begin
     1, 22
   );
 
-  -- Midnight where the restaurant is, as an absolute moment. The inner
-  -- `at time zone` produces the local wall-clock date; the outer one reads that
-  -- wall clock back as a real instant in the restaurant's zone.
+  -- Midnight where the restaurant is, as an absolute moment.
+  --
+  -- date_trunc and not ::date, and the difference is not cosmetic. `AT TIME
+  -- ZONE` has two meanings depending on what is on its left: given a naive
+  -- `timestamp` it *attaches* a zone and returns timestamptz, which is what we
+  -- want; given a `timestamptz` it *converts* and returns a naive timestamp,
+  -- which is not. Feed it a `date` and Postgres resolves the ambiguity by
+  -- casting date -> timestamptz using the session zone, so you get the second
+  -- meaning, a naive result, and — because v_day_start is declared timestamptz
+  -- — a silent re-promotion through the session zone on assignment. The
+  -- original bug, restored, via the line meant to fix it.
+  --
+  -- date_trunc('day', timestamp) returns timestamp, so there is nothing left to
+  -- guess and `at time zone` can only mean "attach".
   v_day_start :=
-    ((now() at time zone v_restaurant.timezone)::date)
+    date_trunc('day', now() at time zone v_restaurant.timezone)
       at time zone v_restaurant.timezone;
 
   select coalesce(max(daily_number), 0) + 1 into v_daily
