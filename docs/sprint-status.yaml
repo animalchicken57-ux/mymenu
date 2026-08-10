@@ -80,7 +80,9 @@ development_status:
   epic-6: in-progress
   6-1-today-at-a-glance: review
   6-2-the-savings-counter: review
-  6-3-customer-list: backlog
+  # /customers plus a CSV export with no row cap, because the FAQ promises the
+  # whole list. Sorting verified against the view on the live database.
+  6-3-customer-list: review
   6-4-order-history: backlog
   epic-6-retrospective: optional
 
