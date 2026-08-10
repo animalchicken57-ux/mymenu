@@ -71,9 +71,11 @@ development_status:
   epic-4-retrospective: optional
 
   # ── Epic 5 · Own-Driver Handoff ─────────────────────────────────
-  epic-5: backlog
-  5-1-assign-an-order-to-a-driver: backlog
-  5-2-driver-list-and-completion: backlog
+  # No migration needed — 0001 already had assigned_driver_id and the three
+  # driver-scoped policies. Verified by scripts/driver-handoff-test.mjs.
+  epic-5: in-progress
+  5-1-assign-an-order-to-a-driver: review
+  5-2-driver-list-and-completion: review
   epic-5-retrospective: optional
 
   # ── Epic 6 · The Money Story ────────────────────────────────────

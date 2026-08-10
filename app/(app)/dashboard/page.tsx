@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { clearProblemAction } from "@/app/actions/delivery";
 import { SavingsCounter } from "@/components/dashboard/savings-counter";
 import { requireRole } from "@/lib/auth";
 import { formatFils } from "@/lib/domain/money";
@@ -76,13 +77,30 @@ export default async function DashboardPage() {
         />
       </div>
 
+      {/* Story 5.2: a driver reporting a problem lands here, because the driver
+          cannot decide what happens to the food and the owner can. Each one is
+          dismissable — a flag with no way to clear it is a red box that lives on
+          this page forever and stops being read. */}
       {(flagged.data ?? []).length > 0 ? (
         <section className="mt-6 rounded-md border border-status-problem bg-status-problem-wash p-4">
           <h2 className="text-heading text-status-problem">Needs you</h2>
-          <ul className="mt-2 flex flex-col gap-1">
+          <ul className="mt-2 flex flex-col gap-2">
             {(flagged.data ?? []).map((order) => (
-              <li key={order.id} className="text-body text-ink-primary">
-                Order #{order.daily_number} — {order.flagged_reason}
+              <li
+                key={order.id}
+                className="flex flex-wrap items-center justify-between gap-3"
+              >
+                <span className="text-body text-ink-primary">
+                  Order #{order.daily_number} — {order.flagged_reason}
+                </span>
+                <form action={clearProblemAction.bind(null, order.id)}>
+                  <button
+                    type="submit"
+                    className="min-h-touch rounded-md border border-status-problem px-4 text-meta text-status-problem"
+                  >
+                    Sorted
+                  </button>
+                </form>
               </li>
             ))}
           </ul>

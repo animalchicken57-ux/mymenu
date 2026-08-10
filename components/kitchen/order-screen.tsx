@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 
+import { assignDriver } from "@/app/actions/delivery";
 import { advanceOrder } from "@/app/actions/kitchen";
 import { bestMapLink, isPin } from "@/lib/domain/maps";
 import { formatFils } from "@/lib/domain/money";
@@ -33,6 +34,7 @@ export type KitchenOrder = {
   status: "received" | "cooking" | "ready" | "completed" | "cancelled";
   total_fils: number;
   created_at: string;
+  assigned_driver_id: string | null;
   order_items: { name_snapshot: string; quantity: number; note: string | null }[];
 };
 
@@ -70,7 +72,15 @@ const MODE_LABEL = {
 /** How long the undo sits on the card before the change is actually written. */
 const UNDO_MS = 5000;
 
-export function OrderScreen({ initial }: { initial: KitchenOrder[] }) {
+export type Driver = { id: string; full_name: string | null; email: string | null };
+
+export function OrderScreen({
+  initial,
+  drivers = [],
+}: {
+  initial: KitchenOrder[];
+  drivers?: Driver[];
+}) {
   const [orders, setOrders] = useState(initial);
   const [live, setLive] = useState<"ok" | "lost">("ok");
   const [muted, setMuted] = useState(false);
@@ -119,7 +129,7 @@ export function OrderScreen({ initial }: { initial: KitchenOrder[] }) {
     const supabase = createClient();
     const { data, error } = await supabase
       .from("orders")
-      .select("id, daily_number, fulfilment_mode, table_number, address, lat, lng, diner_phone, note, status, total_fils, created_at, order_items(name_snapshot, quantity, note)")
+      .select("id, daily_number, fulfilment_mode, table_number, address, lat, lng, diner_phone, note, status, total_fils, created_at, assigned_driver_id, order_items(name_snapshot, quantity, note)")
       .in("status", ACTIVE as unknown as string[])
       .order("created_at", { ascending: false });
 
@@ -280,6 +290,7 @@ export function OrderScreen({ initial }: { initial: KitchenOrder[] }) {
               <Card
                 key={order.id}
                 order={order}
+                drivers={drivers}
                 pending={pendingAdvance[order.id]?.to}
                 onAdvance={() => startAdvance(order)}
                 onUndo={() => undo(order.id)}
@@ -294,11 +305,13 @@ export function OrderScreen({ initial }: { initial: KitchenOrder[] }) {
 
 function Card({
   order,
+  drivers,
   pending,
   onAdvance,
   onUndo,
 }: {
   order: KitchenOrder;
+  drivers: Driver[];
   pending?: string;
   onAdvance: () => void;
   onUndo: () => void;
@@ -342,6 +355,17 @@ function Card({
       </p>
 
       {order.fulfilment_mode === "delivery" ? <Directions order={order} /> : null}
+
+      {/* Story 5.1: offered on a delivery and on nothing else. A dine-in order
+          has no driver to give it to, so the control is absent rather than
+          disabled — and assignDriver refuses it server-side regardless. */}
+      {order.fulfilment_mode === "delivery" && drivers.length > 0 ? (
+        <DriverPicker
+          orderId={order.id}
+          drivers={drivers}
+          assignedTo={order.assigned_driver_id}
+        />
+      ) : null}
 
       <ul className="mt-3 flex flex-col gap-1">
         {order.order_items.map((item, index) => (
@@ -388,6 +412,62 @@ function Card({
       </div>
       </div>
     </li>
+  );
+}
+
+/**
+ * Who is taking this one out.
+ *
+ * A select rather than a row of buttons: a restaurant with six drivers would
+ * otherwise push the order's own contents off a tablet screen, and this is the
+ * kitchen's screen, not a dispatch desk. Saving on change, because the editor
+ * elsewhere in the product has taught the owner there is no Save button.
+ */
+function DriverPicker({
+  orderId,
+  drivers,
+  assignedTo,
+}: {
+  orderId: string;
+  drivers: Driver[];
+  assignedTo: string | null;
+}) {
+  const [pending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+  const id = `driver-${orderId}`;
+
+  return (
+    <div className="mt-3 flex flex-col gap-1">
+      <label htmlFor={id} className="text-meta text-ink-secondary">
+        Driver
+      </label>
+      <select
+        id={id}
+        disabled={pending}
+        defaultValue={assignedTo ?? ""}
+        onChange={(event) => {
+          const value = event.target.value;
+          setError(null);
+          startTransition(async () => {
+            const result = await assignDriver(orderId, value || null);
+            if (!result.ok) setError(result.error ?? "That did not work.");
+          });
+        }}
+        className="min-h-touch rounded-sm border border-border-strong bg-surface-raised px-3 text-body text-ink-primary disabled:opacity-60"
+      >
+        <option value="">Nobody yet</option>
+        {drivers.map((driver) => (
+          <option key={driver.id} value={driver.id}>
+            {driver.full_name ?? driver.email ?? "Driver"}
+          </option>
+        ))}
+      </select>
+      {error ? (
+        <p role="alert" className="text-meta text-status-problem">
+          {error}
+        </p>
+      ) : null}
+    </div>
   );
 }
 
