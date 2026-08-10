@@ -181,10 +181,26 @@ white cards, `#dde8e0` wells), and the dark ordering page is a green-black
 rather than a blue-grey charcoal.
 
 This is not a second colour. It is the same one, at the far end of its
-saturation, and it is still flat — the gradient ban above is unaffected. It
-does cost contrast: `--color-accent` on the new ground is 4.55:1, which passes
-but leaves no margin, so body-size links use `--color-accent-strong` (6.9:1)
-instead. Solid `--color-accent` buttons with white type are 5.2:1 and unchanged.
+saturation, and it is still flat — the gradient ban above is unaffected.
+
+The first attempt at this was too quiet to notice on a real screen, so the
+ground is `#d9e9de` and wells are `#c7dccf` — unmistakably green paper rather
+than white-with-a-hint. Cards stay pure white, which is what makes the ground
+read as a colour at all.
+
+Contrast, measured rather than assumed, against the `#d9e9de` ground:
+
+| | Ratio | |
+|---|---:|---|
+| `--color-ink-primary` | 14.0:1 | |
+| `--color-ink-secondary` | 5.6:1 | |
+| `--color-accent-strong` | 6.2:1 | body-size links use this |
+| `--color-accent` | 4.1:1 | **fails** — never put it on the ground as text |
+
+`--color-accent` as a solid field with white type is 5.2:1 and unchanged, which
+is every button in the product. On a white card it is 5.2:1 and also fine. The
+only forbidden combination is accent text directly on the page ground, and the
+six links that did that now use `accent-strong`.
 
 **A dark theme the user can choose is deliberately not in v1.** Shipping one
 well-tested light theme is worth more than two half-tested ones, and the Order

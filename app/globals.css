@@ -21,9 +21,9 @@
         to the green rather than merely containing it.
 
      Still flat colour. DESIGN.md's ban on gradients stands. */
-  --color-surface-base: #eaf1ec;
+  --color-surface-base: #d9e9de;
   --color-surface-raised: #ffffff;
-  --color-surface-sunken: #dde8e0;
+  --color-surface-sunken: #c7dccf;
   --color-ink-primary: #131a16;
   --color-ink-secondary: #4f5c54;
   --color-ink-disabled: #94a29a;
@@ -43,8 +43,8 @@
   --color-status-problem-wash: #fcebea;
 
   /* Lines — tinted to match the ground they sit on */
-  --color-border-hairline: #d3e0d7;
-  --color-border-strong: #b3c4b8;
+  --color-border-hairline: #c2d6c9;
+  --color-border-strong: #9db8a6;
   --color-focus-ring: #0f7b5f;
 
   /* One family, both scripts */
@@ -124,9 +124,9 @@ body {
   /* Green-black, not neutral black. Same argument as the light stack: the
      ground belongs to the accent. It also flatters food, which a blue-grey
      charcoal does not. */
-  --color-surface-base: #0b100d;
-  --color-surface-raised: #151d18;
-  --color-surface-sunken: #060907;
+  --color-surface-base: #0a1610;
+  --color-surface-raised: #14231a;
+  --color-surface-sunken: #050d08;
   --color-ink-primary: #f2f6f3;
   --color-ink-secondary: #93a099;
   --color-ink-disabled: #66716b;
