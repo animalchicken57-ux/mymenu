@@ -101,6 +101,9 @@ development_status:
   8-1-landing-page: review
   8-2-savings-estimator: review
   8-3-faqs: review
+  # Verified end to end on the live site: form submitted, email delivered.
+  # The send path was correct from the start and was only missing RESEND_API_KEY
+  # and SUPPORT_INBOX, now set locally and in Vercel.
   8-4-contact-form-that-really-sends: review
   8-5-support-reachable-from-everywhere: review
   epic-8-retrospective: optional
