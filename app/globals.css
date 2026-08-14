@@ -209,29 +209,43 @@ body {
   /* Green-charcoal, not black. Same argument as the light stack: the ground
      belongs to the accent, and it flatters food in a way a blue-grey does not.
 
-     Lifted from near-black (#0a1610) because that read as heavy on a phone at
-     full brightness across a dining table. Cards now sit a clear step above the
-     ground instead of both disappearing into the same darkness. Header stays
-     deeper than the ground so the restaurant's name still has a field of its
-     own behind it. */
-  --color-surface-base: #18241e;
-  --color-surface-raised: #22302a;
-  --color-surface-sunken: #101a15;
+     Lifted twice now. First from near-black (#0a1610), which read as heavy on a
+     phone at full brightness across a dining table; then again from #18241e,
+     which was still darker than the room a diner actually sits in. This is the
+     charcoal of a lit restaurant rather than an unlit one, and food photographed
+     on it stops looking like it is floating in a void.
+
+     The whole stack moves together, keeping its three steps: the header
+     (`sunken`) stays deepest so the restaurant's name has a field of its own,
+     the ground sits above it, and dish cards (`raised`) sit above that. Lifting
+     the ground alone would have flattened the cards into it. */
+  --color-surface-base: #26352d;
+  --color-surface-raised: #32433a;
+  --color-surface-sunken: #1b2822;
   --color-ink-primary: #f2f6f3;
-  --color-ink-secondary: #93a099;
-  --color-ink-disabled: #66716b;
+
+  /* Both greys follow the ground up. On the old charcoal #93a099 cleared 4.5:1
+     against a card; on the new one it landed at 3.9:1, which is a fail for the
+     dish descriptions and the "serves 2" chips that use it. */
+  --color-ink-secondary: #a3b0a8;
+  --color-ink-disabled: #767f79;
 
   /* Riyal Green does not survive a dark ground at #0f7b5f. Same hue, lifted
-     until it clears 4.5:1 against the surfaces above. */
+     until it clears 4.5:1 against the surfaces above. Both still clear it on
+     the lighter ground (accent-strong reads 5.8:1 on a card), so the green
+     itself is unchanged — only the wash behind it moves, to stay a wash. */
   --color-accent: #2fb887;
   --color-accent-strong: #56d6a6;
-  --color-accent-wash: #12312a;
+  --color-accent-wash: #1c3b33;
 
-  --color-status-problem: #f0736b;
-  --color-status-problem-wash: #33191a;
+  /* Same reason as ink-secondary: this is used as text ("Sold out", form
+     errors), and #f0736b fell to 3.7:1 on the lighter card. */
+  --color-status-problem: #f8918a;
+  --color-status-problem-wash: #40201f;
 
-  --color-border-hairline: #33413a;
-  --color-border-strong: #4b5b52;
+  /* Lines are drawn against the ground, so they rise with it or they vanish. */
+  --color-border-hairline: #415048;
+  --color-border-strong: #5a6b61;
   --color-focus-ring: #56d6a6;
 
   --tile-mix: 26%;
