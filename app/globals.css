@@ -206,12 +206,17 @@ body {
    is also how every menu worth copying prints it.
 --------------------------------------------------------------------------- */
 .diner-dark {
-  /* Green-black, not neutral black. Same argument as the light stack: the
-     ground belongs to the accent. It also flatters food, which a blue-grey
-     charcoal does not. */
-  --color-surface-base: #0a1610;
-  --color-surface-raised: #14231a;
-  --color-surface-sunken: #050d08;
+  /* Green-charcoal, not black. Same argument as the light stack: the ground
+     belongs to the accent, and it flatters food in a way a blue-grey does not.
+
+     Lifted from near-black (#0a1610) because that read as heavy on a phone at
+     full brightness across a dining table. Cards now sit a clear step above the
+     ground instead of both disappearing into the same darkness. Header stays
+     deeper than the ground so the restaurant's name still has a field of its
+     own behind it. */
+  --color-surface-base: #18241e;
+  --color-surface-raised: #22302a;
+  --color-surface-sunken: #101a15;
   --color-ink-primary: #f2f6f3;
   --color-ink-secondary: #93a099;
   --color-ink-disabled: #66716b;
@@ -225,8 +230,8 @@ body {
   --color-status-problem: #f0736b;
   --color-status-problem-wash: #33191a;
 
-  --color-border-hairline: #24302a;
-  --color-border-strong: #38473f;
+  --color-border-hairline: #33413a;
+  --color-border-strong: #4b5b52;
   --color-focus-ring: #56d6a6;
 
   --tile-mix: 26%;
