@@ -384,7 +384,11 @@
     .versus .what { grid-column: 1 / -1; }
   }
 
-  /* --- speaker script -------------------------------------------------- */
+  /* --- speaker script ---------------------------------------------------
+     Print only. The on-screen toggle was removed on request, so these never
+     appear on the projector — but they are still every slide's script, and
+     they still come out on paper and in the PDF. Do not delete the markup.
+  ---------------------------------------------------------------------- */
 
   .notes {
     display: none;
@@ -394,7 +398,6 @@
     padding: 18px 22px;
     max-width: 70ch;
   }
-  body.notes-on .slide.is-active .notes { display: block; }
   .notes-head {
     font-family: var(--data);
     font-size: 11px;
@@ -590,7 +593,7 @@
   <h1>Talabat didn't cook the food. It still takes the biggest cut.</h1>
   <p class="lede">A 60 dirham meal. The restaurant keeps 42.<br>
     I change that for 300 dirhams a month.</p>
-  <p class="hint">Press &rarr; to start &middot; press N for the script</p>
+  <p class="hint">Press &rarr; to start</p>
   <div class="notes">
     <p class="notes-head">Say this &middot; 30 seconds</p>
     <p>"Talabat did not buy the meat. It did not cook the food. It did not wash
@@ -1065,7 +1068,6 @@
   <span class="counter" id="counter">1 / 12</span>
   <span class="rail-group">
     <button type="button" id="theme">Dark</button>
-    <button type="button" id="notes" aria-pressed="false">Script</button>
     <button type="button" id="prev" aria-label="Previous slide">Prev</button>
     <button type="button" id="next" aria-label="Next slide">Next</button>
   </span>
@@ -1078,7 +1080,6 @@
     var progress = document.getElementById("progress");
     var prevBtn  = document.getElementById("prev");
     var nextBtn  = document.getElementById("next");
-    var notesBtn = document.getElementById("notes");
     var i = 0;
 
     function show(n) {
@@ -1093,11 +1094,6 @@
 
     nextBtn.addEventListener("click", function () { show(i + 1); });
     prevBtn.addEventListener("click", function () { show(i - 1); });
-
-    notesBtn.addEventListener("click", function () {
-      var on = document.body.classList.toggle("notes-on");
-      notesBtn.setAttribute("aria-pressed", on ? "true" : "false");
-    });
 
     // --- white / black ------------------------------------------------------
     // The button is labelled with what it will do, not with what is on screen.
@@ -1142,7 +1138,6 @@
       else if (e.key === " ") { e.preventDefault(); show(i + 1); }
       else if (e.key === "Home") { show(0); }
       else if (e.key === "End") { show(slides.length - 1); }
-      else if (e.key === "n" || e.key === "N") { notesBtn.click(); }
       else { return; }
     });
 
