@@ -22,7 +22,7 @@
 #   database enforces tenancy.
 
 generated: 2026-08-05
-last_updated: 2026-08-08
+last_updated: 2026-08-17
 project: MyMenu
 project_key: MYM
 tracking_system: file-system
@@ -85,7 +85,10 @@ development_status:
   # /customers plus a CSV export with no row cap, because the FAQ promises the
   # whole list. Sorting verified against the view on the live database.
   6-3-customer-list: review
-  6-4-order-history: backlog
+  # /history — a date range, a kind filter, and each order opening to its line
+  # items at the prices recorded then (AD-2). No migration: 0001 already had
+  # everything. New date-boundary helpers in lib/domain/time.ts, with tests.
+  6-4-order-history: review
   epic-6-retrospective: optional
 
   # ── Epic 7 · Account, Settings, and Arabic ──────────────────────
@@ -109,10 +112,16 @@ development_status:
   epic-8-retrospective: optional
 
   # ── Epic 9 · Demo Ready ─────────────────────────────────────────
-  epic-9: backlog
-  9-1-seed-a-believable-demo-restaurant: backlog
-  9-2-production-deploy-and-the-live-link: backlog
-  9-3-the-presentation: backlog
+  # This block was stale: all three were built before 2026-08-14 and never
+  # marked. Al Reem Grill has 19 dishes and a month of trade behind it, the
+  # site is live, and the presentation ships from /public as HTML and PDF.
+  epic-9: in-progress
+  9-1-seed-a-believable-demo-restaurant: review
+  9-2-production-deploy-and-the-live-link: review
+  # Reopened 2026-08-17: the brief names seven things the talk must cover
+  # (segment, problem, differentiation, money, the investor ask). See
+  # docs/presentation-brief.md.
+  9-3-the-presentation: in-progress
   epic-9-retrospective: optional
 
 # The smallest set that makes a complete demo, if time runs short. Everything

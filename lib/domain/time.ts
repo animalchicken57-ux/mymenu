@@ -95,3 +95,104 @@ export function startOfMonthISO(
   const { year, month } = localDate(timezone, now);
   return localMidnight(timezone, year, month, 1).toISOString();
 }
+
+/**
+ * The rest of this file is story 6.4's, where the day being asked about is one
+ * the owner typed rather than the one we are in. A calendar date is written
+ * `YYYY-MM-DD` throughout, because that is what `<input type="date">` submits.
+ */
+
+const pad = (n: number) => String(n).padStart(2, "0");
+
+/**
+ * `YYYY-MM-DD` → its parts, or null if it is not a real date.
+ *
+ * The strict part matters: `Date.UTC` rolls 31 February forward to 3 March
+ * without complaint, so a typo would silently return orders from a day nobody
+ * asked about. Building the date and checking it came back unchanged is the
+ * cheapest way to catch that.
+ */
+function parseDateString(
+  date: string,
+): { year: number; month: number; day: number } | null {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date.trim());
+  if (!match) return null;
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+
+  const probe = new Date(Date.UTC(year, month - 1, day));
+  if (probe.getUTCMonth() !== month - 1 || probe.getUTCDate() !== day) {
+    return null;
+  }
+
+  return { year, month, day };
+}
+
+/** The restaurant's current calendar date, as `YYYY-MM-DD`. */
+export function localDateString(
+  timezone: string,
+  now: Date = new Date(),
+): string {
+  const { year, month, day } = localDate(timezone, now);
+  return `${year}-${pad(month)}-${pad(day)}`;
+}
+
+/**
+ * A calendar date shifted by whole days — plain calendar arithmetic, with no
+ * zone involved, so it cannot drift the way adding 86,400,000 milliseconds to
+ * an instant can.
+ */
+export function shiftDateString(date: string, days: number): string {
+  const parsed = parseDateString(date);
+  if (!parsed) return date;
+
+  const moved = new Date(
+    Date.UTC(parsed.year, parsed.month - 1, parsed.day + days),
+  );
+
+  return `${moved.getUTCFullYear()}-${pad(moved.getUTCMonth() + 1)}-${pad(
+    moved.getUTCDate(),
+  )}`;
+}
+
+/** First moment of a given calendar date in that zone. Null if not a date. */
+export function startOfLocalDateISO(
+  timezone: string,
+  date: string,
+): string | null {
+  const parsed = parseDateString(date);
+  if (!parsed) return null;
+
+  return localMidnight(
+    timezone,
+    parsed.year,
+    parsed.month,
+    parsed.day,
+  ).toISOString();
+}
+
+/**
+ * First moment of the day *after* a given calendar date — the exclusive upper
+ * bound of a range that includes the whole of that day.
+ *
+ * Exclusive rather than 23:59:59 on purpose: an order placed in the last second
+ * before midnight belongs to the day it was placed on, and a `lte` bound cut to
+ * the second quietly loses it.
+ */
+export function endOfLocalDateISO(
+  timezone: string,
+  date: string,
+): string | null {
+  const parsed = parseDateString(date);
+  if (!parsed) return null;
+
+  // Day + 1 overflows the month and the year correctly inside Date.UTC.
+  return localMidnight(
+    timezone,
+    parsed.year,
+    parsed.month,
+    parsed.day + 1,
+  ).toISOString();
+}

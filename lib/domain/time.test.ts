@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { startOfDayISO, startOfMonthISO } from "./time";
+import {
+  endOfLocalDateISO,
+  localDateString,
+  shiftDateString,
+  startOfDayISO,
+  startOfLocalDateISO,
+  startOfMonthISO,
+} from "./time";
 
 /**
  * These replace a test that used to live in savings.test.ts and asserted
@@ -61,5 +68,59 @@ describe("startOfDayISO", () => {
     expect(startOfDayISO("Asia/Dubai", justAfter)).toBe(
       "2026-08-10T20:00:00.000Z",
     );
+  });
+});
+
+/** Story 6.4: the range an owner types into Order History. */
+
+describe("localDateString", () => {
+  it("is the restaurant's date, not the server's", () => {
+    // 21:00 UTC is already the 11th in Dubai and still the 10th in London.
+    const instant = new Date("2026-08-10T21:00:00.000Z");
+    expect(localDateString("Asia/Dubai", instant)).toBe("2026-08-11");
+    expect(localDateString("UTC", instant)).toBe("2026-08-10");
+  });
+});
+
+describe("shiftDateString", () => {
+  it("moves whole calendar days", () => {
+    expect(shiftDateString("2026-08-17", -7)).toBe("2026-08-10");
+    expect(shiftDateString("2026-08-17", 1)).toBe("2026-08-18");
+  });
+
+  it("crosses months and years", () => {
+    expect(shiftDateString("2026-03-01", -1)).toBe("2026-02-28");
+    expect(shiftDateString("2026-01-01", -1)).toBe("2025-12-31");
+    expect(shiftDateString("2024-02-28", 1)).toBe("2024-02-29"); // leap year
+  });
+});
+
+describe("startOfLocalDateISO and endOfLocalDateISO", () => {
+  it("bracket exactly one Dubai day", () => {
+    expect(startOfLocalDateISO("Asia/Dubai", "2026-08-10")).toBe(
+      "2026-08-09T20:00:00.000Z",
+    );
+    // Exclusive: the first instant of the 11th, so 23:59:59 on the 10th is in.
+    expect(endOfLocalDateISO("Asia/Dubai", "2026-08-10")).toBe(
+      "2026-08-10T20:00:00.000Z",
+    );
+  });
+
+  it("rolls the end bound over a month and a year end", () => {
+    expect(endOfLocalDateISO("UTC", "2026-08-31")).toBe(
+      "2026-09-01T00:00:00.000Z",
+    );
+    expect(endOfLocalDateISO("UTC", "2026-12-31")).toBe(
+      "2027-01-01T00:00:00.000Z",
+    );
+  });
+
+  it("rejects anything that is not a real date", () => {
+    // The one that matters: Date.UTC would roll this forward to 3 March and
+    // silently answer about a day nobody asked about.
+    expect(startOfLocalDateISO("Asia/Dubai", "2026-02-31")).toBeNull();
+    expect(startOfLocalDateISO("Asia/Dubai", "2026-13-01")).toBeNull();
+    expect(startOfLocalDateISO("Asia/Dubai", "not-a-date")).toBeNull();
+    expect(endOfLocalDateISO("Asia/Dubai", "")).toBeNull();
   });
 });
