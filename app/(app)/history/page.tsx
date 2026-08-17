@@ -220,10 +220,14 @@ export default async function HistoryPage({
         </p>
       ) : orders.length === 0 ? (
         <p className="mt-8 rounded-md border border-border-hairline bg-surface-raised p-8 text-center text-body text-ink-secondary">
-          No orders between {formatDay(from, timezone)} and{" "}
-          {formatDay(to, timezone)}
-          {mode === "all" ? "" : ` for ${MODES.find((m) => m.key === mode)!.label.toLowerCase()}`}
-          .
+          {/* Built as one string rather than as JSX siblings: split across
+              lines, JSX inserts whitespace between them and the sentence ends
+              " 31 Jan 2025 ." with a space before the full stop. */}
+          {`No orders between ${formatDay(from, timezone)} and ${formatDay(to, timezone)}${
+            mode === "all"
+              ? ""
+              : ` for ${MODES.find((m) => m.key === mode)!.label.toLowerCase()}`
+          }.`}
         </p>
       ) : (
         <>
