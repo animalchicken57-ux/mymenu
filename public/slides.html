@@ -293,6 +293,97 @@
     color: var(--keep-strong);
   }
 
+  /* --- who it is for --------------------------------------------------- */
+  /* Two panels, because there are two different people and confusing them is
+     the commonest way a pitch like this goes wrong: the one who pays is not
+     the one who taps. */
+
+  .who {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(268px, 1fr));
+    gap: 2px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .who > div {
+    background: var(--paper-raised);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .who .role {
+    font-family: var(--data);
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--keep);
+    margin: 0;
+  }
+  .who h3 {
+    margin: 0;
+    font-size: clamp(17px, 2vw, 22px);
+    font-weight: 750;
+    letter-spacing: -.02em;
+    line-height: 1.2;
+  }
+  .who ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: clamp(13px, 1.45vw, 16px);
+    line-height: 1.45;
+    color: var(--ink-soft);
+  }
+  .who li strong { color: var(--ink); font-weight: 650; }
+
+  /* --- the alternatives ------------------------------------------------ */
+
+  .versus {
+    display: grid;
+    gap: 2px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .versus > div {
+    background: var(--paper-raised);
+    display: grid;
+    grid-template-columns: minmax(108px, .8fr) minmax(0, 2fr) auto;
+    gap: 6px 16px;
+    padding: 12px 18px;
+    align-items: baseline;
+    font-size: clamp(13px, 1.4vw, 16px);
+    line-height: 1.4;
+  }
+  .versus .name { font-weight: 700; }
+  .versus .what { color: var(--ink-soft); }
+  .versus .verdict {
+    font-family: var(--data);
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--ink-soft);
+    text-align: end;
+  }
+  .versus .verdict.is-taken { color: var(--taken); }
+  .versus .verdict.is-keep  { color: var(--keep); }
+  /* The row the whole table exists to make obvious. */
+  .versus .is-mine { background: var(--keep-wash); }
+  .versus .is-mine .what { color: var(--ink); }
+
+  @media (max-width: 640px) {
+    .versus > div { grid-template-columns: 1fr auto; }
+    .versus .what { grid-column: 1 / -1; }
+  }
+
   /* --- speaker script -------------------------------------------------- */
 
   .notes {
@@ -445,12 +536,30 @@
     h2 { font-size: 19pt; }
     .lede { font-size: 13pt; max-width: none; }
     .figure .n { font-size: 20pt; }
+    /* The two densest slides. Without this they run onto a second sheet, and
+       one slide per page is the whole reason these PDFs exist. */
+    .who > div { padding: 7pt 10pt; gap: 5pt; }
+    .who h3 { font-size: 12pt; }
+    .who ul { font-size: 9pt; gap: 3pt; line-height: 1.32; }
+    .versus > div { padding: 4pt 10pt; font-size: 9pt; line-height: 1.3; }
+    .versus .verdict { font-size: 8pt; }
+    .versus .is-mine { background: #eeeeee; }
     blockquote { font-size: 16pt; max-width: none; }
     .ask .n { font-size: 26pt; }
 
-    /* The script prints whether or not it was toggled on screen. */
-    .notes { display: block !important; border-top-width: 1pt; }
-    .notes p { font-size: 11pt; }
+    /* The script prints whether or not it was toggled on screen.
+       9.5pt rather than 11pt: three of the slides carry a much longer script
+       than the rest, and at 11pt they pushed onto a second sheet. A page break
+       in the middle of slide 4 is worse to hold in front of a room than a
+       slightly smaller script, and this is still comfortably readable. */
+    .notes {
+      display: block !important;
+      border-top-width: 1pt;
+      padding: 10pt 12pt;
+    }
+    .notes p { font-size: 9.5pt; line-height: 1.42; }
+    .notes p + p { margin-top: 5pt; }
+    .notes-head { margin-bottom: 5pt; }
 
     /* Screen furniture has no business on paper. */
     .rail, .progress, .hint { display: none !important; }
@@ -478,7 +587,7 @@
   })();
 </script>
 
-<!-- 1 .................................................................. -->
+<!-- 1 ................................................................. -->
 <section class="slide is-active">
   <p class="eyebrow">MyMenu &middot; Asking for AED 250,000</p>
   <h1>Talabat didn't cook the food. It still takes the biggest cut.</h1>
@@ -498,7 +607,7 @@
   </div>
 </section>
 
-<!-- 2 .................................................................. -->
+<!-- 2 ................................................................. -->
 <section class="slide">
   <p class="eyebrow is-taken">The problem</p>
   <h2>18 dirhams, for taking the order.</h2>
@@ -520,7 +629,7 @@
   </div>
 </section>
 
-<!-- 3 .................................................................. -->
+<!-- 3 ................................................................. -->
 <section class="slide">
   <p class="eyebrow is-taken">The problem</p>
   <h2>Over a year, that is 90,000 dirhams.</h2>
@@ -552,7 +661,70 @@
   </div>
 </section>
 
-<!-- 4 .................................................................. -->
+<!-- 4 ................................................................. -->
+<section class="slide">
+  <p class="eyebrow">Who this is for</p>
+  <h2>Not every restaurant. This man, in this street.</h2>
+  <div class="who">
+    <div>
+      <p class="role">The one who pays &middot; my customer</p>
+      <h3>The owner of a one-branch cafeteria.</h3>
+      <ul>
+        <li><strong>30 to 50, and it is his own name on the trade licence.</strong>
+          Not a manager who has to ask anyone.</li>
+        <li><strong>Shawarma and grill, curry house, karak caf&eacute;, small Arabic
+          kitchen.</strong> One to three branches, never a chain.</li>
+        <li><strong>Deira, Karama, Al Quoz, Al Nahda, Al Majaz.</strong> Not the
+          Marina and not DIFC &mdash; those are hotel outlets and franchises.</li>
+        <li><strong>AED 20,000 to 60,000 a month</strong>, and a third to a half
+          of it walks through a delivery app.</li>
+        <li><strong>Runs the whole business from WhatsApp.</strong> No IT person,
+          no marketing person, no procurement to get past.</li>
+        <li><strong>Already pays</strong> for an aggregator listing, printed
+          menus and boosted Instagram posts. He is not being asked to start
+          spending &mdash; he is being asked to spend it better.</li>
+        <li><strong>He searches</strong> &ldquo;talabat commission rate&rdquo;,
+          &ldquo;نسبة عمولة طلبات&rdquo;, &ldquo;QR menu Dubai&rdquo;. Those
+          three searches are my entire advertising plan.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="role">The one who taps &middot; his customer</p>
+      <h3>Somebody who already likes the food.</h3>
+      <ul>
+        <li><strong>18 to 40, lives here, orders from their phone.</strong>
+          Men and women equally &mdash; this is lunch, not a niche.</li>
+        <li><strong>Coming back, not discovering.</strong> They are not browsing
+          for a restaurant. They already chose this one.</li>
+        <li><strong>Will not install an app for one shawarma place.</strong>
+          That is exactly why it opens in the browser.</li>
+        <li><strong>About half of them read Arabic first.</strong></li>
+      </ul>
+    </div>
+  </div>
+  <p class="soft tight">Roughly <strong>12,000</strong> of the UAE&rsquo;s 26,795
+  restaurants fit the left-hand column. That is the market I am counting, not all
+  of them. <em>The profile is my own segmentation, not a published statistic.</em></p>
+  <div class="notes">
+    <p class="notes-head">Say this &middot; 45 seconds &middot; full wording in the script</p>
+    <p>"Let me be exact about who I sell to, because 'restaurants' is not an
+      answer. I sell to one man: 30 to 50, his own name on the trade licence, one
+      cafeteria in Deira or Karama. Not the Marina &mdash; that is hotels and
+      franchises, and they buy enterprise systems."</p>
+    <p>"20 to 60 thousand a month, a third of it through a delivery app, and he
+      runs the whole business on WhatsApp. No IT person, no procurement &mdash;
+      he decides in one conversation."</p>
+    <p>"And I know what he types into Google, because it is the same three
+      things. That is my whole advertising plan."</p>
+    <p>"On the right is his customer, the one who actually taps. Coming back, not
+      discovering &mdash; which is why it opens in a browser. Nobody installs an
+      app for one shawarma shop."</p>
+    <p><strong>One line if you lose the rest: 12,000 restaurants, not 26,795.
+      You are counting the ones you can actually sell to.</strong></p>
+  </div>
+</section>
+
+<!-- 5 ................................................................. -->
 <section class="slide">
   <p class="eyebrow is-keep">My solution</p>
   <h2>I give every restaurant its own ordering page.</h2>
@@ -577,26 +749,71 @@
   </div>
 </section>
 
-<!-- 5 .................................................................. -->
+<!-- 6 ................................................................. -->
 <section class="slide">
-  <p class="eyebrow">Positioning</p>
-  <h2>I am not fighting Talabat. I am the way out of it.</h2>
-  <p class="lede" style="max-width:40ch">Talabat brings a restaurant new people.
-    MyMenu keeps the people who already like the food.</p>
-  <p class="soft tight">Most restaurants should use both, and I say that on my own
-    website. Being honest about it is the point, not a weakness.</p>
+  <p class="eyebrow">What he could buy instead</p>
+  <h2>Everything else is built for a bigger kitchen than his.</h2>
+  <div class="versus">
+    <div>
+      <span class="name">Talabat, Deliveroo</span>
+      <span class="what">Bring him new people. Take 15&ndash;35% forever, and keep
+        the customer's number.</span>
+      <span class="verdict is-taken">Not a rival &mdash; the problem</span>
+    </div>
+    <div>
+      <span class="name">ChatFood</span>
+      <span class="what">Did exactly this, in Dubai, and Deliverect bought them
+        for it. Now sold to chains and groups.</span>
+      <span class="verdict">Left the gap</span>
+    </div>
+    <div>
+      <span class="name">Ordable</span>
+      <span class="what">Direct ordering across the Gulf at 0% commission. Priced
+        and shaped for the bigger operator.</span>
+      <span class="verdict">The real rival</span>
+    </div>
+    <div>
+      <span class="name">Foodics, POS systems</span>
+      <span class="what">A whole till and stock system. Thousands to buy, a week
+        to learn, someone to run it.</span>
+      <span class="verdict">Too big, too slow</span>
+    </div>
+    <div>
+      <span class="name">A QR code to a PDF</span>
+      <span class="what">Shows the menu. Cannot take an order, cannot tell him
+        who ordered.</span>
+      <span class="verdict">Not ordering at all</span>
+    </div>
+    <div class="is-mine">
+      <span class="name">MyMenu</span>
+      <span class="what">One branch, one price, set up in an afternoon, Arabic
+        first. Built for nobody else on purpose.</span>
+      <span class="verdict is-keep">Mine</span>
+    </div>
+  </div>
+  <p class="soft tight">And I am not fighting Talabat. Talabat brings new people;
+    I keep the ones who already like the food. Most restaurants should run both
+    &mdash; I say so on my own website.</p>
   <div class="notes">
-    <p class="notes-head">Say this &middot; 30 seconds</p>
-    <p>"You might ask: are you fighting Talabat? No. Talabat is good at one thing
-      &mdash; bringing a restaurant people who never heard of them."</p>
-    <p>"MyMenu does the opposite. It keeps the people who already know the food
-      and already like it."</p>
-    <p>"Most restaurants should use both. I say that on my own website. I am not
-      going to lie to a customer to make a sale."</p>
+    <p class="notes-head">Say this &middot; 45 seconds</p>
+    <p>"So why doesn't he just buy something that already exists? Here is
+      everything he could buy instead."</p>
+    <p>"Talabat is not my rival, it is the problem &mdash; it takes a third and
+      keeps his customer."</p>
+    <p>"ChatFood built almost exactly this in Dubai and got bought for it. That is
+      proof, and I will come back to it. But they belong to Deliverect now, who
+      sell to chains. Ordable is the real competitor, but it is priced for a
+      bigger operator. Foodics is a full till system &mdash; thousands of dirhams
+      and a week of training. And a QR code that opens a PDF just shows a menu;
+      it cannot take an order."</p>
+    <p>"Every one of them is built for a bigger kitchen than his. I am built for
+      nobody else on purpose."</p>
+    <p><strong>Say the last line slowly. Then move on &mdash; do not read the
+      table out row by row, they can read.</strong></p>
   </div>
 </section>
 
-<!-- 6 .................................................................. -->
+<!-- 7 ................................................................. -->
 <section class="slide">
   <p class="eyebrow is-keep">How I make money</p>
   <h2>300 dirhams a month. Always. No percentage.</h2>
@@ -629,7 +846,7 @@
   </div>
 </section>
 
-<!-- 7 .................................................................. -->
+<!-- 8 ................................................................. -->
 <section class="slide">
   <p class="eyebrow is-keep">Why a restaurant says yes</p>
   <h2>After 20 orders a month, they are saving money.</h2>
@@ -655,7 +872,7 @@
   </div>
 </section>
 
-<!-- 8 .................................................................. -->
+<!-- 9 ................................................................. -->
 <section class="slide">
   <p class="eyebrow">The market</p>
   <h2>There are 26,795 restaurants and caf&eacute;s in the UAE.</h2>
@@ -688,7 +905,7 @@
   </div>
 </section>
 
-<!-- 9 .................................................................. -->
+<!-- 10 ................................................................ -->
 <section class="slide">
   <p class="eyebrow">Proof this works</p>
   <h2>A Dubai company did this, and a bigger company bought them.</h2>
@@ -725,36 +942,79 @@
   </div>
 </section>
 
-<!-- 10 ................................................................. -->
+<!-- 11 ................................................................ -->
 <section class="slide">
   <p class="eyebrow is-keep">What I am asking for</p>
   <div class="ask">
     <span class="n">AED 250,000</span>
     <span class="l">for 15% of the company</span>
   </div>
-  <ul class="points">
-    <li><span class="mark">FOR</span><span>One salesperson for a year, visiting restaurants. The app is finished. Selling is what is missing.</span></li>
-    <li><span class="mark">GET</span><span>200 restaurants by the end of year one &mdash; 720,000 dirhams a year. Your 15% would be worth roughly 430,000 to 650,000.</span></li>
-    <li><span class="mark">RISK</span><span>Honestly: my biggest risk is selling, not the software. If nobody visits the restaurants, none of this happens. That is what your money pays for.</span></li>
-  </ul>
+  <p class="soft tight">I am not asking you to pay for the software. The software
+    is finished &mdash; you are about to watch it work. I am asking you to pay for
+    the one thing I cannot do alone, which is knock on 200 doors.</p>
+  <div class="versus">
+    <div>
+      <span class="name">AED 96,000</span>
+      <span class="what">One salesperson, for a year. About 17 restaurants a
+        month &mdash; under one a working day.</span>
+      <span class="verdict">Hiring</span>
+    </div>
+    <div>
+      <span class="name">AED 48,000</span>
+      <span class="what">A part-time Arabic-speaking support person. An owner who
+        cannot get an answer cancels.</span>
+      <span class="verdict">Customer service</span>
+    </div>
+    <div>
+      <span class="name">AED 30,000</span>
+      <span class="what">Search and Instagram, aimed at the three searches on the
+        earlier slide. Nothing broader.</span>
+      <span class="verdict">Advertising</span>
+    </div>
+    <div>
+      <span class="name">AED 76,000</span>
+      <span class="what">Trade licence, card payments, printed table stands,
+        hosting, and something left over for surprises.</span>
+      <span class="verdict">Setup and running</span>
+    </div>
+    <div class="is-mine">
+      <span class="name">You get 15%</span>
+      <span class="what">Of the company, permanently &mdash; not a cut of profit
+        for one year. At 200 restaurants that stake is worth 430,000 to 650,000
+        inside eighteen months.</span>
+      <span class="verdict is-keep">In return</span>
+    </div>
+  </div>
+  <p class="soft tight"><strong>Or buy it outright:</strong> AED 750,000 for all
+    of it &mdash; code, brand, customers &mdash; plus AED 8,000 a month to keep it
+    running. I would rather you took the first deal, and so would you if the plan
+    holds. My risk is selling, not software.</p>
   <div class="notes">
-    <p class="notes-head">Say this &middot; 50 seconds &middot; then go straight to the demo</p>
-    <p>"I am asking for 250,000 dirhams for 15 percent of the company."</p>
-    <p>"The app is already built and working. So the money is not for building.
-      It pays for one salesperson to visit restaurants for a year, plus card
-      payments and the trade licence."</p>
-    <p>"If I hit 200 restaurants in year one, that is 720,000 dirhams a year, and
-      your 15 percent is worth around 430,000 to 650,000."</p>
-    <p>"And let me be honest about my risk. My problem is not the software. It is
-      selling. If nobody walks into those restaurants, none of this happens. That
-      is exactly what I want your money for."</p>
-    <p>"Now let me show you the app."</p>
+    <p class="notes-head">Say this &middot; 55 seconds &middot; full wording in the script</p>
+    <p>"250,000 dirhams for 15 percent. And I want to be precise about what it
+      buys, because it is not the software &mdash; that is finished, you are about
+      to watch it work."</p>
+    <p>"96,000 is a salesperson for a year. 48,000 is part-time Arabic support,
+      because an owner who cannot get an answer cancels. 30,000 is advertising,
+      aimed at the three searches I showed you. 76,000 is licence, card payments,
+      table stands and hosting."</p>
+    <p>"You take 15 percent and you keep it &mdash; not a share of profit for one
+      year. At 200 restaurants that is 720,000 a year, and your stake is worth
+      430,000 to 650,000 inside eighteen months."</p>
+    <p>"If you would rather own the whole thing: 750,000, and I stay on at 8,000 a
+      month to run it. I would rather you took the first deal, and if the plan
+      works, so would you."</p>
+    <p>"My risk is selling, not software. That is what your money is for. Now let
+      me show you the app."</p>
+    <p><strong>Why 750,000, if asked: about one year of the plan's revenue, and
+      they are buying the upside, not the code. The 8,000 a month is a
+      maintenance retainer &mdash; it does not promise new features.</strong></p>
   </div>
 </section>
 
-<!-- 11 ................................................................. -->
+<!-- 12 ................................................................ -->
 <section class="slide">
-  <p class="eyebrow is-keep">Demo &middot; about 6 minutes left</p>
+  <p class="eyebrow is-keep">Demo &middot; about 5 minutes left</p>
   <h1>Let me show you.</h1>
   <ul class="points">
     <li><span class="mark">01</span><span>Scan the table code &mdash; the menu opens with no app</span></li>
@@ -773,9 +1033,15 @@
   </p>
   <div class="notes">
     <p class="notes-head">Demo &middot; keep it to four steps</p>
-    <p>Do not walk through every page. Four steps only, exactly as listed.</p>
+    <p>Do not walk through every page. Four steps only, exactly as listed. Every
+      step here is something you already promised on an earlier slide &mdash;
+      that is the only reason it is in the demo.</p>
     <p>End on the savings counter going up. That is the whole pitch in one number,
       and it is the last thing they should see.</p>
+    <p><strong>Do not open the menu editor, the customer list, order history,
+      settings or the drivers page unless somebody asks.</strong> They exist, and
+      saying "it is all there, ask me and I will open it" is stronger than
+      spending your last two minutes clicking.</p>
     <p>If you have time left, invite them to scan the code themselves.</p>
   </div>
 </section>

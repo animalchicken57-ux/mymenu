@@ -23,16 +23,32 @@ software cannot do by itself — walking into restaurants.
 | What | Cost |
 |---|---:|
 | One field salesperson, 12 months @ 8,000 | 96,000 |
-| Part-time onboarding and support, 12 months @ 4,000 | 48,000 |
-| Card payment integration (one-off build) | 25,000 |
+| Part-time Arabic-speaking support and onboarding, 12 months @ 4,000 | 48,000 |
+| Advertising — search and Instagram, aimed at the segment in §3 | 30,000 |
 | Trade licence, legal, accounting | 30,000 |
-| Printed QR table stands, demo materials | 24,000 |
-| Infrastructure and tools, 12 months | 12,000 |
-| Contingency | 15,000 |
+| Card payment integration (one-off build) | 25,000 |
+| Printed QR table stands, demo materials | 12,000 |
+| Contingency | 6,000 |
+| Infrastructure and tools, 12 months | 3,000 |
 | **Total** | **250,000** |
+
+Nothing in that table is software. The product is built; this is the cost of
+putting it in front of people.
 
 **The milestone this buys:** 200 paying restaurants by month 12 — AED 60,000
 monthly recurring revenue, AED 720,000 annualised.
+
+### If you would rather buy it outright
+
+Offered because it is a fair question, not because it is the preferred answer:
+**AED 750,000 for the whole company** — code, brand, domain, customers — plus
+**AED 8,000 a month** to keep it running and fix what breaks. That retainer buys
+maintenance, not a roadmap; new features are quoted separately.
+
+750,000 is roughly one year of the plan's revenue. On the plan in §6, 15% is
+worth AED 2.2–3.2M by year three, so the outright price is deliberately set
+where selling the whole thing is the worse deal for us — and, if the plan holds,
+the better one for the buyer only if they can sell faster than we can.
 
 ---
 
@@ -63,7 +79,44 @@ still finishes the year not knowing one customer's name.
 
 ---
 
-## 3. The market
+## 3. Who we sell to
+
+"Restaurants" is not a segment. There are two different people here, and the one
+who pays is not the one who taps.
+
+### The buyer — our customer
+
+| | |
+|---|---|
+| Who | The owner of a one-branch cafeteria. His own name is on the trade licence |
+| Age | 30–50 |
+| Business | Shawarma and grill, curry house, karak café, small Arabic kitchen. One to three branches, never a chain |
+| Where | Deira, Karama, Al Quoz, Al Nahda, Al Majaz — not the Marina or DIFC, which are hotel outlets and franchises |
+| Turnover | AED 20,000–60,000 a month, a third to a half of it through an aggregator |
+| Staff | No IT person, no marketing person, no procurement. He decides in one conversation |
+| Tools | WhatsApp is the CRM. Instagram is the marketing. Maybe a cheap till |
+| Already spends on | An aggregator listing, printed menus, boosted Instagram posts |
+| Language | Arabic or English, and the product must be Arabic-first rather than Arabic-translated |
+| Finds us by searching | "talabat commission rate", "نسبة عمولة طلبات", "QR menu Dubai", "online ordering system restaurant UAE" |
+
+Those searches matter more than they look: they are high-intent, low-volume and
+cheap, and they are the entire paid-acquisition plan. We are not buying "food
+delivery" as a keyword.
+
+### The user — his customer
+
+18–40, lives in the UAE, orders from a phone, men and women equally. Critically
+they are **returning, not discovering** — they already chose this restaurant, so
+we never have to solve demand generation. About half read Arabic first. None of
+them will install an app for one shawarma shop, which is why ordering is a web
+page and not an app.
+
+**This profile is our own segmentation, not a published statistic.** The market
+sizes below are sourced; this is the judgement applied to them.
+
+---
+
+## 4. The market
 
 The UAE online food delivery market was worth **USD 2.51 billion in 2024**
 (≈ AED 9.2 billion) and is forecast to reach **USD 3.96 billion by 2030**, a 7.4%
@@ -86,7 +139,7 @@ a 300 AED page. 1,000 restaurants is **3.7% of the total market**.
 
 ---
 
-## 4. How MyMenu makes money
+## 5. How MyMenu makes money
 
 **AED 300 per restaurant per month, flat.** No commission, no per-order fee, no
 percentage. The first 30 orders each month are free so a restaurant can try it
@@ -128,7 +181,7 @@ numbers to check first with real customers.
 
 ---
 
-## 5. Three-year plan
+## 6. Three-year plan
 
 | | Restaurants | MRR | ARR |
 |---|---:|---:|---:|
@@ -143,7 +196,7 @@ the software** — the software is built.
 
 ---
 
-## 6. The competition, honestly
+## 7. The competition, honestly
 
 **Someone has already proved this model works in this market.**
 
@@ -173,7 +226,7 @@ product, because that market already has three of them.
 
 ---
 
-## 7. What the investor gets
+## 8. What the investor gets
 
 **Return on the plan above.** SaaS businesses of this size trade at roughly 4–6×
 annual recurring revenue.
@@ -198,7 +251,7 @@ On AED 250,000, that is roughly **1.7× to 2.6× within eighteen months**, and
 
 ---
 
-## 8. What could go wrong
+## 9. What could go wrong
 
 Stated plainly, because an investor will find these anyway.
 
