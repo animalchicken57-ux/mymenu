@@ -158,4 +158,37 @@ assignment_required:
   - 8-3-faqs                    # Support must contain FAQs
   - 8-4-contact-form-that-really-sends  # must be wired to email and working
 
-action_items: []
+action_items:
+  # Raised 2026-08-17.
+  - id: build-status-is-not-checked
+    note: >
+      Every Vercel build from 0c1ea52 to 76b3ebb failed and nobody noticed,
+      because the live site kept serving the last good build. Four commits of
+      work looked shipped and were not. Fixed in 84c97ba. After any push, check
+      the commit status on GitHub rather than assuming — `tsc --noEmit` cannot
+      see this class of failure, because it happens at page-data collection.
+    status: fixed
+
+  - id: stale-presentation-duplicates
+    note: >
+      docs/pitch.html, docs/script.html and docs/cheat-sheet.html are older
+      copies of the three files in public/. They are not served and have been
+      out of sync since e6d86c1. Delete them before the demo so nobody presents
+      from the wrong deck.
+    status: open
+
+  - id: history-page-weight
+    note: >
+      /history embeds every order's line items so a row can open without a
+      round trip. At 66 orders that is a 440 KB document; the 200-order cap
+      would be roughly 1.3 MB. Fine for an owner on a desktop, worth revisiting
+      if it is ever opened on a phone.
+    status: open
+
+  - id: arabic-is-the-last-real-gap
+    note: >
+      7-2 is the only unbuilt story left that a user would notice. Owner pages
+      written after Epic 6 hardcode English rather than using lib/i18n, so the
+      dictionary has to catch up with /menu, /customers, /team, /settings and
+      /history when it is done.
+    status: open
