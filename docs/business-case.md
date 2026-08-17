@@ -96,7 +96,7 @@ who pays is not the one who taps.
 | Staff | No IT person, no marketing person, no procurement. He decides in one conversation |
 | Tools | WhatsApp is the CRM. Instagram is the marketing. Maybe a cheap till |
 | Already spends on | An aggregator listing, printed menus, boosted Instagram posts |
-| Language | Arabic or English, and the product must be Arabic-first rather than Arabic-translated |
+| Language | Arabic or English. The product must end up Arabic-first rather than Arabic-translated — today it flips right-to-left but is only part-translated (story 7-2) |
 | Finds us by searching | "talabat commission rate", "نسبة عمولة طلبات", "QR menu Dubai", "online ordering system restaurant UAE" |
 
 Those searches matter more than they look: they are high-intent, low-volume and
@@ -220,9 +220,18 @@ This is the strongest slide in the deck, not the weakest:
 
 **Where MyMenu differs:** we serve only the small independent. One to three
 branches, non-technical, no POS system, no IT person. Set up in an afternoon,
-priced at one number a busy owner can decide on in a minute, and Arabic-first
-rather than Arabic-translated. We are deliberately not building the enterprise
-product, because that market already has three of them.
+and priced at one number a busy owner can decide on in a minute. We are
+deliberately not building the enterprise product, because that market already
+has three of them.
+
+**On Arabic, stated accurately.** The intent is Arabic-first rather than
+Arabic-translated, and the foundation is built — the interface mirrors
+right-to-left today, and the dictionary is typed so a missing string is a build
+error rather than a half-translated screen. It is not finished: only part of the
+interface is translated, and completing it is story 7-2. Saying "we are Arabic
+first" in front of an Arabic speaker who then switches the language is a worse
+outcome than saying "the layout is there, the words are next" — so the deck says
+the second one.
 
 ---
 
