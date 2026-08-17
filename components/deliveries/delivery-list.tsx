@@ -2,11 +2,8 @@
 
 import { useCallback, useEffect, useState, useTransition } from "react";
 
-import {
-  markDelivered,
-  PROBLEM_REASONS,
-  reportProblem,
-} from "@/app/actions/delivery";
+import { markDelivered, reportProblem } from "@/app/actions/delivery";
+import { PROBLEM_REASONS } from "@/lib/domain/delivery";
 import { bestMapLink } from "@/lib/domain/maps";
 import { formatFils } from "@/lib/domain/money";
 import { createClient } from "@/lib/supabase/client";

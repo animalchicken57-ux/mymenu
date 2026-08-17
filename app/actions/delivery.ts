@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { requireRole } from "@/lib/auth";
+import { PROBLEM_REASONS } from "@/lib/domain/delivery";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -26,13 +27,10 @@ function fail(error: string): Result {
   return { ok: false, error };
 }
 
-/** The only reasons a driver can raise, so the flag is scannable, not prose. */
-export const PROBLEM_REASONS = [
-  "Nobody answered",
-  "Address is wrong",
-  "Customer refused it",
-  "I cannot get there",
-] as const;
+// PROBLEM_REASONS lives in lib/domain/delivery.ts, not here. A "use server"
+// module may only export async functions — every export becomes a callable
+// endpoint — and exporting the array broke `next build` at page-data collection
+// while `tsc --noEmit` stayed green. Types are erased and may still be exported.
 
 // -----------------------------------------------------------------------------
 // Story 5.1 — hand a delivery to a driver
