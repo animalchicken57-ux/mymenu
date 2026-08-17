@@ -38,14 +38,37 @@ const env = Object.fromEntries(
     .map((l) => [l.slice(0, l.indexOf("=")), l.slice(l.indexOf("=") + 1).trim()]),
 );
 
+const args = process.argv.slice(2);
+const flag = (name) => {
+  const hit = args.find((a) => a.startsWith(`--${name}=`));
+  return hit ? hit.slice(name.length + 3) : null;
+};
+const positional = args.filter((a) => !a.startsWith("--"));
+
 const URL_BASE = env.NEXT_PUBLIC_SUPABASE_URL;
 const KEY = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const EMAIL = process.argv[2];
-const PASSWORD = process.argv[3];
-const DAYS = Number(process.argv[4] ?? 30);
+const EMAIL = positional[0];
+const PASSWORD = positional[1];
+const DAYS = Number(positional[2] ?? 30);
+
+/**
+ * `--since=YYYY-MM-DD` restamps only orders placed on or after that date, and
+ * `--between=YYYY-MM-DD..YYYY-MM-DD` spreads them over an explicit window
+ * instead of the last N days.
+ *
+ * Together they are what lets a top-up land where it is wanted: seed more
+ * trade, then move only the newly created orders into the current month. Doing
+ * it by date is the only handle available — place_order decides the ids, so
+ * there is no batch marker to select on afterwards.
+ */
+const SINCE = flag("since");
+const BETWEEN = flag("between");
 
 if (!EMAIL || !PASSWORD) {
-  throw new Error("Usage: node scripts/spread-demo-history.mjs <owner-email> <password> [days]");
+  throw new Error(
+    "Usage: node scripts/spread-demo-history.mjs <owner-email> <password> [days]" +
+      " [--since=YYYY-MM-DD] [--between=YYYY-MM-DD..YYYY-MM-DD]",
+  );
 }
 if (!URL_BASE || !KEY) {
   throw new Error("NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be in .env.local");
@@ -99,10 +122,14 @@ const restaurant = (await meRes.json()).restaurant;
 void me;
 if (!restaurant) throw new Error("that account has no restaurant");
 
+const sinceFilter = SINCE ? `&created_at=gte.${SINCE}T00:00:00Z` : "";
 const orders = await read(
-  `/rest/v1/orders?select=id,created_at,total_fils,status&order=created_at.asc`,
+  `/rest/v1/orders?select=id,created_at,total_fils,status${sinceFilter}&order=created_at.asc`,
 );
-console.log(`${restaurant.name}: ${orders.length} orders`);
+console.log(
+  `${restaurant.name}: ${orders.length} orders${SINCE ? ` placed since ${SINCE}` : ""}`,
+);
+if (orders.length === 0) throw new Error("nothing to restamp");
 
 // -- when ---------------------------------------------------------------------
 
@@ -131,11 +158,25 @@ const todayUTCms = Date.UTC(
  * generated.
  */
 const days = [];
-for (let back = DAYS; back >= 1; back--) {
-  const dayStart = todayUTCms - back * 86400000;
+const pushDay = (dayStart) => {
   const weekday = new Date(dayStart).getUTCDay(); // 0 Sun … 6 Sat
   const busy = weekday === 4 || weekday === 5 || weekday === 6;
   days.push({ dayStart, weight: busy ? 2 : 1 });
+};
+
+if (BETWEEN) {
+  const [fromStr, toStr] = BETWEEN.split("..");
+  const parse = (s) => {
+    const [y, m, d] = s.split("-").map(Number);
+    return Date.UTC(y, m - 1, d);
+  };
+  for (let t = parse(fromStr); t <= parse(toStr); t += 86400000) {
+    if (t >= todayUTCms) break; // today stays empty, always
+    pushDay(t);
+  }
+  if (days.length === 0) throw new Error(`--between=${BETWEEN} covers no day before today`);
+} else {
+  for (let back = DAYS; back >= 1; back--) pushDay(todayUTCms - back * 86400000);
 }
 
 const totalWeight = days.reduce((s, d) => s + d.weight, 0);
@@ -185,7 +226,11 @@ for (const { order, at } of plan) {
   if (res.status >= 300) throw new Error(`failed on ${order.id}: ${JSON.stringify(res.json)}`);
   written++;
 }
-console.log(`restamped ${written} orders across the last ${DAYS} days, none on today`);
+console.log(
+  `restamped ${written} orders across ${
+    BETWEEN ? BETWEEN.replace("..", " to ") : `the last ${DAYS} days`
+  }, none on today`,
+);
 
 // -- read it back the way the dashboard does ----------------------------------
 
