@@ -452,9 +452,7 @@
     color: var(--keep-strong);
   }
 
-  .counter, .clock { font-variant-numeric: tabular-nums; }
-  .clock { font-weight: 700; color: var(--ink); }
-  .clock.is-warning { color: var(--taken); }
+  .counter { font-variant-numeric: tabular-nums; }
 
   .progress {
     position: fixed;
@@ -490,7 +488,6 @@
 
   @media (max-width: 720px) {
     .rail { font-size: 11px; padding-inline: 12px; }
-    .rail .hide-sm { display: none; }
     .bar > span { padding-inline: 10px; font-size: 11px; }
   }
 
@@ -1060,12 +1057,12 @@
 
 <div class="progress" id="progress"></div>
 
+<!-- The countdown that used to sit here was removed on request. A clock in the
+     presenter's eyeline is a second thing to perform for, and the timings are
+     already written on every slide's script. -->
 <nav class="rail" aria-label="Slide navigation">
-  <span class="rail-group">
-    <span class="clock" id="clock">15:00</span>
-    <span class="hide-sm">left</span>
-  </span>
-  <span class="counter" id="counter">1 / 11</span>
+  <span class="rail-group"></span>
+  <span class="counter" id="counter">1 / 12</span>
   <span class="rail-group">
     <button type="button" id="theme">Dark</button>
     <button type="button" id="notes" aria-pressed="false">Script</button>
@@ -1082,10 +1079,7 @@
     var prevBtn  = document.getElementById("prev");
     var nextBtn  = document.getElementById("next");
     var notesBtn = document.getElementById("notes");
-    var clockEl  = document.getElementById("clock");
     var i = 0;
-    var startedAt = null;
-    var LIMIT = 15 * 60 * 1000;
 
     function show(n) {
       i = Math.max(0, Math.min(slides.length - 1, n));
@@ -1095,21 +1089,7 @@
       prevBtn.disabled = i === 0;
       nextBtn.disabled = i === slides.length - 1;
       window.scrollTo(0, 0);
-      if (startedAt === null && i > 0) { startedAt = Date.now(); }
     }
-
-    function pad(n) { return (n < 10 ? "0" : "") + n; }
-
-    function tick() {
-      if (startedAt === null) { return; }
-      var left = LIMIT - (Date.now() - startedAt);
-      var over = left < 0;
-      var abs  = Math.abs(left);
-      clockEl.textContent =
-        (over ? "+" : "") + pad(Math.floor(abs / 60000)) + ":" + pad(Math.floor(abs / 1000) % 60);
-      clockEl.classList.toggle("is-warning", over || left < 3 * 60 * 1000);
-    }
-    setInterval(tick, 1000);
 
     nextBtn.addEventListener("click", function () { show(i + 1); });
     prevBtn.addEventListener("click", function () { show(i - 1); });
