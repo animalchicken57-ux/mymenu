@@ -28,6 +28,27 @@ const AUTHENTICATED_PREFIXES = [
 
 const AUTH_PAGES = ["/login", "/signup", "/forgot"];
 
+/** Cookie name, duplicated from lib/i18n — the proxy runs on the edge and must
+ *  not drag a module that reaches for `next/headers`. */
+const LANG_COOKIE = "mymenu_lang";
+
+/**
+ * Does this browser ask for Arabic first?
+ *
+ * `resolveLang()` has always claimed the cookie is "set from Accept-Language on
+ * first visit", and nothing ever did it — a diner got English no matter what
+ * their phone was set to, which made the whole Arabic dictionary unreachable
+ * for the only person it was written for. This is the missing half.
+ *
+ * Only the first-listed language counts. A header of "en,ar" means a person who
+ * would rather read English, and guessing otherwise is worse than doing nothing.
+ */
+function prefersArabic(header: string | null): boolean {
+  if (!header) return false;
+  const first = header.split(",")[0]?.trim().toLowerCase() ?? "";
+  return first === "ar" || first.startsWith("ar-");
+}
+
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
 
@@ -75,6 +96,17 @@ export async function proxy(request: NextRequest) {
     url.pathname = "/dashboard";
     url.search = "";
     return NextResponse.redirect(url);
+  }
+
+  // First visit, no choice on record: take the browser's word for it. Written
+  // only when the cookie is absent, so it can never overrule a person who has
+  // actually picked a language — theirs stays picked.
+  if (!request.cookies.get(LANG_COOKIE)) {
+    response.cookies.set(
+      LANG_COOKIE,
+      prefersArabic(request.headers.get("accept-language")) ? "ar" : "en",
+      { path: "/", sameSite: "lax", maxAge: 60 * 60 * 24 * 365 },
+    );
   }
 
   return response;

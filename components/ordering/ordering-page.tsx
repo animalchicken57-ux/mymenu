@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
 
 import { placeOrder } from "@/app/actions/order";
+import { LanguageToggle } from "@/components/ordering/language-toggle";
 import { LocationPicker } from "@/components/ordering/location-picker";
 import { cartTotal, formatFils } from "@/lib/domain/money";
 import { photoUrl, tileColor, tileLetter } from "@/lib/domain/photos";
@@ -151,7 +152,7 @@ export function OrderingPage({
 
   if (!openState.open) {
     return (
-      <Shell restaurant={restaurant} t={t}>
+      <Shell restaurant={restaurant} t={t} lang={lang}>
         <div className="rounded-md border border-border-hairline bg-surface-raised p-8 text-center">
           <p className="text-heading text-ink-primary">{t.closedTitle}</p>
           {openState.opensAt ? (
@@ -166,7 +167,7 @@ export function OrderingPage({
 
   if (categories.length === 0) {
     return (
-      <Shell restaurant={restaurant} t={t}>
+      <Shell restaurant={restaurant} t={t} lang={lang}>
         <div className="rounded-md border border-border-hairline bg-surface-raised p-8 text-center">
           <p className="text-heading text-ink-primary">{t.notTakingOrders}</p>
         </div>
@@ -180,6 +181,7 @@ export function OrderingPage({
       tableNumber={tableNumber}
       categories={categories}
       t={t}
+      lang={lang}
     >
       <div className="flex flex-col gap-10 pb-36">
         {categories.map((category) => (
@@ -330,12 +332,14 @@ function Shell({
   categories,
   children,
   t,
+  lang,
 }: {
   restaurant: { name: string; coverPath?: string | null };
   tableNumber?: number | null;
   categories?: Category[];
   children: React.ReactNode;
   t: T;
+  lang: Lang;
 }) {
   const cover = photoUrl(restaurant.coverPath);
 
@@ -381,9 +385,12 @@ function Shell({
             {/* Whose software this is. It sits opposite the restaurant's own
                 name rather than above it — the restaurant is the brand on this
                 page, and we are the small print. Flips side in Arabic. */}
-            <span className="shrink-0 pt-1 text-meta uppercase tracking-widest text-ink-secondary">
-              MyMenu
-            </span>
+            <div className="flex shrink-0 items-center gap-3 pt-1">
+              <LanguageToggle lang={lang} />
+              <span className="text-meta uppercase tracking-widest text-ink-secondary">
+                MyMenu
+              </span>
+            </div>
           </div>
         </div>
 
