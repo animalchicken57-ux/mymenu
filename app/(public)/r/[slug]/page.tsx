@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import { OrderingPage } from "@/components/ordering/ordering-page";
 import { openState, type OpeningHour } from "@/lib/domain/hours";
+import { getT } from "@/lib/i18n";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -18,6 +19,11 @@ export default async function RestaurantOrderingPage({
 }: PageProps<"/r/[slug]">) {
   const { slug } = await params;
   const query = await searchParams;
+
+  // Story 7.2. The Diner has no account, so their language comes from the
+  // cookie the root layout already set from Accept-Language — which is why an
+  // Arabic-speaking customer gets an Arabic menu without touching a setting.
+  const { t } = await getT();
 
   const supabase = await createClient();
 
@@ -59,6 +65,7 @@ export default async function RestaurantOrderingPage({
 
   return (
     <OrderingPage
+      t={t.ordering}
       restaurant={{
         name: restaurant.name,
         slug: restaurant.slug,

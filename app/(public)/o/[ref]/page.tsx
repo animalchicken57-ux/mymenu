@@ -1,4 +1,5 @@
 import { OrderStatus } from "@/components/ordering/order-status";
+import { getT } from "@/lib/i18n";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -11,6 +12,7 @@ export default async function OrderStatusPage({
   params,
 }: PageProps<"/o/[ref]">) {
   const { ref } = await params;
+  const { t } = await getT();
 
   const supabase = await createClient();
   const { data } = await supabase.rpc("get_order_by_ref", { p_ref: ref });
@@ -18,16 +20,19 @@ export default async function OrderStatusPage({
   if (!data) {
     return (
       <main className="mx-auto w-full max-w-xl flex-1 px-4 py-16 text-center">
-        <h1 className="text-title text-ink-primary">
-          We can&rsquo;t find that order.
-        </h1>
+        <h1 className="text-title text-ink-primary">{t.orderStatus.notFound}</h1>
         <p className="mt-3 text-body text-ink-secondary">
-          Order links stop working after 24 hours. If you are still waiting on
-          food, ask the restaurant directly.
+          {t.orderStatus.notFoundBody}
         </p>
       </main>
     );
   }
 
-  return <OrderStatus initial={data} />;
+  return (
+    <OrderStatus
+      initial={data}
+      t={t.orderStatus}
+      currency={t.ordering.currency}
+    />
+  );
 }

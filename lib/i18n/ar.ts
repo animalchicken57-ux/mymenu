@@ -91,4 +91,85 @@ export const ar: Dictionary = {
     body: "حسابك ما عنده صلاحية لهذا الجزء من ماي مينو.",
     backToWork: "ارجع لشاشتك",
   },
+
+  /**
+   * الصفحة اللي يشوفها الزبون. مكتوبة بلهجة خليجية مفهومة، لا فصحى ثقيلة ولا
+   * ترجمة حرفية — الزبون واقف على طاولة وما عنده وقت يفك رموز.
+   *
+   * السهم في backToMenu يتجه يمين لأن الصفحة كلها تنقلب في العربي.
+   */
+  ordering: {
+    closedTitle: "مسكّرين الحين.",
+    opensAt: (time: string) => `نفتح الساعة ${time}.`,
+    notTakingOrders: "هذا المطعم ما بدأ يستقبل الطلبات بعد.",
+
+    currency: "درهم",
+    soldOut: "خلصت",
+    add: "أضف",
+    addNamed: (dish: string) => `أضف ${dish}`,
+    oneFewer: (dish: string) => `واحد أقل من ${dish}`,
+    oneMore: (dish: string) => `واحد زيادة من ${dish}`,
+
+    tableLabel: (n: number) => `طاولة ${n}`,
+    menuSections: "أقسام المنيو",
+
+    // العربية ما تجمع مثل الإنجليزية: واحد، اثنين، ثم جمع، ثم مفرد بعد العشرة.
+    itemCount: (n: number) =>
+      n === 1 ? "صنف واحد" : n === 2 ? "صنفين" : n <= 10 ? `${n} أصناف` : `${n} صنف`,
+    orderButton: "اطلب",
+
+    backToMenu: "→ رجوع للمنيو",
+    yourOrder: "طلبك",
+    howAreYouGettingIt: "كيف بتستلم طلبك؟",
+    modeDineIn: "أنا على طاولة",
+    modePickup: "بمرّ آخذه",
+    modeDelivery: "وصّلوه لي",
+
+    tableNumber: "رقم الطاولة",
+    whereToBring: "وين نوصّله؟",
+    addressHint: "اسم البناية، رقم الشقة، أي شي يساعدنا نوصل",
+    yourPhone: "رقم هاتفك",
+    phoneHint: "05x xxx xxxx",
+    kitchenNote: "شي تبي تقوله للمطبخ؟ (اختياري)",
+    kitchenNoteHint: "بدون بصل",
+
+    sending: "جاري الإرسال…",
+    sendToKitchen: "أرسل للمطبخ",
+    payAtRestaurant: "الدفع في المطعم.",
+
+    shareLocation: "📍 شارك موقعي",
+    findingYou: "نحدد موقعك…",
+    locationShared: "تم مشاركة الموقع.",
+    locationSharedBody: "السائق بيوصله موقعك على الخريطة، فما راح يحتاج يتصل يسأل عن الطريق.",
+    checkOnMap: "شوفه على الخريطة",
+    removeLocation: "احذفه",
+    locationDenied: "هاتفك رفض مشاركة الموقع. عادي — العنوان اللي كتبته يكفي.",
+    locationFailed: "ما قدرنا نحدد موقعك. العنوان اللي كتبته يكفي.",
+  },
+
+  orderStatus: {
+    orderNumber: (n: number) => `طلب رقم ${n}`,
+    atTable: (n: number) => ` · طاولة ${n}`,
+
+    stepReceived: "وصل",
+    stepCooking: "يُطبخ",
+    stepReady: "جاهز",
+
+    receivedTitle: "المطبخ استلم طلبك.",
+    receivedBody: "بيبدون فيه بعد شوي.",
+    cookingTitle: "يطبخ الحين.",
+    cookingBody: "ما راح يطول.",
+    readyTitle: "جاهز.",
+    readyBody: "تفضل استلمه.",
+    completedTitle: "تم.",
+    completedBody: "شكراً لطلبك.",
+    cancelledTitle: "هذا الطلب انلغى.",
+    cancelledBody: "كلّم المطعم إذا هذا شي ما تتوقعه.",
+
+    keepOpen: "خلّ الصفحة مفتوحة، أو ارجع لهذا الرابط. يشتغل ٢٤ ساعة.",
+
+    notFound: "ما لقينا هذا الطلب.",
+    notFoundBody:
+      "روابط الطلبات تتوقف بعد ٢٤ ساعة. إذا كنت لا تزال تنتظر أكلك، كلّم المطعم مباشرة.",
+  },
 };

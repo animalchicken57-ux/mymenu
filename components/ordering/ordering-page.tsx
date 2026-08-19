@@ -10,6 +10,7 @@ import { cartTotal, formatFils } from "@/lib/domain/money";
 import { photoUrl, tileColor, tileLetter } from "@/lib/domain/photos";
 import type { OpenState } from "@/lib/domain/hours";
 import type { Pin } from "@/lib/domain/maps";
+import type { Dictionary } from "@/lib/i18n";
 
 /**
  * The Diner's whole world — stories 3.1 to 3.4.
@@ -17,7 +18,14 @@ import type { Pin } from "@/lib/domain/maps";
  * KF-2: scan, two taps, a phone number, done, in under a minute. Everything in
  * here is shaped by that: no account, no mode selector when the QR already
  * answered it, and a cart that survives the phone ringing.
+ *
+ * Story 7.2: the words arrive as a prop rather than through `getT()`, because
+ * this is a client component and the dictionary is resolved on the server from
+ * a cookie. Passing it down also means the whole page is one language for one
+ * render — there is no moment where half the screen has switched.
  */
+
+type T = Dictionary["ordering"];
 
 type Item = {
   id: string;
@@ -37,6 +45,7 @@ export function OrderingPage({
   categories,
   tableNumber,
   openState,
+  t,
 }: {
   restaurant: {
     name: string;
@@ -47,6 +56,7 @@ export function OrderingPage({
   categories: Category[];
   tableNumber: number | null;
   openState: OpenState;
+  t: T;
 }) {
   const router = useRouter();
   const storageKey = `mymenu.cart.${restaurant.slug}`;
@@ -138,12 +148,12 @@ export function OrderingPage({
 
   if (!openState.open) {
     return (
-      <Shell restaurant={restaurant}>
+      <Shell restaurant={restaurant} t={t}>
         <div className="rounded-md border border-border-hairline bg-surface-raised p-8 text-center">
-          <p className="text-heading text-ink-primary">Closed right now.</p>
+          <p className="text-heading text-ink-primary">{t.closedTitle}</p>
           {openState.opensAt ? (
             <p className="mt-2 text-body text-ink-secondary">
-              Opens at {openState.opensAt}.
+              {t.opensAt(openState.opensAt)}
             </p>
           ) : null}
         </div>
@@ -153,11 +163,9 @@ export function OrderingPage({
 
   if (categories.length === 0) {
     return (
-      <Shell restaurant={restaurant}>
+      <Shell restaurant={restaurant} t={t}>
         <div className="rounded-md border border-border-hairline bg-surface-raised p-8 text-center">
-          <p className="text-heading text-ink-primary">
-            This restaurant isn&rsquo;t taking orders yet.
-          </p>
+          <p className="text-heading text-ink-primary">{t.notTakingOrders}</p>
         </div>
       </Shell>
     );
@@ -168,6 +176,7 @@ export function OrderingPage({
       restaurant={restaurant}
       tableNumber={tableNumber}
       categories={categories}
+      t={t}
     >
       <div className="flex flex-col gap-10 pb-36">
         {categories.map((category) => (
@@ -202,7 +211,7 @@ export function OrderingPage({
                     <p className="tabular text-body font-bold text-accent-strong">
                       {formatFils(item.priceFils)}
                       <span className="ms-1 text-meta font-medium text-ink-secondary">
-                        AED
+                        {t.currency}
                       </span>
                     </p>
                   </div>
@@ -213,12 +222,13 @@ export function OrderingPage({
                         quantity={quantities[item.id] ?? 0}
                         onChange={(next) => setQuantity(item.id, next)}
                         label={item.name}
+                        t={t}
                       />
                     ) : (
                       // Greyed in place, never hidden — a diner who cannot find
                       // the dish they came for asks a human instead.
                       <span className="shrink-0 rounded-full bg-surface-sunken px-3 py-1 text-meta text-ink-secondary">
-                        Sold out
+                        {t.soldOut}
                       </span>
                     )}
                   </div>
@@ -234,11 +244,13 @@ export function OrderingPage({
           count={count}
           total={total}
           onCheckout={() => setCheckingOut(true)}
+          t={t}
         />
       ) : null}
 
       {checkingOut ? (
         <Checkout
+          t={t}
           restaurant={restaurant}
           lines={lines}
           total={total}
@@ -313,11 +325,13 @@ function Shell({
   tableNumber,
   categories,
   children,
+  t,
 }: {
   restaurant: { name: string; coverPath?: string | null };
   tableNumber?: number | null;
   categories?: Category[];
   children: React.ReactNode;
+  t: T;
 }) {
   const cover = photoUrl(restaurant.coverPath);
 
@@ -355,7 +369,7 @@ function Shell({
               <h1 className="text-title text-ink-primary">{restaurant.name}</h1>
               {tableNumber ? (
                 <p className="mt-2 inline-flex rounded-full bg-accent-wash px-3 py-1 text-meta font-semibold text-accent-strong">
-                  Table {tableNumber}
+                  {t.tableLabel(tableNumber)}
                 </p>
               ) : null}
             </div>
@@ -373,7 +387,7 @@ function Shell({
             scroll on a phone held in one hand over a table. */}
         {categories && categories.length > 1 ? (
           <nav
-            aria-label="Menu sections"
+            aria-label={t.menuSections}
             className="relative mx-auto w-full max-w-xl overflow-x-auto px-4 pb-4"
           >
             <ul className="flex gap-2">
@@ -401,20 +415,22 @@ function Stepper({
   quantity,
   onChange,
   label,
+  t,
 }: {
   quantity: number;
   onChange: (next: number) => void;
   label: string;
+  t: T;
 }) {
   if (quantity === 0) {
     return (
       <button
         type="button"
         onClick={() => onChange(1)}
-        aria-label={`Add ${label}`}
+        aria-label={t.addNamed(label)}
         className="min-h-touch shrink-0 rounded-md bg-accent px-5 text-body font-semibold text-white"
       >
-        Add
+        {t.add}
       </button>
     );
   }
@@ -424,7 +440,7 @@ function Stepper({
       <button
         type="button"
         onClick={() => onChange(quantity - 1)}
-        aria-label={`One fewer ${label}`}
+        aria-label={t.oneFewer(label)}
         className="min-h-touch w-12 rounded-md border border-border-strong text-body"
       >
         −
@@ -435,7 +451,7 @@ function Stepper({
       <button
         type="button"
         onClick={() => onChange(quantity + 1)}
-        aria-label={`One more ${label}`}
+        aria-label={t.oneMore(label)}
         className="min-h-touch w-12 rounded-md border border-border-strong text-body"
       >
         +
@@ -448,21 +464,21 @@ function CartBar({
   count,
   total,
   onCheckout,
+  t,
 }: {
   count: number;
   total: number;
   onCheckout: () => void;
+  t: T;
 }) {
   return (
     // The one shadow in the whole design system (DESIGN.md § Elevation).
     <div className="fixed inset-x-0 bottom-0 border-t border-border-hairline bg-surface-raised shadow-[0_-8px_24px_rgba(22,24,29,0.08)]">
       <div className="mx-auto flex w-full max-w-xl items-center gap-4 px-4 py-3">
         <div className="min-w-0 flex-1">
-          <p className="text-meta text-ink-secondary">
-            {count} item{count === 1 ? "" : "s"}
-          </p>
+          <p className="text-meta text-ink-secondary">{t.itemCount(count)}</p>
           <p className="tabular text-body font-semibold text-ink-primary">
-            {formatFils(total)} AED
+            {formatFils(total)} {t.currency}
           </p>
         </div>
         <button
@@ -470,7 +486,7 @@ function CartBar({
           onClick={onCheckout}
           className="min-h-touch rounded-md bg-accent px-6 text-body font-semibold text-white"
         >
-          Order
+          {t.orderButton}
         </button>
       </div>
     </div>
@@ -478,6 +494,7 @@ function CartBar({
 }
 
 function Checkout(props: {
+  t: T;
   restaurant: { deliveryEnabled: boolean };
   lines: { item: Item; quantity: number }[];
   total: number;
@@ -499,11 +516,13 @@ function Checkout(props: {
   onBack: () => void;
   onConfirm: () => void;
 }) {
+  const t = props.t;
+
   const modes: { value: Mode; label: string }[] = [
-    { value: "dine_in", label: "I'm at a table" },
-    { value: "pickup", label: "I'll collect it" },
+    { value: "dine_in", label: t.modeDineIn },
+    { value: "pickup", label: t.modePickup },
     ...(props.restaurant.deliveryEnabled
-      ? [{ value: "delivery" as Mode, label: "Deliver it" }]
+      ? [{ value: "delivery" as Mode, label: t.modeDelivery }]
       : []),
   ];
 
@@ -515,10 +534,10 @@ function Checkout(props: {
           onClick={props.onBack}
           className="min-h-touch text-meta text-ink-secondary"
         >
-          ← Back to the menu
+          {t.backToMenu}
         </button>
 
-        <h2 className="mt-4 text-title text-ink-primary">Your order</h2>
+        <h2 className="mt-4 text-title text-ink-primary">{t.yourOrder}</h2>
 
         <ul className="mt-4 flex flex-col gap-2">
           {props.lines.map(({ item, quantity }) => (
@@ -535,7 +554,7 @@ function Checkout(props: {
         </ul>
 
         <p className="tabular mt-4 border-t border-border-hairline pt-4 text-heading font-semibold text-ink-primary">
-          {formatFils(props.total)} AED
+          {formatFils(props.total)} {t.currency}
         </p>
 
         {/* FR-15: only ask for what this mode actually needs. When a table QR
@@ -543,7 +562,7 @@ function Checkout(props: {
         {props.tableLocked ? null : (
           <fieldset className="mt-8">
             <legend className="text-meta font-medium text-ink-primary">
-              How are you getting it?
+              {t.howAreYouGettingIt}
             </legend>
             <div className="mt-2 flex flex-wrap gap-2">
               {modes.map((m) => (
@@ -567,7 +586,7 @@ function Checkout(props: {
 
         <div className="mt-6 flex flex-col gap-5">
           {props.mode === "dine_in" && !props.tableLocked ? (
-            <Labelled label="Table number">
+            <Labelled label={t.tableNumber}>
               <input
                 inputMode="numeric"
                 value={props.table}
@@ -579,38 +598,38 @@ function Checkout(props: {
 
           {props.mode === "delivery" ? (
             <>
-              <LocationPicker pin={props.pin} onPin={props.setPin} />
+              <LocationPicker pin={props.pin} onPin={props.setPin} t={t} />
 
-              <Labelled label="Where should we bring it?">
+              <Labelled label={t.whereToBring}>
                 <textarea
                   rows={2}
                   value={props.address}
                   onChange={(e) => props.setAddress(e.target.value)}
-                  placeholder="Building, flat number, anything that helps"
+                  placeholder={t.addressHint}
                   className="w-full rounded-sm border border-border-strong bg-surface-raised px-4 py-3 text-body"
                 />
               </Labelled>
             </>
           ) : null}
 
-          <Labelled label="Your phone number">
+          <Labelled label={t.yourPhone}>
             <input
               inputMode="tel"
               autoComplete="tel"
               value={props.phone}
               onChange={(e) => props.setPhone(e.target.value)}
-              placeholder="05x xxx xxxx"
+              placeholder={t.phoneHint}
               className="min-h-touch w-full rounded-sm border border-border-strong bg-surface-raised px-4 text-body"
             />
           </Labelled>
 
-          <Labelled label="Anything to tell the kitchen? (optional)">
+          <Labelled label={t.kitchenNote}>
             <textarea
               rows={2}
               maxLength={200}
               value={props.note}
               onChange={(e) => props.setNote(e.target.value)}
-              placeholder="No onions"
+              placeholder={t.kitchenNoteHint}
               className="w-full rounded-sm border border-border-strong bg-surface-raised px-4 py-3 text-body"
             />
           </Labelled>
@@ -628,11 +647,11 @@ function Checkout(props: {
           disabled={props.pending}
           className="mt-8 min-h-touch w-full rounded-md bg-accent px-6 text-body font-semibold text-white disabled:opacity-60"
         >
-          {props.pending ? "Sending…" : "Send to the kitchen"}
+          {props.pending ? t.sending : t.sendToKitchen}
         </button>
 
         <p className="mt-4 pb-8 text-center text-meta text-ink-secondary">
-          You pay at the restaurant.
+          {t.payAtRestaurant}
         </p>
       </div>
     </div>

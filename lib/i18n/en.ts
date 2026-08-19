@@ -94,6 +94,92 @@ export const en = {
     body: "Your account does not have access to this part of MyMenu.",
     backToWork: "Back to your screen",
   },
+
+  /**
+   * The Diner's whole world — story 7.2 finally reaching the page that matters
+   * most. This is the only surface a customer ever sees, and half of them read
+   * Arabic first, so it is the first thing translated rather than the last.
+   *
+   * Functions, not template strings, wherever a number goes in. Arabic does not
+   * pluralise the way English does — "1 item / 2 items / 5 items" is three
+   * different words — so the dictionary decides the whole phrase and the
+   * component never concatenates.
+   */
+  ordering: {
+    closedTitle: "Closed right now.",
+    opensAt: (time: string) => `Opens at ${time}.`,
+    notTakingOrders: "This restaurant isn't taking orders yet.",
+
+    currency: "AED",
+    soldOut: "Sold out",
+    add: "Add",
+    addNamed: (dish: string) => `Add ${dish}`,
+    oneFewer: (dish: string) => `One fewer ${dish}`,
+    oneMore: (dish: string) => `One more ${dish}`,
+
+    tableLabel: (n: number) => `Table ${n}`,
+    menuSections: "Menu sections",
+
+    itemCount: (n: number) => `${n} item${n === 1 ? "" : "s"}`,
+    orderButton: "Order",
+
+    backToMenu: "← Back to the menu",
+    yourOrder: "Your order",
+    howAreYouGettingIt: "How are you getting it?",
+    modeDineIn: "I'm at a table",
+    modePickup: "I'll collect it",
+    modeDelivery: "Deliver it",
+
+    tableNumber: "Table number",
+    whereToBring: "Where should we bring it?",
+    addressHint: "Building, flat number, anything that helps",
+    yourPhone: "Your phone number",
+    phoneHint: "05x xxx xxxx",
+    kitchenNote: "Anything to tell the kitchen? (optional)",
+    kitchenNoteHint: "No onions",
+
+    sending: "Sending…",
+    sendToKitchen: "Send to the kitchen",
+    payAtRestaurant: "You pay at the restaurant.",
+
+    shareLocation: "📍 Share my location",
+    findingYou: "Finding you…",
+    locationShared: "Location shared.",
+    locationSharedBody:
+      "The driver gets a map pin, so they will not have to phone you for directions.",
+    checkOnMap: "Check it on the map",
+    removeLocation: "Remove it",
+    locationDenied:
+      "Your phone said no to sharing location. That is fine — the address you type is enough.",
+    locationFailed: "We could not get your location. The address you type is enough.",
+  },
+
+  /** The status page a diner watches while the food is cooked — story 3.5. */
+  orderStatus: {
+    orderNumber: (n: number) => `Order #${n}`,
+    atTable: (n: number) => ` · Table ${n}`,
+
+    stepReceived: "received",
+    stepCooking: "cooking",
+    stepReady: "ready",
+
+    receivedTitle: "The kitchen has your order.",
+    receivedBody: "They will start it in a moment.",
+    cookingTitle: "Cooking now.",
+    cookingBody: "It will not be long.",
+    readyTitle: "Ready.",
+    readyBody: "Come and get it.",
+    completedTitle: "All done.",
+    completedBody: "Thanks for ordering.",
+    cancelledTitle: "This order was cancelled.",
+    cancelledBody: "Speak to the restaurant if that is a surprise.",
+
+    keepOpen: "Keep this page open, or come back to this link. It works for 24 hours.",
+
+    notFound: "We can't find that order.",
+    notFoundBody:
+      "Order links stop working after 24 hours. If you are still waiting on food, ask the restaurant directly.",
+  },
 };
 
 // Deliberately not `as const`. With literal types, `ar.ts` would have to repeat

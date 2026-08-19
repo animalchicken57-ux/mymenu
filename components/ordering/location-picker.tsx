@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { mapLink, roundPin, type Pin } from "@/lib/domain/maps";
+import type { Dictionary } from "@/lib/i18n";
 
 /**
  * "Share my location" for a delivery order.
@@ -17,9 +18,11 @@ import { mapLink, roundPin, type Pin } from "@/lib/domain/maps";
 export function LocationPicker({
   pin,
   onPin,
+  t,
 }: {
   pin: Pin | null;
   onPin: (pin: Pin | null) => void;
+  t: Dictionary["ordering"];
 }) {
   const [state, setState] = useState<"idle" | "asking" | "denied" | "failed">(
     "idle",
@@ -54,11 +57,10 @@ export function LocationPicker({
     return (
       <div className="rounded-md bg-accent-wash p-4">
         <p className="text-body font-semibold text-accent-strong">
-          Location shared.
+          {t.locationShared}
         </p>
         <p className="mt-1 text-meta text-accent-strong">
-          The driver gets a map pin, so they will not have to phone you for
-          directions.
+          {t.locationSharedBody}
         </p>
         <div className="mt-3 flex flex-wrap gap-4">
           <a
@@ -67,14 +69,14 @@ export function LocationPicker({
             rel="noreferrer"
             className="text-meta text-accent-strong underline"
           >
-            Check it on the map
+            {t.checkOnMap}
           </a>
           <button
             type="button"
             onClick={() => onPin(null)}
             className="text-meta text-accent-strong underline"
           >
-            Remove it
+            {t.removeLocation}
           </button>
         </div>
       </div>
@@ -89,19 +91,18 @@ export function LocationPicker({
         disabled={state === "asking"}
         className="min-h-touch w-full rounded-md border border-border-strong bg-surface-raised px-4 text-body text-ink-primary disabled:opacity-60"
       >
-        {state === "asking" ? "Finding you…" : "📍 Share my location"}
+        {state === "asking" ? t.findingYou : t.shareLocation}
       </button>
 
       {state === "denied" ? (
         <p className="mt-2 text-meta text-ink-secondary">
-          Your phone said no to sharing location. That is fine — the address you
-          type is enough.
+          {t.locationDenied}
         </p>
       ) : null}
 
       {state === "failed" ? (
         <p className="mt-2 text-meta text-ink-secondary">
-          We could not get your location. The address you type is enough.
+          {t.locationFailed}
         </p>
       ) : null}
     </div>

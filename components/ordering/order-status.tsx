@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { formatFils } from "@/lib/domain/money";
 import { createClient } from "@/lib/supabase/client";
+import type { Dictionary } from "@/lib/i18n";
 
 /**
  * The Diner's status page — story 3.5, KF-2's climax.
@@ -25,21 +26,29 @@ type OrderView = {
 
 const STEPS = ["received", "cooking", "ready"] as const;
 
-const WORDING: Record<OrderView["status"], { title: string; body: string }> = {
-  received: {
-    title: "The kitchen has your order.",
-    body: "They will start it in a moment.",
-  },
-  cooking: { title: "Cooking now.", body: "It will not be long." },
-  ready: { title: "Ready.", body: "Come and get it." },
-  completed: { title: "All done.", body: "Thanks for ordering." },
-  cancelled: {
-    title: "This order was cancelled.",
-    body: "Speak to the restaurant if that is a surprise.",
-  },
-};
+type T = Dictionary["orderStatus"];
 
-export function OrderStatus({ initial }: { initial: OrderView }) {
+function wordingFor(
+  t: T,
+): Record<OrderView["status"], { title: string; body: string }> {
+  return {
+    received: { title: t.receivedTitle, body: t.receivedBody },
+    cooking: { title: t.cookingTitle, body: t.cookingBody },
+    ready: { title: t.readyTitle, body: t.readyBody },
+    completed: { title: t.completedTitle, body: t.completedBody },
+    cancelled: { title: t.cancelledTitle, body: t.cancelledBody },
+  };
+}
+
+export function OrderStatus({
+  initial,
+  t,
+  currency,
+}: {
+  initial: OrderView;
+  t: T;
+  currency: string;
+}) {
   const [order, setOrder] = useState(initial);
 
   useEffect(() => {
@@ -73,14 +82,14 @@ export function OrderStatus({ initial }: { initial: OrderView }) {
     };
   }, [initial.order_ref]);
 
-  const wording = WORDING[order.status];
+  const wording = wordingFor(t)[order.status];
   const stepIndex = STEPS.indexOf(order.status as (typeof STEPS)[number]);
 
   return (
     <main className="mx-auto w-full max-w-xl flex-1 px-4 py-8">
       <p className="text-meta text-ink-secondary">
-        Order #{order.daily_number}
-        {order.table_number ? ` · Table ${order.table_number}` : ""}
+        {t.orderNumber(order.daily_number)}
+        {order.table_number ? t.atTable(order.table_number) : ""}
       </p>
 
       <h1 className="mt-2 text-title text-ink-primary" aria-live="polite">
@@ -99,8 +108,12 @@ export function OrderStatus({ initial }: { initial: OrderView }) {
                     : "bg-surface-sunken"
                 }`}
               />
-              <p className="mt-2 text-meta capitalize text-ink-secondary">
-                {step}
+              <p className="mt-2 text-meta text-ink-secondary">
+                {step === "received"
+                  ? t.stepReceived
+                  : step === "cooking"
+                    ? t.stepCooking
+                    : t.stepReady}
               </p>
             </li>
           ))}
@@ -127,12 +140,10 @@ export function OrderStatus({ initial }: { initial: OrderView }) {
       </ul>
 
       <p className="tabular mt-4 border-t border-border-hairline pt-4 text-heading font-semibold text-ink-primary">
-        {formatFils(order.total_fils)} AED
+        {formatFils(order.total_fils)} {currency}
       </p>
 
-      <p className="mt-8 text-meta text-ink-secondary">
-        Keep this page open, or come back to this link. It works for 24 hours.
-      </p>
+      <p className="mt-8 text-meta text-ink-secondary">{t.keepOpen}</p>
     </main>
   );
 }
