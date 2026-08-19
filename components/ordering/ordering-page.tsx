@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
 
 import { placeOrder } from "@/app/actions/order";
-import { LanguageToggle } from "@/components/ordering/language-toggle";
 import { LocationPicker } from "@/components/ordering/location-picker";
 import { cartTotal, formatFils } from "@/lib/domain/money";
 import { photoUrl, tileColor, tileLetter } from "@/lib/domain/photos";
@@ -385,12 +384,9 @@ function Shell({
             {/* Whose software this is. It sits opposite the restaurant's own
                 name rather than above it — the restaurant is the brand on this
                 page, and we are the small print. Flips side in Arabic. */}
-            <div className="flex shrink-0 items-center gap-3 pt-1">
-              <LanguageToggle lang={lang} />
-              <span className="text-meta uppercase tracking-widest text-ink-secondary">
-                MyMenu
-              </span>
-            </div>
+            <span className="shrink-0 pt-1 text-meta uppercase tracking-widest text-ink-secondary">
+              MyMenu
+            </span>
           </div>
         </div>
 
