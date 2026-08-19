@@ -100,27 +100,31 @@ export const en = {
    * most. This is the only surface a customer ever sees, and half of them read
    * Arabic first, so it is the first thing translated rather than the last.
    *
-   * Functions, not template strings, wherever a number goes in. Arabic does not
-   * pluralise the way English does — "1 item / 2 items / 5 items" is three
-   * different words — so the dictionary decides the whole phrase and the
-   * component never concatenates.
+   * Every value is a plain string. Placeholders like {n} are filled by
+   * lib/i18n/format.ts, and plural forms are chosen there too. It must stay
+   * that way: this dictionary crosses into a Client Component, and React
+   * cannot serialise a function across that boundary — an earlier version held
+   * arrow functions and took the whole ordering page down with a 500.
    */
   ordering: {
     closedTitle: "Closed right now.",
-    opensAt: (time: string) => `Opens at ${time}.`,
+    opensAt: "Opens at {time}.",
     notTakingOrders: "This restaurant isn't taking orders yet.",
 
     currency: "AED",
     soldOut: "Sold out",
     add: "Add",
-    addNamed: (dish: string) => `Add ${dish}`,
-    oneFewer: (dish: string) => `One fewer ${dish}`,
-    oneMore: (dish: string) => `One more ${dish}`,
+    addNamed: "Add {dish}",
+    oneFewer: "One fewer {dish}",
+    oneMore: "One more {dish}",
 
-    tableLabel: (n: number) => `Table ${n}`,
+    tableLabel: "Table {n}",
     menuSections: "Menu sections",
 
-    itemCount: (n: number) => `${n} item${n === 1 ? "" : "s"}`,
+    itemCountOne: "1 item",
+    itemCountTwo: "2 items",
+    itemCountFew: "{n} items",
+    itemCountMany: "{n} items",
     orderButton: "Order",
 
     backToMenu: "← Back to the menu",
@@ -156,8 +160,8 @@ export const en = {
 
   /** The status page a diner watches while the food is cooked — story 3.5. */
   orderStatus: {
-    orderNumber: (n: number) => `Order #${n}`,
-    atTable: (n: number) => ` · Table ${n}`,
+    orderNumber: "Order #{n}",
+    atTable: " · Table {n}",
 
     stepReceived: "received",
     stepCooking: "cooking",

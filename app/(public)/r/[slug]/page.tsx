@@ -23,7 +23,7 @@ export default async function RestaurantOrderingPage({
   // Story 7.2. The Diner has no account, so their language comes from the
   // cookie the root layout already set from Accept-Language — which is why an
   // Arabic-speaking customer gets an Arabic menu without touching a setting.
-  const { t } = await getT();
+  const { t, lang } = await getT();
 
   const supabase = await createClient();
 
@@ -66,6 +66,7 @@ export default async function RestaurantOrderingPage({
   return (
     <OrderingPage
       t={t.ordering}
+      lang={lang}
       restaurant={{
         name: restaurant.name,
         slug: restaurant.slug,

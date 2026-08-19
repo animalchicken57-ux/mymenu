@@ -10,7 +10,8 @@ import { cartTotal, formatFils } from "@/lib/domain/money";
 import { photoUrl, tileColor, tileLetter } from "@/lib/domain/photos";
 import type { OpenState } from "@/lib/domain/hours";
 import type { Pin } from "@/lib/domain/maps";
-import type { Dictionary } from "@/lib/i18n";
+import type { Dictionary, Lang } from "@/lib/i18n";
+import { fill, plural } from "@/lib/i18n/format";
 
 /**
  * The Diner's whole world — stories 3.1 to 3.4.
@@ -46,6 +47,7 @@ export function OrderingPage({
   tableNumber,
   openState,
   t,
+  lang,
 }: {
   restaurant: {
     name: string;
@@ -57,6 +59,7 @@ export function OrderingPage({
   tableNumber: number | null;
   openState: OpenState;
   t: T;
+  lang: Lang;
 }) {
   const router = useRouter();
   const storageKey = `mymenu.cart.${restaurant.slug}`;
@@ -153,7 +156,7 @@ export function OrderingPage({
           <p className="text-heading text-ink-primary">{t.closedTitle}</p>
           {openState.opensAt ? (
             <p className="mt-2 text-body text-ink-secondary">
-              {t.opensAt(openState.opensAt)}
+              {fill(t.opensAt, { time: openState.opensAt })}
             </p>
           ) : null}
         </div>
@@ -245,6 +248,7 @@ export function OrderingPage({
           total={total}
           onCheckout={() => setCheckingOut(true)}
           t={t}
+          lang={lang}
         />
       ) : null}
 
@@ -369,7 +373,7 @@ function Shell({
               <h1 className="text-title text-ink-primary">{restaurant.name}</h1>
               {tableNumber ? (
                 <p className="mt-2 inline-flex rounded-full bg-accent-wash px-3 py-1 text-meta font-semibold text-accent-strong">
-                  {t.tableLabel(tableNumber)}
+                  {fill(t.tableLabel, { n: tableNumber })}
                 </p>
               ) : null}
             </div>
@@ -427,7 +431,7 @@ function Stepper({
       <button
         type="button"
         onClick={() => onChange(1)}
-        aria-label={t.addNamed(label)}
+        aria-label={fill(t.addNamed, { dish: label })}
         className="min-h-touch shrink-0 rounded-md bg-accent px-5 text-body font-semibold text-white"
       >
         {t.add}
@@ -440,7 +444,7 @@ function Stepper({
       <button
         type="button"
         onClick={() => onChange(quantity - 1)}
-        aria-label={t.oneFewer(label)}
+        aria-label={fill(t.oneFewer, { dish: label })}
         className="min-h-touch w-12 rounded-md border border-border-strong text-body"
       >
         −
@@ -451,7 +455,7 @@ function Stepper({
       <button
         type="button"
         onClick={() => onChange(quantity + 1)}
-        aria-label={t.oneMore(label)}
+        aria-label={fill(t.oneMore, { dish: label })}
         className="min-h-touch w-12 rounded-md border border-border-strong text-body"
       >
         +
@@ -465,18 +469,30 @@ function CartBar({
   total,
   onCheckout,
   t,
+  lang,
 }: {
   count: number;
   total: number;
   onCheckout: () => void;
   t: T;
+  lang: Lang;
 }) {
   return (
     // The one shadow in the whole design system (DESIGN.md § Elevation).
     <div className="fixed inset-x-0 bottom-0 border-t border-border-hairline bg-surface-raised shadow-[0_-8px_24px_rgba(22,24,29,0.08)]">
       <div className="mx-auto flex w-full max-w-xl items-center gap-4 px-4 py-3">
         <div className="min-w-0 flex-1">
-          <p className="text-meta text-ink-secondary">{t.itemCount(count)}</p>
+          <p className="text-meta text-ink-secondary">
+            {fill(
+              plural(lang, count, {
+                one: t.itemCountOne,
+                two: t.itemCountTwo,
+                few: t.itemCountFew,
+                many: t.itemCountMany,
+              }),
+              { n: count },
+            )}
+          </p>
           <p className="tabular text-body font-semibold text-ink-primary">
             {formatFils(total)} {t.currency}
           </p>

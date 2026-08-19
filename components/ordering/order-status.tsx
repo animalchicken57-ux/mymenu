@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { formatFils } from "@/lib/domain/money";
 import { createClient } from "@/lib/supabase/client";
 import type { Dictionary } from "@/lib/i18n";
+import { fill } from "@/lib/i18n/format";
 
 /**
  * The Diner's status page — story 3.5, KF-2's climax.
@@ -88,8 +89,8 @@ export function OrderStatus({
   return (
     <main className="mx-auto w-full max-w-xl flex-1 px-4 py-8">
       <p className="text-meta text-ink-secondary">
-        {t.orderNumber(order.daily_number)}
-        {order.table_number ? t.atTable(order.table_number) : ""}
+        {fill(t.orderNumber, { n: order.daily_number })}
+        {order.table_number ? fill(t.atTable, { n: order.table_number }) : ""}
       </p>
 
       <h1 className="mt-2 text-title text-ink-primary" aria-live="polite">

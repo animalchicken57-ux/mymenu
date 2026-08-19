@@ -100,22 +100,24 @@ export const ar: Dictionary = {
    */
   ordering: {
     closedTitle: "مسكّرين الحين.",
-    opensAt: (time: string) => `نفتح الساعة ${time}.`,
+    opensAt: "نفتح الساعة {time}.",
     notTakingOrders: "هذا المطعم ما بدأ يستقبل الطلبات بعد.",
 
     currency: "درهم",
     soldOut: "خلصت",
     add: "أضف",
-    addNamed: (dish: string) => `أضف ${dish}`,
-    oneFewer: (dish: string) => `واحد أقل من ${dish}`,
-    oneMore: (dish: string) => `واحد زيادة من ${dish}`,
+    addNamed: "أضف {dish}",
+    oneFewer: "واحد أقل من {dish}",
+    oneMore: "واحد زيادة من {dish}",
 
-    tableLabel: (n: number) => `طاولة ${n}`,
+    tableLabel: "طاولة {n}",
     menuSections: "أقسام المنيو",
 
     // العربية ما تجمع مثل الإنجليزية: واحد، اثنين، ثم جمع، ثم مفرد بعد العشرة.
-    itemCount: (n: number) =>
-      n === 1 ? "صنف واحد" : n === 2 ? "صنفين" : n <= 10 ? `${n} أصناف` : `${n} صنف`,
+    itemCountOne: "صنف واحد",
+    itemCountTwo: "صنفين",
+    itemCountFew: "{n} أصناف",
+    itemCountMany: "{n} صنف",
     orderButton: "اطلب",
 
     backToMenu: "→ رجوع للمنيو",
@@ -148,8 +150,8 @@ export const ar: Dictionary = {
   },
 
   orderStatus: {
-    orderNumber: (n: number) => `طلب رقم ${n}`,
-    atTable: (n: number) => ` · طاولة ${n}`,
+    orderNumber: "طلب رقم {n}",
+    atTable: " · طاولة {n}",
 
     stepReceived: "وصل",
     stepCooking: "يُطبخ",
