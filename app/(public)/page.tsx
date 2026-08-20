@@ -104,6 +104,37 @@ export default async function LandingPage() {
             body="Orders land on a screen in your kitchen with a sound. One big button moves each one along. The customer watches it happen on their phone."
           />
         </ol>
+
+        {/* The other half of the same story. The three steps above are work an
+            owner has to picture themselves doing; these are the ones they are
+            really buying, and leaving them out meant the page described the
+            setup without ever describing the thing being set up. */}
+        <div className="mt-10 rounded-lg border border-border-hairline bg-surface-sunken p-6 sm:p-8">
+          <h3 className="text-body font-semibold text-ink-primary">
+            And this is all your customer does
+          </h3>
+          <p className="mt-1 max-w-prose text-body text-ink-secondary">
+            Three taps, on the phone already in their hand.
+          </p>
+
+          <ol className="mt-6 flex flex-col gap-6">
+            <Step
+              number="1"
+              title="They point their camera at the table"
+              body="Your menu opens. There is nothing to download and no account to make, which is the step that loses people."
+            />
+            <Step
+              number="2"
+              title="They tap what they want"
+              body="Photos, prices, and an Add button. When they send it, it goes to your kitchen and nowhere else."
+            />
+            <Step
+              number="3"
+              title="They watch it being cooked"
+              body="Received, cooking, ready — on their own screen. Nobody has to come and ask how much longer."
+            />
+          </ol>
+        </div>
       </section>
 
       <section className="border-t border-border-hairline">
