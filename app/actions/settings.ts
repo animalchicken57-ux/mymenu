@@ -85,7 +85,7 @@ export async function saveRestaurant(
     return { ok: false, error: "That did not save. Try again." };
   }
 
-  revalidatePath("/settings");
+  revalidatePath("/settings", "layout");
   revalidatePath("/dashboard");
   revalidatePath("/menu");
 
@@ -160,7 +160,7 @@ export async function uploadCover(
     return { ok: false, error: "The photo uploaded but did not save. Try again." };
   }
 
-  revalidatePath("/settings");
+  revalidatePath("/settings", "layout");
   revalidatePath("/r", "layout");
   return { ok: true, message: "saved" };
 }
@@ -186,7 +186,7 @@ export async function removeCover(): Promise<Result> {
 
   if (error) return { ok: false, error: "That did not remove. Try again." };
 
-  revalidatePath("/settings");
+  revalidatePath("/settings", "layout");
   revalidatePath("/r", "layout");
   return ok;
 }
@@ -218,7 +218,7 @@ export async function saveProfile(
 
   if (error) return { ok: false, error: "That did not save. Try again." };
 
-  revalidatePath("/settings");
+  revalidatePath("/settings", "layout");
   return { ok: true, message: "saved" };
 }
 
