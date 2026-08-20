@@ -56,9 +56,20 @@ function rateLimited(ip: string): boolean {
 async function sendEmail(fields: z.infer<typeof schema>): Promise<void> {
   const key = process.env.RESEND_API_KEY;
   const inbox = process.env.SUPPORT_INBOX;
-  if (!key || !inbox) return;
 
-  await fetch("https://api.resend.com/emails", {
+  if (!key || !inbox) {
+    // Not a crash — the message is already in the database and the sender has
+    // been told the truth. But say so, because "I set it up and no email came"
+    // is otherwise indistinguishable from "the email was rejected".
+    console.warn(
+      "[support] No email sent: " +
+        (!key ? "RESEND_API_KEY" : "SUPPORT_INBOX") +
+        " is not set. The message is saved in support_messages.",
+    );
+    return;
+  }
+
+  const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${key}`,
@@ -72,6 +83,20 @@ async function sendEmail(fields: z.infer<typeof schema>): Promise<void> {
       text: `From: ${fields.name} <${fields.email}>\n\n${fields.body}`,
     }),
   });
+
+  // Resend answers a bad key or an unverified recipient with a 4xx and a JSON
+  // reason, not by throwing. Reading it is the difference between a silent
+  // dead end and a log line naming the fix.
+  //
+  // The most common one: the shared `onboarding@resend.dev` sender may only
+  // deliver to the address the Resend account was opened with. Sending anywhere
+  // else needs a verified domain.
+  if (!response.ok) {
+    const detail = await response.text().catch(() => "");
+    console.error(
+      `[support] Resend refused the email (${response.status}). ${detail}`,
+    );
+  }
 }
 
 export async function sendSupportMessage(
