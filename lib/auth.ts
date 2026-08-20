@@ -2,6 +2,7 @@ import "server-only";
 
 import { redirect } from "next/navigation";
 
+import type { Lang } from "@/lib/i18n/languages";
 import { createClient } from "@/lib/supabase/server";
 
 export type Role = "owner" | "staff" | "driver";
@@ -11,7 +12,7 @@ export type Me = {
   restaurant_id: string;
   role: Role;
   full_name: string | null;
-  language: "en" | "ar";
+  language: Lang;
   restaurant: {
     name: string;
     slug: string;

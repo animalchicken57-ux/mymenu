@@ -32,8 +32,13 @@ const AUTH_PAGES = ["/login", "/signup", "/forgot"];
  *  not drag a module that reaches for `next/headers`. */
 const LANG_COOKIE = "mymenu_lang";
 
+/** Every language MyMenu speaks, duplicated from lib/i18n for the same reason
+ *  the cookie name is: the edge must not import `next/headers`. Adding a
+ *  language means adding it here too, or that browser silently gets English. */
+const LANGS = ["en", "ar", "es", "de", "hi", "zh", "tr", "ru"];
+
 /**
- * Does this browser ask for Arabic first?
+ * Which language does this browser ask for first?
  *
  * `resolveLang()` has always claimed the cookie is "set from Accept-Language on
  * first visit", and nothing ever did it — a diner got English no matter what
@@ -42,11 +47,15 @@ const LANG_COOKIE = "mymenu_lang";
  *
  * Only the first-listed language counts. A header of "en,ar" means a person who
  * would rather read English, and guessing otherwise is worse than doing nothing.
+ *
+ * The region is dropped before matching, so "zh-CN" and "es-419" find their
+ * language instead of falling through to English on a suffix we never listed.
  */
-function prefersArabic(header: string | null): boolean {
-  if (!header) return false;
+function preferredLang(header: string | null): string {
+  if (!header) return "en";
   const first = header.split(",")[0]?.trim().toLowerCase() ?? "";
-  return first === "ar" || first.startsWith("ar-");
+  const base = first.split("-")[0];
+  return LANGS.includes(base) ? base : "en";
 }
 
 export async function proxy(request: NextRequest) {
@@ -104,7 +113,7 @@ export async function proxy(request: NextRequest) {
   if (!request.cookies.get(LANG_COOKIE)) {
     response.cookies.set(
       LANG_COOKIE,
-      prefersArabic(request.headers.get("accept-language")) ? "ar" : "en",
+      preferredLang(request.headers.get("accept-language")),
       { path: "/", sameSite: "lax", maxAge: 60 * 60 * 24 * 365 },
     );
   }

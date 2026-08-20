@@ -15,7 +15,8 @@ import {
 import { Field } from "@/components/ui/field";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { photoUrl } from "@/lib/domain/photos";
-import type { Dictionary, Lang } from "@/lib/i18n";
+import type { Dictionary } from "@/lib/i18n";
+import { LANGS, LANGUAGE_NAMES, type Lang } from "@/lib/i18n/languages";
 
 function Saved({ shown }: { shown: boolean }) {
   if (!shown) return null;
@@ -245,10 +246,12 @@ export function ProfileForm({
 export function LanguageSwitch({ current }: { current: Lang }) {
   const [pending, startTransition] = useTransition();
 
-  const options: { value: Lang; label: string }[] = [
-    { value: "en", label: "English" },
-    { value: "ar", label: "العربية" },
-  ];
+  // Driven off the registry rather than a second list here, so a language
+  // added to lib/i18n cannot be one nobody can switch to.
+  const options: { value: Lang; label: string }[] = LANGS.map((value) => ({
+    value,
+    label: LANGUAGE_NAMES[value],
+  }));
 
   return (
     <div className="flex flex-wrap gap-2">

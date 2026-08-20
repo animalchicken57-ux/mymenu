@@ -1,4 +1,4 @@
-import type { Lang } from "./index";
+import type { Lang } from "./languages";
 
 /**
  * Filling words into sentences, without putting functions in the dictionary.
@@ -23,9 +23,19 @@ export function fill(
 }
 
 /**
- * Arabic counts in more shapes than English does: one, two, a few (3–10), then
- * back to a singular-looking form above ten. English has two. Picking the form
- * is a language rule, so it lives with the language and not in a component.
+ * Languages count in different numbers of shapes, and picking the shape is a
+ * language rule, so it lives with the language and not in a component.
+ *
+ * - Arabic has four: one, two, a few (3–10), then a singular-looking form again
+ *   above ten.
+ * - Russian has three, and the rule reads the last digit rather than the size
+ *   of the number: 1 but not 11, then 2–4 but not 12–14, then everything else.
+ *   This is why the Russian dictionary writes its `one` and `two` forms with
+ *   `{n}` instead of a literal digit — 21 takes the same shape as 1.
+ * - Turkish and Chinese have none at all. Their dictionaries repeat the same
+ *   sentence in all four slots on purpose, so the English rule below returns
+ *   the right string without needing a case of its own.
+ * - English, Spanish, German and Hindi have two.
  */
 export function plural(
   lang: Lang,
@@ -38,5 +48,16 @@ export function plural(
     if (n >= 3 && n <= 10) return forms.few;
     return forms.many;
   }
+
+  if (lang === "ru") {
+    const lastDigit = n % 10;
+    const lastTwo = n % 100;
+    if (lastDigit === 1 && lastTwo !== 11) return forms.one;
+    if (lastDigit >= 2 && lastDigit <= 4 && !(lastTwo >= 12 && lastTwo <= 14)) {
+      return forms.few;
+    }
+    return forms.many;
+  }
+
   return n === 1 ? forms.one : forms.many;
 }

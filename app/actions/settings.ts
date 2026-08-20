@@ -7,6 +7,7 @@ import { z } from "zod";
 import { getMe, requireRole } from "@/lib/auth";
 import { coverPath } from "@/lib/domain/photos";
 import { LANG_COOKIE } from "@/lib/i18n";
+import type { Lang } from "@/lib/i18n/languages";
 import { createClient } from "@/lib/supabase/server";
 import { THEME_COOKIE, type Theme } from "@/lib/theme";
 
@@ -226,7 +227,7 @@ export async function saveProfile(
 // FR-28 — language
 // -----------------------------------------------------------------------------
 
-export async function setLanguage(lang: "en" | "ar"): Promise<Result> {
+export async function setLanguage(lang: Lang): Promise<Result> {
   const store = await cookies();
 
   // The cookie is what every render reads, so language resolution never costs a

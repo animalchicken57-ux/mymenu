@@ -2,24 +2,41 @@ import { cookies } from "next/headers";
 
 import { en, type Dictionary } from "./en";
 import { ar } from "./ar";
+import { de } from "./de";
+import { es } from "./es";
+import { hi } from "./hi";
+import { ru } from "./ru";
+import { tr } from "./tr";
+import { zh } from "./zh";
+import { LANGS, LANGUAGE_NAMES, type Lang } from "./languages";
 
-export type Lang = "en" | "ar";
-export type { Dictionary };
+export type { Dictionary, Lang };
+export { LANGS, LANGUAGE_NAMES };
 
 export const LANG_COOKIE = "mymenu_lang";
 
-const dictionaries: Record<Lang, Dictionary> = { en, ar };
+const dictionaries: Record<Lang, Dictionary> = {
+  en,
+  ar,
+  de,
+  es,
+  hi,
+  ru,
+  tr,
+  zh,
+};
 
 export function dictionary(lang: Lang): Dictionary {
   return dictionaries[lang];
 }
 
+/** Arabic is the only right-to-left language offered so far. */
 export function dir(lang: Lang): "ltr" | "rtl" {
   return lang === "ar" ? "rtl" : "ltr";
 }
 
 function isLang(value: string | undefined): value is Lang {
-  return value === "en" || value === "ar";
+  return value !== undefined && value in dictionaries;
 }
 
 /**
