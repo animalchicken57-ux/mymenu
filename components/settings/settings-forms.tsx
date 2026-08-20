@@ -16,6 +16,7 @@ import { Field } from "@/components/ui/field";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { photoUrl } from "@/lib/domain/photos";
 import type { Dictionary } from "@/lib/i18n";
+import { Flag } from "@/components/settings/flags";
 import { LANGS, LANGUAGE_NAMES, type Lang } from "@/lib/i18n/languages";
 
 function Saved({ shown }: { shown: boolean }) {
@@ -254,25 +255,38 @@ export function LanguageSwitch({ current }: { current: Lang }) {
   }));
 
   return (
-    <div className="flex flex-wrap gap-2">
-      {options.map((option) => (
-        <button
-          key={option.value}
-          type="button"
-          disabled={pending}
-          aria-pressed={current === option.value}
-          onClick={() =>
-            startTransition(() => setLanguage(option.value).then(() => {}))
-          }
-          className={`min-h-touch rounded-md border px-6 text-body disabled:opacity-60 ${
-            current === option.value
-              ? "border-accent bg-accent-wash text-accent-strong"
-              : "border-border-strong bg-surface-raised text-ink-primary"
-          }`}
-        >
-          {option.label}
-        </button>
-      ))}
+    /* A grid rather than a wrapping row: eight tiles of noticeably different
+       widths ("English" against "中文") leave a ragged edge when they wrap, and
+       the eye reads a ragged block as a mistake. Fixed columns keep it calm. */
+    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+      {options.map((option) => {
+        const selected = current === option.value;
+
+        return (
+          <button
+            key={option.value}
+            type="button"
+            disabled={pending}
+            aria-pressed={selected}
+            onClick={() =>
+              startTransition(() => setLanguage(option.value).then(() => {}))
+            }
+            className={`flex min-h-touch items-center gap-3 rounded-md border px-3 py-2 text-start text-body transition-colors disabled:opacity-60 ${
+              selected
+                ? "border-accent bg-accent-wash text-accent-strong"
+                : "border-border-strong bg-surface-raised text-ink-primary hover:bg-surface-sunken"
+            }`}
+          >
+            <Flag lang={option.value} />
+            {/* Each name is written in its own language, so it has to be free
+                to run in its own direction — "العربية" is right-to-left even
+                when the page around it is not. */}
+            <span className="min-w-0 truncate" dir="auto">
+              {option.label}
+            </span>
+          </button>
+        );
+      })}
     </div>
   );
 }
