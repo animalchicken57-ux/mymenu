@@ -6,6 +6,13 @@ import { createClient } from "@/lib/supabase/server";
 import { resolveTheme } from "@/lib/theme";
 
 /**
+ * The restaurant an owner is sent to when they want to see the thing working
+ * before they sign up. This used to read "demo", which is a slug no restaurant
+ * has ever had — so the second call-to-action below silently never rendered.
+ */
+const DEMO_SLUG = "al-reem-grill";
+
+/**
  * The Landing Page — stories 8.1 and 8.2.
  *
  * Written for a restaurant owner, not for a diner. It leads with what
@@ -21,7 +28,7 @@ export default async function LandingPage() {
   const { data: demo } = await supabase
     .from("public_restaurants")
     .select("slug")
-    .eq("slug", "demo")
+    .eq("slug", DEMO_SLUG)
     .maybeSingle();
 
   return (
